@@ -7,3 +7,5 @@ You need to follow all of these steps in order!
 5. Start the server on any machine using scripts/start_server.sh
 6. To use the Java client, look at scripts/parse-java.sh
 7. To use the Python client, look at scripts/parse-python.sh
+
+The packaging for Python is not currently ideal since the server needs to be in Java. For Java, there's a nice jar file that contains both the server and the client. 
