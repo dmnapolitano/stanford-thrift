@@ -1,0 +1,56 @@
+<project name="StanfordParser" default="main" basedir=".">
+
+  <description>Stanford Parser Wrapper</description>
+
+  <property name="src" location="src" />
+  <property name="genjava" location="gen-java" />
+  <property name="genpy" location="gen-py" />
+  <property name="build" location="build" />
+
+  <path id="libs.classpath">
+    <fileset dir="/home/nlp-text/dynamic/nmadnani/thrift/lib">
+      <include name="*.jar" />
+    </fileset>
+    <fileset dir="/home/nlp-text/dynamic/NLPTools/stanford-parser">
+      <include name="stanford-parser.jar" />
+    </fileset>
+  </path>
+  <path id="build.classpath">
+    <path refid="libs.classpath" />
+    <pathelement path="${genjava}" />
+  </path>
+
+  <target name="init">
+    <tstamp />
+    <mkdir dir="${build}"/>
+    <mkdir dir="${build}/log"/>
+  </target>
+
+
+ <target name="generate">
+    <!-- Generate the thrift gen-java and gen-py source -->
+    <exec executable="/home/research/cbrew/bin/thrift" failonerror="true">
+      <arg line="--gen java parser.thrift"/>
+    </exec>
+    <exec executable="/home/research/cbrew/bin/thrift" failonerror="true">
+      <arg line="--gen py parser.thrift"/>
+    </exec>
+  </target>
+
+  <target name="compile" depends="init, generate">
+    <javac srcdir="${genjava}" destdir="${build}" classpathref="libs.classpath" />
+    <javac srcdir="${src}" destdir="${build}" classpathref="build.classpath" />
+  </target>
+
+  <target name="main" description="Run" depends="compile">
+    <jar jarfile="stanford-parser-wrapper.jar" basedir="${build}"/>
+  </target>
+
+  <target name="clean">
+    <delete dir="${genjava}" />
+    <delete dir="${genpy}" />
+    <delete dir="${build}" />
+    <delete file="stanford-parser-wrapper.jar" />
+  </target>
+
+</project>
