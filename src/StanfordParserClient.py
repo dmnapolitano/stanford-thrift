@@ -42,7 +42,7 @@ try:
     # parse each line of the file
     with open(infile, 'r') as f:
         for line in f:
-            parse = client.parse(line)
+            parse = client.parse_sentence(line)
             sys.stdout.write(parse + '\n')
 
     # Close!

@@ -58,7 +58,7 @@ public class StanfordParserClient {
             BufferedReader in = new BufferedReader(infile);
             while (in.ready()) {
                 String sentence = in.readLine();
-                String parse = client.parse(sentence);
+                String parse = client.parse_sentence(sentence);
                 System.out.println(parse);
             }
             in.close();
