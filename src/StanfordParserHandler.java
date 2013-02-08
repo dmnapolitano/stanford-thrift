@@ -18,6 +18,7 @@ import edu.stanford.nlp.ling.Sentence;
 import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
 import edu.stanford.nlp.process.DocumentPreprocessor;
 import edu.stanford.nlp.trees.PennTreebankLanguagePack;
+import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.trees.TreePrint;
 
 public class StanfordParserHandler implements StanfordParser.Iface {
@@ -94,28 +95,32 @@ public class StanfordParserHandler implements StanfordParser.Iface {
         }
     }
 
-    public String parse_sentence(String sentence)
+    public List<ParseTree> parse_text(String sentence)
     {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
+        List<ParseTree> results = new ArrayList<ParseTree>();
 
         // assume no tokenization was done; use Stanford's default tokenizer
         DocumentPreprocessor preprocess = new DocumentPreprocessor(new StringReader(sentence));
         Iterator<List<HasWord>> foundSentences = preprocess.iterator();
         while (foundSentences.hasNext())
         {
-            treePrinter.printTree(parser.apply(foundSentences.next()), pw);
+    		Tree parseTree = parser.apply(foundSentences.next());
+    		treePrinter.printTree(parseTree, pw);
+    		results.add(new ParseTree(sw.getBuffer().toString().trim(), parseTree.score()));
         }
 
         // Odds are threads will be reused, so reset the options every time
         // resetOptions()
-        return sw.getBuffer().toString().trim();
+        return results;
     }
 
-    public String parse_tokens(List<String> tokens)
+    public List<ParseTree> parse_tokens(List<String> tokens)
     {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
+        List<ParseTree> results = new ArrayList<ParseTree>();
     	
     	// assume an array of tokens was passed in
     	if (tokens.contains("\n"))
@@ -130,7 +135,9 @@ public class StanfordParserHandler implements StanfordParser.Iface {
     		for (String s : multipleSentences)
     		{
     			List<CoreLabel> crazyStanfordFormat = Sentence.toCoreLabelList(s.trim().split(" "));
-    			treePrinter.printTree(parser.apply(crazyStanfordFormat), pw);
+        		Tree parseTree = parser.apply(crazyStanfordFormat);
+        		treePrinter.printTree(parseTree, pw);
+        		results.add(new ParseTree(sw.getBuffer().toString().trim(), parseTree.score()));
     		}
     	}
     	else
@@ -139,11 +146,13 @@ public class StanfordParserHandler implements StanfordParser.Iface {
     		String[] tokenArray = new String[tokens.size()];
     		tokens.toArray(tokenArray);
     		List<CoreLabel> crazyStanfordFormat = Sentence.toCoreLabelList(tokenArray);
-    		treePrinter.printTree(parser.apply(crazyStanfordFormat), pw);
+    		Tree parseTree = parser.apply(crazyStanfordFormat);
+    		treePrinter.printTree(parseTree, pw);
+    		results.add(new ParseTree(sw.getBuffer().toString().trim(), parseTree.score()));
     	}
     	// Odds are threads will be reused, so reset the options every time. :\
     	//resetOptions();
-    	return sw.getBuffer().toString().trim();
+    	return results;
     }
     
     public void ping() {
