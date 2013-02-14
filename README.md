@@ -20,22 +20,23 @@ For some examples, please see scripts/parse-java.sh for a Java client, scripts/p
 
 Additionally, here's an example showing how to parse one sentence of pre-tokenized data at a time:
 
-    from stanfordparser import StanfordParser
-    from stanfordparser.ttypes import *
-    from thrift import Thrift
-    from thrift.transport import TSocket, TTransport
-    from thrift.protocol import TBinaryProtocol
+```python
+from stanfordparser import StanfordParser
+from stanfordparser.ttypes import *
+from thrift import Thrift
+from thrift.transport import TSocket, TTransport
+from thrift.protocol import TBinaryProtocol
 
-    transport = TSocket.TSocket("bragi.research.ets.org", 9999)
-    transport = TTransport.TBufferedTransport(transport)
-    protocol = TBinaryProtocol.TBinaryProtocol(transport)
-    client = StanfordParser.Client(protocol)
-    transport.open()
-    for sentence in sentences:  # This is a list of tokenized sentences
-        tree = client.parse_tokens(sentence)[0] # because we only sent over a single sentence; parse_tokens ALWAYS returns an array
-	print tree.tree, "\t", tree.score  # to see the parse tree AND its score
-    transport.close()
-
+transport = TSocket.TSocket("bragi.research.ets.org", 9999)
+transport = TTransport.TBufferedTransport(transport)
+protocol = TBinaryProtocol.TBinaryProtocol(transport)
+client = StanfordParser.Client(protocol)
+transport.open()
+for sentence in sentences:  # This is a list of tokenized sentences
+    tree = client.parse_tokens(sentence)[0] # because we only sent over a single sentence; parse_tokens ALWAYS returns an array
+print tree.tree, "\t", tree.score  # to see the parse tree AND its score
+transport.close()
+```
 
 
 How to Get a Server Running Elsewhere
