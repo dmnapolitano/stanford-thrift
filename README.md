@@ -40,8 +40,7 @@ transport.close()
 ```
 
 
-How to Get a Server Running Elsewhere
--------------------------------------
+## How to Get a Server Running Elsewhere
 
 Make sure you have the Stanford Parser installed, and the stanford-parser.jar and stanford-parser-models.jar on your CLASSPATH.
 
@@ -53,7 +52,6 @@ Make sure you have the Stanford Parser installed, and the stanford-parser.jar an
 
 
 
-How to Modify and then Recompile the Clients/Server
----------------------------------------------------
+## How to Modify and then Recompile the Clients/Server
 
 Assuming you are already able to run a server as per the instructions above, and have this project cloned, modify the code ONLY if you're faimilar enough with Thrift to do so and then run `ant` to rebuild.
