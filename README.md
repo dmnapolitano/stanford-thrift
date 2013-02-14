@@ -19,6 +19,7 @@ How to Communicate with the Server on Research Boxes
 For some examples, please see scripts/parse-java.sh for a Java client, scripts/parse-python.sh for a Python client.
 
 Additionally, here's an example showing how to parse one sentence of pre-tokenized data at a time:
+
     from stanfordparser import StanfordParser
     from stanfordparser.ttypes import *
     from thrift import Thrift
@@ -34,6 +35,7 @@ Additionally, here's an example showing how to parse one sentence of pre-tokeniz
         tree = client.parse_tokens(sentence)[0] # because we only sent over a single sentence; parse_tokens ALWAYS returns an array
 	print tree.tree, "\t", tree.score  # to see the parse tree AND its score
     transport.close()
+
 
 
 How to Get a Server Running Elsewhere
