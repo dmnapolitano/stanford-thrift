@@ -3,6 +3,8 @@ import org.apache.thrift.TException;
 // Generated code
 import parser.*;
 
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -95,28 +97,35 @@ public class StanfordParserHandler implements StanfordParser.Iface {
         }
     }
 
-    public List<ParseTree> parse_text(String sentence)
+    public List<ParseTree> parse_text(String sentence) throws TException
     {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         List<ParseTree> results = new ArrayList<ParseTree>();
 
-        // assume no tokenization was done; use Stanford's default tokenizer
-        DocumentPreprocessor preprocess = new DocumentPreprocessor(new StringReader(sentence));
-        Iterator<List<HasWord>> foundSentences = preprocess.iterator();
-        while (foundSentences.hasNext())
+        try
         {
-    		Tree parseTree = parser.apply(foundSentences.next());
-    		treePrinter.printTree(parseTree, pw);
-    		results.add(new ParseTree(sw.getBuffer().toString().trim(), parseTree.score()));
+        	// assume no tokenization was done; use Stanford's default tokenizer
+        	DocumentPreprocessor preprocess = new DocumentPreprocessor(new StringReader(sentence));
+        	Iterator<List<HasWord>> foundSentences = preprocess.iterator();
+        	while (foundSentences.hasNext())
+        	{
+        		Tree parseTree = parser.apply(foundSentences.next());
+        		treePrinter.printTree(parseTree, pw);
+        		results.add(new ParseTree(sw.getBuffer().toString().trim(), parseTree.score()));
+        	}
         }
-
+        catch (Exception e)
+        {
+        	throw new TException(e.getMessage(), e.getCause());
+        }
+        	
         // Odds are threads will be reused, so reset the options every time
         // resetOptions()
         return results;
     }
 
-    public List<ParseTree> parse_tokens(List<String> tokens)
+    public List<ParseTree> parse_tokens(List<String> tokens) throws TException
     {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
@@ -134,21 +143,35 @@ public class StanfordParserHandler implements StanfordParser.Iface {
     		String[] multipleSentences = builder.toString().split("\n");
     		for (String s : multipleSentences)
     		{
-    			List<CoreLabel> crazyStanfordFormat = Sentence.toCoreLabelList(s.trim().split(" "));
-        		Tree parseTree = parser.apply(crazyStanfordFormat);
-        		treePrinter.printTree(parseTree, pw);
-        		results.add(new ParseTree(sw.getBuffer().toString().trim(), parseTree.score()));
+    			try
+    			{
+    				List<CoreLabel> crazyStanfordFormat = Sentence.toCoreLabelList(s.trim().split(" "));
+    				Tree parseTree = parser.apply(crazyStanfordFormat);
+    				treePrinter.printTree(parseTree, pw);
+    				results.add(new ParseTree(sw.getBuffer().toString().trim(), parseTree.score()));
+    			}
+    			catch (Exception e)
+    			{
+    				throw new TException(e.getMessage(), e.getCause());
+    			}
     		}
     	}
     	else
     	{
-    		// a single sentence worth of tokens
-    		String[] tokenArray = new String[tokens.size()];
-    		tokens.toArray(tokenArray);
-    		List<CoreLabel> crazyStanfordFormat = Sentence.toCoreLabelList(tokenArray);
-    		Tree parseTree = parser.apply(crazyStanfordFormat);
-    		treePrinter.printTree(parseTree, pw);
-    		results.add(new ParseTree(sw.getBuffer().toString().trim(), parseTree.score()));
+    		try
+    		{
+    			// a single sentence worth of tokens
+    			String[] tokenArray = new String[tokens.size()];
+    			tokens.toArray(tokenArray);
+    			List<CoreLabel> crazyStanfordFormat = Sentence.toCoreLabelList(tokenArray);
+    			Tree parseTree = parser.apply(crazyStanfordFormat);
+    			treePrinter.printTree(parseTree, pw);
+    			results.add(new ParseTree(sw.getBuffer().toString().trim(), parseTree.score()));
+    		}
+    		catch (Exception e)
+    		{
+    			throw new TException(e.getMessage(), e.getCause());
+    		}
     	}
     	// Odds are threads will be reused, so reset the options every time. :\
     	//resetOptions();
