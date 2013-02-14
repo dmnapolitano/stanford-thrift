@@ -33,7 +33,7 @@
       <arg line="--gen java parser.thrift"/>
     </exec>
     <exec executable="/home/research/cbrew/bin/thrift" failonerror="true">
-      <arg line="--gen py parser.thrift"/>
+      <arg line="--gen py:utf8strings,slots,new_style parser.thrift"/>
     </exec>
   </target>
 
