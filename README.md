@@ -4,6 +4,7 @@ Apache Thrift Server for the Stanford Parser
 This is a client/server setup of the Stanford Parser which uses [Apache Thrift](http://thrift.apache.org/).
 
 Things you can do with it:
+
 * Parse text that is both tokenized (by sending an array (Java ArrayList, Python list, etc.) of tokens) or untokenized (any ordinary text).
 * Send unicode (optional), receive unicode (always).
 * Parse things in a multithreaded way (Thrift provides ten threads).
@@ -20,26 +21,26 @@ For some examples, please see scripts/parse-java.sh for a Java client, scripts/p
 
 Additionally, here's an example showing how to parse one sentence of pre-tokenized data at a time:
 
-    from stanfordparser import StanfordParser
-    from stanfordparser.ttypes import *
-    from thrift import Thrift
-    from thrift.transport import TSocket, TTransport
-    from thrift.protocol import TBinaryProtocol
+```python
+from stanfordparser import StanfordParser
+from stanfordparser.ttypes import *
+from thrift import Thrift
+from thrift.transport import TSocket, TTransport
+from thrift.protocol import TBinaryProtocol
 
-    transport = TSocket.TSocket("bragi.research.ets.org", 9999)
-    transport = TTransport.TBufferedTransport(transport)
-    protocol = TBinaryProtocol.TBinaryProtocol(transport)
-    client = StanfordParser.Client(protocol)
-    transport.open()
-    for sentence in sentences:  # This is a list of tokenized sentences
-        tree = client.parse_tokens(sentence)[0] # because we only sent over a single sentence; parse_tokens ALWAYS returns an array
-	print tree.tree, "\t", tree.score  # to see the parse tree AND its score
-    transport.close()
+transport = TSocket.TSocket("bragi.research.ets.org", 9999)
+transport = TTransport.TBufferedTransport(transport)
+protocol = TBinaryProtocol.TBinaryProtocol(transport)
+client = StanfordParser.Client(protocol)
+transport.open()
+for sentence in sentences:  # This is a list of tokenized sentences
+    tree = client.parse_tokens(sentence)[0] # because we only sent over a single sentence; parse_tokens ALWAYS returns an array
+print tree.tree, "\t", tree.score  # to see the parse tree AND its score
+transport.close()
+```
 
 
-
-How to Get a Server Running Elsewhere
--------------------------------------
+## How to Get a Server Running Elsewhere
 
 Make sure you have the Stanford Parser installed, and the stanford-parser.jar and stanford-parser-models.jar on your CLASSPATH.
 
@@ -49,8 +50,9 @@ Make sure you have the Stanford Parser installed, and the stanford-parser.jar an
 4. Add the gen-py directory to your PYTHONPATH.
 5. Use scripts/start_server.sh <port number> to start a server.
 
+And then
 
-How to Modify and then Recompile the Clients/Server
----------------------------------------------------
+
+## How to Modify and then Recompile the Clients and Server
 
 Assuming you are already able to run a server as per the instructions above, and have this project cloned, modify the code ONLY if you're faimilar enough with Thrift to do so and then run `ant` to rebuild.
