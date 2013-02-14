@@ -4,6 +4,7 @@ Apache Thrift Server for the Stanford Parser
 This is a client/server setup of the Stanford Parser which uses [Apache Thrift](http://thrift.apache.org/).
 
 Things you can do with it:
+
 * Parse text that is both tokenized (by sending an array (Java ArrayList, Python list, etc.) of tokens) or untokenized (any ordinary text).
 * Send unicode (optional), receive unicode (always).
 * Parse things in a multithreaded way (Thrift provides ten threads).
