@@ -50,8 +50,9 @@ Make sure you have the Stanford Parser installed, and the stanford-parser.jar an
 4. Add the gen-py directory to your PYTHONPATH.
 5. Use scripts/start_server.sh <port number> to start a server.
 
+And then
 
 
-## How to Modify and then Recompile the Clients/Server
+## How to Modify and then Recompile the Clients and Server
 
 Assuming you are already able to run a server as per the instructions above, and have this project cloned, modify the code ONLY if you're faimilar enough with Thrift to do so and then run `ant` to rebuild.
