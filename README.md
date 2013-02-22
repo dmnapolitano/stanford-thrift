@@ -7,7 +7,7 @@ Things you can do with it:
 
 * Parse text that is both tokenized (by sending an array (Java ArrayList, Python list, etc.) of tokens) or untokenized (any ordinary text).
 * Send unicode (optional), receive unicode (always).
-* Parse things in a multithreaded way (Thrift provides ten threads).
+* Parse things in a multithreaded way without having to think about it too much (Thrift provides ten threads).
 * Receive one parse tree per sentence in the format "(ROOT (S (NP (DT This)) (VP (VBZ is) (NP (DT a) (JJ parse) (NN tree.)))))".
 * Receive the score (probability) along with that parse tree.
 * Communicate with the server using the language of your choice (with some additional coding if your choice isn't "Java" or "Python").
@@ -45,7 +45,7 @@ transport.close()
 Make sure you have the Stanford Parser installed, and the stanford-parser.jar and stanford-parser-models.jar on your CLASSPATH.
 
 1. Install the latest version of Thrift.  Add all of the jars in the installation directory's lib directory to your CLASSPATH.
-2. From this git project, download stanford-parser-wrapper.jar for the server and Java client, gen-py for the Python client, to your preferred location.
+2. Clone the operational branch of this project with `git clone -b operational` followed by the SSH address above.
 3. Add stanford-parser-wrapper.jar to your CLASSPATH.
 4. Add the gen-py directory to your PYTHONPATH.
 5. Use scripts/start_server.sh <port number> to start a server.
