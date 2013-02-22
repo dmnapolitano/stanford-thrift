@@ -49,7 +49,6 @@ Make sure you have the Stanford Parser installed, and the stanford-parser.jar an
 3. Add the gen-py directory to your PYTHONPATH.
 4. Run `scripts/start_server.sh <port number>` to start a server.
 
-And then
 
 
 ## How to Modify and then Recompile the Clients and Server
