@@ -45,14 +45,13 @@ transport.close()
 Make sure you have the Stanford Parser installed, and the stanford-parser.jar and stanford-parser-models.jar on your CLASSPATH.
 
 1. Install the latest version of Thrift.  Add all of the jars in the installation directory's lib directory to your CLASSPATH.
-2. Clone the operational branch of this project with `git clone -b operational` followed by the SSH address above.
-3. Add stanford-parser-wrapper.jar to your CLASSPATH.
-4. Add the gen-py directory to your PYTHONPATH.
-5. Use scripts/start_server.sh <port number> to start a server.
+2. Clone the operational branch of this project with `git clone -b operational` followed by the SSH address above.  (You can clone the master branch, but that will also give you the source code, which you may not be interested in here).
+3. Add the gen-py directory to your PYTHONPATH.
+4. Run `scripts/start_server.sh <port number>` to start a server.
 
 And then
 
 
 ## How to Modify and then Recompile the Clients and Server
 
-Assuming you are already able to run a server as per the instructions above, and have this project cloned, modify the code ONLY if you're faimilar enough with Thrift to do so and then run `ant` to rebuild.
+Assuming you are already able to run a server as per the instructions above, and have this project's master branch cloned, modify the code ONLY if you're faimilar enough with Thrift to do so and then run `ant` to rebuild.  This will result in an updated stanford-parser-wrapper.jar in the same place you ran `ant` from (which is probably the place you cloned master to).
