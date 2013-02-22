@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.BufferedReader;
+import java.util.List;
 
 
 import org.apache.thrift.TException;
@@ -58,8 +59,11 @@ public class StanfordParserClient {
             BufferedReader in = new BufferedReader(infile);
             while (in.ready()) {
                 String sentence = in.readLine();
-                String parse = client.parse_sentence(sentence);
-                System.out.println(parse);
+                List<ParseTree> trees = client.parse_text(sentence);
+                for (ParseTree tree : trees)
+                {
+                    System.out.println(tree.tree);
+                }
             }
             in.close();
         }

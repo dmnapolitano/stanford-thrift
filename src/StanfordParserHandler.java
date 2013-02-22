@@ -1,3 +1,4 @@
+import org.apache.thrift.TApplicationException;
 import org.apache.thrift.TException;
 
 // Generated code
@@ -97,7 +98,7 @@ public class StanfordParserHandler implements StanfordParser.Iface {
         }
     }
 
-    public List<ParseTree> parse_text(String sentence) throws TException
+    public List<ParseTree> parse_text(String sentence) throws TApplicationException
     {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
@@ -117,7 +118,7 @@ public class StanfordParserHandler implements StanfordParser.Iface {
         }
         catch (Exception e)
         {
-        	throw new TException(e.getMessage(), e.getCause());
+        	throw new TApplicationException(TApplicationException.INTERNAL_ERROR, e.getMessage());
         }
         	
         // Odds are threads will be reused, so reset the options every time
@@ -125,7 +126,7 @@ public class StanfordParserHandler implements StanfordParser.Iface {
         return results;
     }
 
-    public List<ParseTree> parse_tokens(List<String> tokens) throws TException
+    public List<ParseTree> parse_tokens(List<String> tokens) throws TApplicationException
     {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
@@ -152,7 +153,7 @@ public class StanfordParserHandler implements StanfordParser.Iface {
     			}
     			catch (Exception e)
     			{
-    				throw new TException(e.getMessage(), e.getCause());
+    				throw new TApplicationException(TApplicationException.INTERNAL_ERROR, e.getMessage());
     			}
     		}
     	}
@@ -170,7 +171,8 @@ public class StanfordParserHandler implements StanfordParser.Iface {
     		}
     		catch (Exception e)
     		{
-    			throw new TException(e.getMessage(), e.getCause());
+    			//throw new TException(e.getMessage(), e.getCause());
+    			throw new TApplicationException(TApplicationException.INTERNAL_ERROR, "bar");
     		}
     	}
     	// Odds are threads will be reused, so reset the options every time. :\
