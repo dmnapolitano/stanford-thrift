@@ -71,12 +71,12 @@ and then
 
 ## How to Get a Server Running Elsewhere
 
-Make sure you have the Stanford Parser installed, and the stanford-parser.jar and stanford-parser-models.jar on your CLASSPATH.
+If you are on a research server, the latest version of the Stanford Parser will always be in `/home/nlp-text/dynamic/NLPTools/stanford-parser`, and Thrift can be found in `/home/nlp-text/dynamic/NLPTools/thrift`.
+Make sure the stanford-parser.jar and stanford-parser-models.jar, and also all of the jars in thrift/lib, are on your CLASSPATH.
 
-1. Install the latest version of Thrift.  Add all of the jars in the installation directory's lib directory to your CLASSPATH.
-2. Clone the operational branch of this project with `git clone -b operational` followed by the SSH address above.  (You can clone the master branch, but that will also give you the source code, which you may not be interested in here).
-3. Add the gen-py directory to your PYTHONPATH.
-4. Run `scripts/start_server.sh <port number>` to start a server.
+1. Clone the operational branch of this project with `git clone -b operational` followed by the SSH address above.  (You can clone the master branch, but that will also give you the source code, which you may not be interested in here).
+2. Add the gen-py directory to your PYTHONPATH.
+3. Run `scripts/start_server.sh <port number>` to start a server.
 
 
 
