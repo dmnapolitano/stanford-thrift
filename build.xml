@@ -29,10 +29,10 @@
 
  <target name="generate">
     <!-- Generate the thrift gen-java and gen-py source -->
-    <exec executable="/home/research/cbrew/bin/thrift" failonerror="true">
+    <exec executable="/home/nlp-text/dynamic/NLPTools/thrift/bin/thrift" failonerror="true">
       <arg line="--gen java parser.thrift"/>
     </exec>
-    <exec executable="/home/research/cbrew/bin/thrift" failonerror="true">
+    <exec executable="/home/nlp-text/dynamic/NLPTools/thrift/bin/thrift" failonerror="true">
       <arg line="--gen py:utf8strings,slots,new_style parser.thrift"/>
     </exec>
   </target>

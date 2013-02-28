@@ -28,19 +28,19 @@ public class StanfordParserHandler implements StanfordParser.Iface {
 
     private LexicalizedParser parser;
     private boolean customOutputOptionsSet;
-    private boolean customParserOptionsSet;
+//    private boolean customParserOptionsSet;
     private TreePrint treePrinter;
 
     public StanfordParserHandler(String modelFile) {
         loadModel(modelFile);
         treePrinter = new TreePrint("oneline", "", new PennTreebankLanguagePack());
         customOutputOptionsSet = false;
-        customParserOptionsSet = false;
+//        customParserOptionsSet = false;
     }
 
     private void loadModel(String modelFile)
     {
-        if (modelFile.equals("")) {
+        if (modelFile.equals("") || modelFile == null) {
             parser = LexicalizedParser.loadModel("edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz", new String[]{});
         }
         else {
@@ -48,66 +48,86 @@ public class StanfordParserHandler implements StanfordParser.Iface {
         }
     }
 
-    private void setOptions(List<String> options)
+    private void setOptions(List<String> outputOptions) throws Exception
     {
-        String outputFormats = "";
-        String outputFormatOptions = "";
+        String outputFormatStr = "oneline";
+        String outputFormatOptionsStr = "";
 
         // for output formatting
-        if (options.contains("-outputFormat"))
+        if (outputOptions.size() > 0 || outputOptions != null)
         {
-            int argIndex = options.indexOf("-outputFormat");
-            outputFormats = options.get(argIndex+1);
-            options.remove(argIndex + 1);
-            options.remove(argIndex);
+        	int ofIndex = outputOptions.indexOf("-outputFormat");
+        	int ofoIndex = outputOptions.indexOf("-outputFormatOptions");
+        	
+        	if (ofIndex >= 0)
+        	{
+        		outputFormatStr = outputOptions.get(ofIndex+1);
+        	}
+        	if (ofoIndex >= 0)
+        	{
+        		outputFormatOptionsStr = outputOptions.get(ofoIndex+1);
+        	}
+        	if (ofIndex < 0 && ofoIndex < 0)
+        	{
+        		throw new Exception("Invalid option(s): " + outputOptions.toString());
+        	}
+        	
             customOutputOptionsSet = true;
         }
-        if (options.contains("-outputFormatOptions"))
+        else
         {
-            int argIndex = options.indexOf("-outputFormatOptions");
-            outputFormatOptions = options.get(argIndex+1);
-            options.remove(argIndex + 1);
-            options.remove(argIndex);
-            customOutputOptionsSet = true;
+        	customOutputOptionsSet = false;
         }
+        
+        treePrinter = new TreePrint(outputFormatStr, outputFormatOptionsStr, new PennTreebankLanguagePack());
 
-        treePrinter = new TreePrint(outputFormats, outputFormatOptions, new PennTreebankLanguagePack());
-
-        // for everything else
-        if (!options.isEmpty())
-        {
-            String[] remainingOptions = new String[options.size()];
-            options.toArray(remainingOptions);
-            parser.setOptionFlags(remainingOptions);
-            customParserOptionsSet = true;
-        }
+        // for everything else; disabled for now
+//        if (!options.isEmpty())
+//        {
+//        	String[] remainingOptions = new String[options.size()];
+//        	options.toArray(remainingOptions);
+//        	parser.setOptionFlags(remainingOptions);
+//        	customParserOptionsSet = true;
+//        }
     }
 
-    private void resetOptions(String modelFile)
-    {
-        if (customParserOptionsSet)
-        {
-            loadModel(modelFile);
-            customParserOptionsSet = false;
-        }
+//    private void resetOptions()
+//    {
+//        if (customParserOptionsSet)
+//        {
+//            loadModel(modelFile);
+//            customParserOptionsSet = false;
+//        }
+//
+//        if (customOutputOptionsSet)
+//        {
+//            treePrinter = new TreePrint("oneline", "", new PennTreebankLanguagePack());
+//            customOutputOptionsSet = false;
+//        }
+//    }
 
-        if (customOutputOptionsSet)
-        {
-            treePrinter = new TreePrint("oneline", "", new PennTreebankLanguagePack());
-            customOutputOptionsSet = false;
-        }
-    }
-
-    public List<ParseTree> parse_text(String sentence) throws TApplicationException
+    public List<ParseTree> parse_text(String text, List<String> outputFormat) throws TApplicationException
     {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         List<ParseTree> results = new ArrayList<ParseTree>();
-
+        
         try
         {
+            if (outputFormat != null && outputFormat.size() > 0)
+            {
+            	setOptions(outputFormat);
+            }
+            else
+            {
+            	if (customOutputOptionsSet)
+            	{
+            		setOptions(null);
+            	}
+            }
+            
         	// assume no tokenization was done; use Stanford's default tokenizer
-        	DocumentPreprocessor preprocess = new DocumentPreprocessor(new StringReader(sentence));
+        	DocumentPreprocessor preprocess = new DocumentPreprocessor(new StringReader(text));
         	Iterator<List<HasWord>> foundSentences = preprocess.iterator();
         	while (foundSentences.hasNext())
         	{
@@ -118,22 +138,25 @@ public class StanfordParserHandler implements StanfordParser.Iface {
         }
         catch (Exception e)
         {
+        	// FIXME
         	throw new TApplicationException(TApplicationException.INTERNAL_ERROR, e.getMessage());
         }
-        	
-        // Odds are threads will be reused, so reset the options every time
-        // resetOptions()
+
         return results;
     }
 
-    public List<ParseTree> parse_tokens(List<String> tokens) throws TApplicationException
+    public ParseTree parse_tokens(List<String> tokens, List<String> outputFormat) throws TApplicationException
     {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
-        List<ParseTree> results = new ArrayList<ParseTree>();
+//        List<ParseTree> results = new ArrayList<ParseTree>();
     	
     	// assume an array of tokens was passed in
-    	if (tokens.contains("\n"))
+        // This doesn't seem to be getting used much; the typical case is to pass in one sentence worth of tokens.
+        // This code here handled the case where you wanted two parse trees, one for each sentence "This is a sentence.  It is about cats."
+        // and you wanted to pass in [["This", "is", "a", "sentence", "."], ["It", "is", "about", "cats", "."]]
+        // but instead this code is looking for ["This", "is", "a", "sentence", ".", "\n", "It", "is", "about", "cats", "."]
+    	/*if (tokens.contains("\n"))
     	{
     		StringBuilder builder = new StringBuilder();
     		// at least one sentence worth of tokens
@@ -158,26 +181,38 @@ public class StanfordParserHandler implements StanfordParser.Iface {
     		}
     	}
     	else
-    	{
-    		try
-    		{
-    			// a single sentence worth of tokens
-    			String[] tokenArray = new String[tokens.size()];
-    			tokens.toArray(tokenArray);
-    			List<CoreLabel> crazyStanfordFormat = Sentence.toCoreLabelList(tokenArray);
-    			Tree parseTree = parser.apply(crazyStanfordFormat);
-    			treePrinter.printTree(parseTree, pw);
-    			results.add(new ParseTree(sw.getBuffer().toString().trim(), parseTree.score()));
-    		}
-    		catch (Exception e)
-    		{
-    			//throw new TException(e.getMessage(), e.getCause());
-    			throw new TApplicationException(TApplicationException.INTERNAL_ERROR, "bar");
-    		}
-    	}
-    	// Odds are threads will be reused, so reset the options every time. :\
-    	//resetOptions();
-    	return results;
+    	{*/
+        try
+        {
+            if (outputFormat != null && outputFormat.size() > 0)
+            {
+            	setOptions(outputFormat);
+            }
+            else
+            {
+            	if (customOutputOptionsSet)
+            	{
+            		setOptions(null);
+            	}
+            }
+        	
+        	// a single sentence worth of tokens
+        	String[] tokenArray = new String[tokens.size()];
+        	tokens.toArray(tokenArray);
+        	List<CoreLabel> crazyStanfordFormat = Sentence.toCoreLabelList(tokenArray);
+        	Tree parseTree = parser.apply(crazyStanfordFormat);
+        	treePrinter.printTree(parseTree, pw);
+//        	results.add(new ParseTree(sw.getBuffer().toString().trim(), parseTree.score()));
+        	return new ParseTree(sw.getBuffer().toString().trim(), parseTree.score());
+        }
+        catch (Exception e)
+        {
+        	// FIXME
+        	throw new TApplicationException(TApplicationException.INTERNAL_ERROR, e.getMessage());
+        }
+    	//}
+
+//    	return results;
     }
     
     public void ping() {

@@ -59,7 +59,7 @@ public class StanfordParserClient {
             BufferedReader in = new BufferedReader(infile);
             while (in.ready()) {
                 String sentence = in.readLine();
-                List<ParseTree> trees = client.parse_text(sentence);
+                List<ParseTree> trees = client.parse_text(sentence, null);
                 for (ParseTree tree : trees)
                 {
                     System.out.println(tree.tree);

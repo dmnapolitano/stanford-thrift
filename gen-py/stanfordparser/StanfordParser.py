@@ -21,17 +21,19 @@ class Iface(object):
   def ping(self, ):
     pass
 
-  def parse_text(self, sentence):
+  def parse_text(self, sentence, outputFormat):
     """
     Parameters:
      - sentence
+     - outputFormat
     """
     pass
 
-  def parse_tokens(self, tokens):
+  def parse_tokens(self, tokens, outputFormat):
     """
     Parameters:
      - tokens
+     - outputFormat
     """
     pass
 
@@ -69,18 +71,20 @@ class Client(Iface):
     self._iprot.readMessageEnd()
     return
 
-  def parse_text(self, sentence):
+  def parse_text(self, sentence, outputFormat):
     """
     Parameters:
      - sentence
+     - outputFormat
     """
-    self.send_parse_text(sentence)
+    self.send_parse_text(sentence, outputFormat)
     return self.recv_parse_text()
 
-  def send_parse_text(self, sentence):
+  def send_parse_text(self, sentence, outputFormat):
     self._oprot.writeMessageBegin('parse_text', TMessageType.CALL, self._seqid)
     args = parse_text_args()
     args.sentence = sentence
+    args.outputFormat = outputFormat
     args.write(self._oprot)
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
@@ -99,18 +103,20 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "parse_text failed: unknown result");
 
-  def parse_tokens(self, tokens):
+  def parse_tokens(self, tokens, outputFormat):
     """
     Parameters:
      - tokens
+     - outputFormat
     """
-    self.send_parse_tokens(tokens)
+    self.send_parse_tokens(tokens, outputFormat)
     return self.recv_parse_tokens()
 
-  def send_parse_tokens(self, tokens):
+  def send_parse_tokens(self, tokens, outputFormat):
     self._oprot.writeMessageBegin('parse_tokens', TMessageType.CALL, self._seqid)
     args = parse_tokens_args()
     args.tokens = tokens
+    args.outputFormat = outputFormat
     args.write(self._oprot)
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
@@ -179,7 +185,7 @@ class Processor(Iface, TProcessor):
     args.read(iprot)
     iprot.readMessageEnd()
     result = parse_text_result()
-    result.success = self._handler.parse_text(args.sentence)
+    result.success = self._handler.parse_text(args.sentence, args.outputFormat)
     oprot.writeMessageBegin("parse_text", TMessageType.REPLY, seqid)
     result.write(oprot)
     oprot.writeMessageEnd()
@@ -190,7 +196,7 @@ class Processor(Iface, TProcessor):
     args.read(iprot)
     iprot.readMessageEnd()
     result = parse_tokens_result()
-    result.success = self._handler.parse_tokens(args.tokens)
+    result.success = self._handler.parse_tokens(args.tokens, args.outputFormat)
     oprot.writeMessageBegin("parse_tokens", TMessageType.REPLY, seqid)
     result.write(oprot)
     oprot.writeMessageEnd()
@@ -316,19 +322,23 @@ class parse_text_args(object):
   """
   Attributes:
    - sentence
+   - outputFormat
   """
 
   __slots__ = [ 
     'sentence',
+    'outputFormat',
    ]
 
   thrift_spec = (
     None, # 0
     (1, TType.STRING, 'sentence', None, None, ), # 1
+    (2, TType.LIST, 'outputFormat', (TType.STRING,None), None, ), # 2
   )
 
-  def __init__(self, sentence=None,):
+  def __init__(self, sentence=None, outputFormat=None,):
     self.sentence = sentence
+    self.outputFormat = outputFormat
 
   def read(self, iprot):
     if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
@@ -344,6 +354,16 @@ class parse_text_args(object):
           self.sentence = iprot.readString().decode('utf-8')
         else:
           iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.LIST:
+          self.outputFormat = []
+          (_etype3, _size0) = iprot.readListBegin()
+          for _i4 in xrange(_size0):
+            _elem5 = iprot.readString().decode('utf-8')
+            self.outputFormat.append(_elem5)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -357,6 +377,13 @@ class parse_text_args(object):
     if self.sentence is not None:
       oprot.writeFieldBegin('sentence', TType.STRING, 1)
       oprot.writeString(self.sentence.encode('utf-8'))
+      oprot.writeFieldEnd()
+    if self.outputFormat is not None:
+      oprot.writeFieldBegin('outputFormat', TType.LIST, 2)
+      oprot.writeListBegin(TType.STRING, len(self.outputFormat))
+      for iter6 in self.outputFormat:
+        oprot.writeString(iter6.encode('utf-8'))
+      oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
@@ -413,11 +440,11 @@ class parse_text_result(object):
       if fid == 0:
         if ftype == TType.LIST:
           self.success = []
-          (_etype3, _size0) = iprot.readListBegin()
-          for _i4 in xrange(_size0):
-            _elem5 = ParseTree()
-            _elem5.read(iprot)
-            self.success.append(_elem5)
+          (_etype10, _size7) = iprot.readListBegin()
+          for _i11 in xrange(_size7):
+            _elem12 = ParseTree()
+            _elem12.read(iprot)
+            self.success.append(_elem12)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -434,8 +461,8 @@ class parse_text_result(object):
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.LIST, 0)
       oprot.writeListBegin(TType.STRUCT, len(self.success))
-      for iter6 in self.success:
-        iter6.write(oprot)
+      for iter13 in self.success:
+        iter13.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -468,19 +495,23 @@ class parse_tokens_args(object):
   """
   Attributes:
    - tokens
+   - outputFormat
   """
 
   __slots__ = [ 
     'tokens',
+    'outputFormat',
    ]
 
   thrift_spec = (
     None, # 0
     (1, TType.LIST, 'tokens', (TType.STRING,None), None, ), # 1
+    (2, TType.LIST, 'outputFormat', (TType.STRING,None), None, ), # 2
   )
 
-  def __init__(self, tokens=None,):
+  def __init__(self, tokens=None, outputFormat=None,):
     self.tokens = tokens
+    self.outputFormat = outputFormat
 
   def read(self, iprot):
     if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
@@ -494,10 +525,20 @@ class parse_tokens_args(object):
       if fid == 1:
         if ftype == TType.LIST:
           self.tokens = []
-          (_etype10, _size7) = iprot.readListBegin()
-          for _i11 in xrange(_size7):
-            _elem12 = iprot.readString().decode('utf-8')
-            self.tokens.append(_elem12)
+          (_etype17, _size14) = iprot.readListBegin()
+          for _i18 in xrange(_size14):
+            _elem19 = iprot.readString().decode('utf-8')
+            self.tokens.append(_elem19)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.LIST:
+          self.outputFormat = []
+          (_etype23, _size20) = iprot.readListBegin()
+          for _i24 in xrange(_size20):
+            _elem25 = iprot.readString().decode('utf-8')
+            self.outputFormat.append(_elem25)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -514,8 +555,15 @@ class parse_tokens_args(object):
     if self.tokens is not None:
       oprot.writeFieldBegin('tokens', TType.LIST, 1)
       oprot.writeListBegin(TType.STRING, len(self.tokens))
-      for iter13 in self.tokens:
-        oprot.writeString(iter13.encode('utf-8'))
+      for iter26 in self.tokens:
+        oprot.writeString(iter26.encode('utf-8'))
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    if self.outputFormat is not None:
+      oprot.writeFieldBegin('outputFormat', TType.LIST, 2)
+      oprot.writeListBegin(TType.STRING, len(self.outputFormat))
+      for iter27 in self.outputFormat:
+        oprot.writeString(iter27.encode('utf-8'))
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -555,7 +603,7 @@ class parse_tokens_result(object):
    ]
 
   thrift_spec = (
-    (0, TType.LIST, 'success', (TType.STRUCT,(ParseTree, ParseTree.thrift_spec)), None, ), # 0
+    (0, TType.STRUCT, 'success', (ParseTree, ParseTree.thrift_spec), None, ), # 0
   )
 
   def __init__(self, success=None,):
@@ -571,14 +619,9 @@ class parse_tokens_result(object):
       if ftype == TType.STOP:
         break
       if fid == 0:
-        if ftype == TType.LIST:
-          self.success = []
-          (_etype17, _size14) = iprot.readListBegin()
-          for _i18 in xrange(_size14):
-            _elem19 = ParseTree()
-            _elem19.read(iprot)
-            self.success.append(_elem19)
-          iprot.readListEnd()
+        if ftype == TType.STRUCT:
+          self.success = ParseTree()
+          self.success.read(iprot)
         else:
           iprot.skip(ftype)
       else:
@@ -592,11 +635,8 @@ class parse_tokens_result(object):
       return
     oprot.writeStructBegin('parse_tokens_result')
     if self.success is not None:
-      oprot.writeFieldBegin('success', TType.LIST, 0)
-      oprot.writeListBegin(TType.STRUCT, len(self.success))
-      for iter20 in self.success:
-        iter20.write(oprot)
-      oprot.writeListEnd()
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()

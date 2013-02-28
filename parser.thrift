@@ -9,7 +9,7 @@ struct ParseTree {
 service StanfordParser {
 
     void ping(),
-    list<ParseTree> parse_text(1:string sentence),
-    list<ParseTree> parse_tokens(1:list<string> tokens),
+    list<ParseTree> parse_text(1:string text, 2:list<string> outputFormat),
+    ParseTree parse_tokens(1:list<string> tokens, 2:list<string> outputFormat),
     oneway void zip()
 }
