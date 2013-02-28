@@ -39,6 +39,7 @@ In order to get these `ParseTree` objects, you have two choices, depending on wh
 ##### What one can do with the `outputFormat` argument to both of these methods
 
 The purpose of the `outputFormat` argument is to allow one to supply arguments in the same style as one would via command-line call to the Stanford Parser. **The only command-line switches supported here are `-outputFormat` and `-outputFormatOptions`, but they are supported in full.**  By that I mean any valid argument to each of those options is also valid here.
+You can also pass in `null`/`None` and that will return parse trees in this server's default format of `-outputFormat "oneline"`.
 You can also supply multiple `-outputFormat` arguments, but note: you'll get back all of those parse trees, but altogether in the `tree` member of the returned `ParseTree` object, separated by two newlines (`\n\n`).
 Thus, a call to a client object `client` that looks like:
 
