@@ -18,6 +18,16 @@ Things you can do with it:
 **The server will usually be running on edsel, but check via `qstatx`.  The port will always be 9999.**
 For some examples, please see the scripts/ directory for Python clients, src/StanfordParserClient.java for a Java client.
 
+To write/use a Java client, add `/home/nlp-text/dynamic/NLPTools/thrift/all_thrift_jars.jar` to your `$CLASSPATH`.
+To write/use a Python client, add `/home/nlp-text/dynamic/NLPTools/stanford-thrift/gen-py` to your `$PYTHONPATH.`
+
+
+### How to Set Up Thrift on Your Local Machine
+
+You can communicate with the server on edsel from your local machine in the exact same way you would from any one of the servers.
+As far as I can tell, the required libraries aren't bundled with Thrift, so you can either download `/home/nlp-text/dynamic/NLPTools/thrift/all_thrift_jars.jar` or `/home/nlp-text/dynamic/NLPTools/thrift/lib` from our servers to make sure you have all of them.
+Then download Thrift from the website above and follow the relevant instructions under "Build and Install the Apache Thrift compiler".
+
 
 ## How to Interact with the Methods and Data Structures
 
@@ -73,7 +83,7 @@ and then
 ## How to Get a Server Running Elsewhere
 
 If you are on a research server, the latest version of the Stanford Parser will always be in `/home/nlp-text/dynamic/NLPTools/stanford-parser`, and Thrift can be found in `/home/nlp-text/dynamic/NLPTools/thrift`.
-Make sure the stanford-parser.jar and stanford-parser-models.jar, and also all of the jars in thrift/lib, are on your CLASSPATH.
+Make sure the stanford-parser.jar and stanford-parser-models.jar, and also either the entire contents of thrift/lib OR `/home/nlp-text/dynamic/NLPTools/thrift/all_thrift_jars.jar`, are on your CLASSPATH.  (The latter is the contents of the former, bundled into one jar using Ant.)
 
 1. Clone the operational branch of this project with `git clone -b operational` followed by the SSH address above.  (You can clone the master branch, but that will also give you the source code, which you may not be interested in here).
 2. Add the gen-py directory to your PYTHONPATH.
