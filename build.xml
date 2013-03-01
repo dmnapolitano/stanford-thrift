@@ -8,7 +8,7 @@
   <property name="build" location="build" />
 
   <path id="libs.classpath">
-    <fileset dir="/home/nlp-text/dynamic/NLPTools/thrift/lib">
+    <fileset dir="/home/nlp-text/dynamic/NLPTools/thrift">
       <include name="*.jar" />
     </fileset>
     <fileset dir="/home/nlp-text/dynamic/NLPTools/stanford-parser">
@@ -19,6 +19,12 @@
     <path refid="libs.classpath" />
     <pathelement path="${genjava}" />
   </path>
+
+  <target name="combine_thrift_jars">
+    <zip destfile="/home/nlp-text/dynamic/NLPTools/thrift/all_thrift_jars.jar">
+      <zipgroupfileset dir="/home/nlp-text/dynamic/NLPTools/thrift/lib" includes="*.jar"/>
+    </zip>
+  </target>
 
   <target name="init">
     <tstamp />
