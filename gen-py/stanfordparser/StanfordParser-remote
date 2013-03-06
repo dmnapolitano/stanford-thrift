@@ -24,7 +24,7 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
   print ''
   print 'Functions:'
   print '  void ping()'
-  print '   parse_text(string sentence,  outputFormat)'
+  print '   parse_text(string text,  outputFormat)'
   print '  ParseTree parse_tokens( tokens,  outputFormat)'
   print '  void zip()'
   print ''

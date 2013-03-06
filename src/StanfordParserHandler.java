@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.InetAddress;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -31,7 +32,8 @@ public class StanfordParserHandler implements StanfordParser.Iface {
 //    private boolean customParserOptionsSet;
     private TreePrint treePrinter;
 
-    public StanfordParserHandler(String modelFile) {
+    public StanfordParserHandler(String modelFile) 
+    {
         loadModel(modelFile);
         treePrinter = new TreePrint("oneline", "", new PennTreebankLanguagePack());
         customOutputOptionsSet = false;
@@ -145,7 +147,7 @@ public class StanfordParserHandler implements StanfordParser.Iface {
         return results;
     }
 
-    public ParseTree parse_tokens(List<String> tokens, List<String> outputFormat) throws TApplicationException
+    public ParseTree parse_tokens(List<String> tokens, List<String> outputFormat) throws SerializedException
     {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
@@ -208,10 +210,20 @@ public class StanfordParserHandler implements StanfordParser.Iface {
         catch (Exception e)
         {
         	// FIXME
-        	throw new TApplicationException(TApplicationException.INTERNAL_ERROR, e.getMessage());
+        	//throw new TApplicationException(TApplicationException.INTERNAL_ERROR, e.getMessage());
+        	try
+        	{
+        		ByteArrayOutputStream os = new ByteArrayOutputStream();
+        		new ObjectOutputStream(os).writeObject(e);
+        		throw new SerializedException(ByteBuffer.wrap(os.toByteArray()));
+        	}
+        	catch (Exception ex)
+        	{
+        		System.err.println(ex.getMessage());
+        	}
         }
     	//}
-
+        return null;
 //    	return results;
     }
     

@@ -21,10 +21,10 @@ class Iface(object):
   def ping(self, ):
     pass
 
-  def parse_text(self, sentence, outputFormat):
+  def parse_text(self, text, outputFormat):
     """
     Parameters:
-     - sentence
+     - text
      - outputFormat
     """
     pass
@@ -71,19 +71,19 @@ class Client(Iface):
     self._iprot.readMessageEnd()
     return
 
-  def parse_text(self, sentence, outputFormat):
+  def parse_text(self, text, outputFormat):
     """
     Parameters:
-     - sentence
+     - text
      - outputFormat
     """
-    self.send_parse_text(sentence, outputFormat)
+    self.send_parse_text(text, outputFormat)
     return self.recv_parse_text()
 
-  def send_parse_text(self, sentence, outputFormat):
+  def send_parse_text(self, text, outputFormat):
     self._oprot.writeMessageBegin('parse_text', TMessageType.CALL, self._seqid)
     args = parse_text_args()
-    args.sentence = sentence
+    args.text = text
     args.outputFormat = outputFormat
     args.write(self._oprot)
     self._oprot.writeMessageEnd()
@@ -133,6 +133,8 @@ class Client(Iface):
     self._iprot.readMessageEnd()
     if result.success is not None:
       return result.success
+    if result.se is not None:
+      raise result.se
     raise TApplicationException(TApplicationException.MISSING_RESULT, "parse_tokens failed: unknown result");
 
   def zip(self, ):
@@ -185,7 +187,7 @@ class Processor(Iface, TProcessor):
     args.read(iprot)
     iprot.readMessageEnd()
     result = parse_text_result()
-    result.success = self._handler.parse_text(args.sentence, args.outputFormat)
+    result.success = self._handler.parse_text(args.text, args.outputFormat)
     oprot.writeMessageBegin("parse_text", TMessageType.REPLY, seqid)
     result.write(oprot)
     oprot.writeMessageEnd()
@@ -196,7 +198,10 @@ class Processor(Iface, TProcessor):
     args.read(iprot)
     iprot.readMessageEnd()
     result = parse_tokens_result()
-    result.success = self._handler.parse_tokens(args.tokens, args.outputFormat)
+    try:
+      result.success = self._handler.parse_tokens(args.tokens, args.outputFormat)
+    except SerializedException as se:
+      result.se = se
     oprot.writeMessageBegin("parse_tokens", TMessageType.REPLY, seqid)
     result.write(oprot)
     oprot.writeMessageEnd()
@@ -321,23 +326,23 @@ class ping_result(object):
 class parse_text_args(object):
   """
   Attributes:
-   - sentence
+   - text
    - outputFormat
   """
 
   __slots__ = [ 
-    'sentence',
+    'text',
     'outputFormat',
    ]
 
   thrift_spec = (
     None, # 0
-    (1, TType.STRING, 'sentence', None, None, ), # 1
+    (1, TType.STRING, 'text', None, None, ), # 1
     (2, TType.LIST, 'outputFormat', (TType.STRING,None), None, ), # 2
   )
 
-  def __init__(self, sentence=None, outputFormat=None,):
-    self.sentence = sentence
+  def __init__(self, text=None, outputFormat=None,):
+    self.text = text
     self.outputFormat = outputFormat
 
   def read(self, iprot):
@@ -351,7 +356,7 @@ class parse_text_args(object):
         break
       if fid == 1:
         if ftype == TType.STRING:
-          self.sentence = iprot.readString().decode('utf-8')
+          self.text = iprot.readString().decode('utf-8')
         else:
           iprot.skip(ftype)
       elif fid == 2:
@@ -374,9 +379,9 @@ class parse_text_args(object):
       oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
       return
     oprot.writeStructBegin('parse_text_args')
-    if self.sentence is not None:
-      oprot.writeFieldBegin('sentence', TType.STRING, 1)
-      oprot.writeString(self.sentence.encode('utf-8'))
+    if self.text is not None:
+      oprot.writeFieldBegin('text', TType.STRING, 1)
+      oprot.writeString(self.text.encode('utf-8'))
       oprot.writeFieldEnd()
     if self.outputFormat is not None:
       oprot.writeFieldBegin('outputFormat', TType.LIST, 2)
@@ -596,18 +601,22 @@ class parse_tokens_result(object):
   """
   Attributes:
    - success
+   - se
   """
 
   __slots__ = [ 
     'success',
+    'se',
    ]
 
   thrift_spec = (
     (0, TType.STRUCT, 'success', (ParseTree, ParseTree.thrift_spec), None, ), # 0
+    (1, TType.STRUCT, 'se', (SerializedException, SerializedException.thrift_spec), None, ), # 1
   )
 
-  def __init__(self, success=None,):
+  def __init__(self, success=None, se=None,):
     self.success = success
+    self.se = se
 
   def read(self, iprot):
     if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
@@ -624,6 +633,12 @@ class parse_tokens_result(object):
           self.success.read(iprot)
         else:
           iprot.skip(ftype)
+      elif fid == 1:
+        if ftype == TType.STRUCT:
+          self.se = SerializedException()
+          self.se.read(iprot)
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -637,6 +652,10 @@ class parse_tokens_result(object):
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.STRUCT, 0)
       self.success.write(oprot)
+      oprot.writeFieldEnd()
+    if self.se is not None:
+      oprot.writeFieldBegin('se', TType.STRUCT, 1)
+      self.se.write(oprot)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
