@@ -1,24 +1,24 @@
-Apache Thrift Server for the Stanford Parser
-============================================
+Apache Thrift Server for Stanford CoreNLP
+=========================================
 
-This is a client/server setup of the Stanford Parser which uses [Apache Thrift](http://thrift.apache.org/).
+This is a client/server setup of Stanford's CoreNLP which uses [Apache Thrift](http://thrift.apache.org/).
 
 Things you can do with it:
 
-* Parse text that is both tokenized (by sending an array (Java ArrayList, Python list, etc.) of tokens) or untokenized (any ordinary text).
+* Send over text/data in a variety of formats and receive:
+	- Parse Trees **See README_parser.md**
+	- Named Entities **See README_ner.md**
 * Send unicode (optional), receive unicode (always).
-* Parse things in a multithreaded way without having to think about it too much (Thrift provides ten threads).
-* Receive one parse tree per sentence in the format "(ROOT (S (NP (DT This)) (VP (VBZ is) (NP (DT a) (JJ parse) (NN tree.)))))".
-* Receive the score (probability) along with that parse tree.
+* Do these things in a multithreaded way without having to think about it too much (Thrift provides ten threads).
 * Communicate with the server using the language of your choice (with some additional coding if your choice isn't "Java" or "Python").
 
 
 ## How to Communicate with the Server on Research Boxes
 
 **The server will usually be running on edsel, but check via `qstatx`.  The port will always be 9999.**
-For some examples, please see the scripts/ directory for Python clients, src/StanfordParserClient.java for a Java client.
+For some examples, please see the scripts/ directory for Python clients, src/StanfordCoreNLPClient.java for a Java client.
 
-To write/use a Java client, add `/home/nlp-text/dynamic/NLPTools/thrift/all_thrift_jars.jar` to your `$CLASSPATH`.
+To write/use a Java client, add `/home/nlp-text/dynamic/NLPTools/thrift/all_thrift_jars.jar`, plus every jar in `/home/nlp-text/dynamic/NLPTools/stanford-core` except the sources and javadoc ones, to your `$CLASSPATH`.
 To write/use a Python client, add `/home/nlp-text/dynamic/NLPTools/stanford-thrift/gen-py` to your `$PYTHONPATH.`
 
 
@@ -26,64 +26,13 @@ To write/use a Python client, add `/home/nlp-text/dynamic/NLPTools/stanford-thri
 
 You can communicate with the server on edsel from your local machine in the exact same way you would from any one of the servers.
 As far as I can tell, the required libraries aren't bundled with Thrift, so you can either download `/home/nlp-text/dynamic/NLPTools/thrift/all_thrift_jars.jar` or `/home/nlp-text/dynamic/NLPTools/thrift/lib` from our servers to make sure you have all of them.
-Then download Thrift from the website above and follow the relevant instructions under "Build and Install the Apache Thrift compiler".
-
-
-## How to Interact with the Methods and Data Structures
-
-The core return type here is a data structure called `ParseTree` which has two members:
-
-* `tree`: A string representing your parse tree (or, quite optionally, parse treeS; keep reading).
-* `score`: A double representing the score for that parse.
-
-In order to get these `ParseTree` objects, you have two choices, depending on whether or not you'd like Stanford's tokenizer to do some of the work for you.  The arguments are supplied in both Python and Java terms for ease of understanding, but again, see the clients if you're confused.  Keep reading for more information on the `outputFormat` parameter to each of these methods.
-
-* `parse_text(text, outputFormat)` where `text` is a Java `String`/Python `str` or `unicode`, `outputFormat` is a Java `List<String>`/Python list containing `str`/`unicode`.
-  Returns: Java `List<ParseTree>`/Python list containing `ParseTree` objects.
-  Given any untokenized, arbitrary text, use Stanford's sentence and word tokenizers to do that bit of the work.
-
-* `parse_tokens(tokens, outputFormat)` where `tokens` is a Java `List<String>`/Python list containing `str`/`unicode`, `outputFormat` is a Java `List<String>`/Python list containing `str`/`unicode`.
-   Returns: A `ParseTree` object.
-   Given a single sentence worth of output from toksent and expunct (for example), return that sentence's corresponding result from Stanford Parser.  Does not use Stanford's tokenizers.
-   
-##### What one can do with the `outputFormat` argument to both of these methods
-
-The purpose of the `outputFormat` argument is to allow one to supply arguments in the same style as one would via command-line call to the Stanford Parser. **The only command-line switches supported here are `-outputFormat` and `-outputFormatOptions`, but they are supported in full.**  By that I mean any valid argument to each of those options is also valid here.
-You can also pass in `null`/`None` and that will return parse trees in this server's default format of `-outputFormat "oneline"`.
-You can also supply multiple `-outputFormat` arguments, but note: you'll get back all of those parse trees, but altogether in the `tree` member of the returned `ParseTree` object, separated by two newlines (`\n\n`).
-Thus, a call to a client object `client` that looks like:
-
-```python
-result = client.parse_tokens(["The", "cat", "sat", "on", "the", "mat", "."], 
-                             ["-outputFormat", "typedDependencies,penn", "-outputFormatOptions", "basicDependencies"])
-```
-
-will have the following inside the `tree` member:
-
-```Python
-(ROOT
-  (S
-    (NP (DT The) (NN cat))
-    (VP (VBD sat)
-      (PP (IN on)
-        (NP (DT the) (NN mat))))
-    (. .)))
-
-det(cat-2, The-1)
-nsubj(sat-3, cat-2)
-root(ROOT-0, sat-3)
-prep(sat-3, on-4)
-det(mat-6, the-5)
-pobj(on-4, mat-6)
-```
-
-and then
+Then download Thrift from the website above and follow the relevant instructions under "Build and Install the Apache Thrift Compiler".
 
 
 ## How to Get a Server Running Elsewhere
 
-If you are on a research server, the latest version of the Stanford Parser will always be in `/home/nlp-text/dynamic/NLPTools/stanford-parser`, and Thrift can be found in `/home/nlp-text/dynamic/NLPTools/thrift`.
-Make sure the stanford-parser.jar and stanford-parser-models.jar, and also either the entire contents of thrift/lib OR `/home/nlp-text/dynamic/NLPTools/thrift/all_thrift_jars.jar`, are on your CLASSPATH.  (The latter is the contents of the former, bundled into one jar using Ant.)
+If you are on a research server, the latest version of Stanford CoreNLP will always be in `/home/nlp-text/dynamic/NLPTools/stanford-core`, and Thrift can be found in `/home/nlp-text/dynamic/NLPTools/thrift`.
+Make sure the Stanford CoreNLP jars, as described above, and also either the entire contents of thrift/lib OR `/home/nlp-text/dynamic/NLPTools/thrift/all_thrift_jars.jar`, are on your CLASSPATH.  (The latter is the contents of the former, bundled into one jar using Ant.)
 
 1. Clone the operational branch of this project with `git clone -b operational` followed by the SSH address above.  (You can clone the master branch, but that will also give you the source code, which you may not be interested in here).
 2. Add the gen-py directory to your PYTHONPATH.
@@ -93,4 +42,4 @@ Make sure the stanford-parser.jar and stanford-parser-models.jar, and also eithe
 
 ## How to Modify and then Recompile the Clients and Server
 
-Assuming you are already able to run a server as per the instructions above, and have this project's master branch cloned, modify the code ONLY if you're faimilar enough with Thrift to do so and then run `ant` to rebuild.  This will result in an updated stanford-parser-wrapper.jar in the same place you ran `ant` from (which is probably the place you cloned master to).
+Assuming you are already able to run a server as per the instructions above, and have this project's master branch cloned, modify the code ONLY if you're faimilar enough with Thrift to do so and then run `ant` to rebuild.  This will result in an updated stanford-corenlp-wrapper.jar in the same place you ran `ant` from (which is probably the place you cloned master to).

@@ -3,8 +3,8 @@ import ner.StanfordNERThrift;
 import org.apache.thrift.TApplicationException;
 import org.apache.thrift.TException;
 
-// Generated code
-import parser.*;
+import parser.StanfordParserThrift;
+
 import CoreNLP.*;
 
 import java.util.List;
@@ -46,11 +46,13 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
     }
     /* End Stanford NER Methods */
     
-    public void ping() {
+    public void ping() 
+    {
         System.out.println("ping()");
     }
 
-    public void zip() {
+    public void zip() 
+    {
         System.out.println("zip()");
     }
 }
