@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 # The purpose of this client is to show how to send over a few sentences as you tokenize them with expunct.
 # It is also for me to unit test things. >:)
@@ -33,7 +34,10 @@ else:
 #sentences = ["Members of about 37 species are referred to as foxes, of which only 12 species actually belong to the Vulpes genus of \"true foxes\".", "By far the most common and widespread species of fox is the red fox (Vulpes vulpes), although various species are found on almost every continent.", "The presence of fox-like carnivores all over the globe, together with their widespread reputation for cunning, has contributed to their appearance in popular culture and folklore in many societies around the world (see also Foxes in culture).", "The hunting of foxes with packs of hounds, long an established pursuit in Europe, especially the British Isles, was exported by European settlers to various parts of the New World."]
 
 # for testing named entity systems
-sentences = ["My name is Diane and I live in New Jersey.",  "I sometimes go to New York.",  "The Food and Drug Administration is an organization."]
+#sentences = ["My name is Diane and I live in New Jersey.",  "I sometimes go to New York.",  "The Food and Drug Administration is an organization."]
+
+sentences = [u"During reconstruction , he found that certain tokenization decisions might be non-standard and impact the accuracy of the Stanford parser that we plan to use to extract features , such as separating hyphens and apostrophes with spaces , as in today ‘s and co – workers ."]
+sentences = [u"During reconstruction, he found that certain tokenization decisions might be non-standard and impact the accuracy of the Stanford parser that we plan to use to extract features, such as separating hyphens and apostrophes with spaces, as in today's and co–workers."]
 
 transport = TSocket.TSocket(server, port)
 transport = TTransport.TBufferedTransport(transport)
@@ -46,7 +50,7 @@ transport.open()
 # Note that the DEFAULT is what you would get if you specified "oneline" on the command line, or "None" here.
 #outputOptions = ["-outputFormat", "typedDependencies,penn", "-outputFormatOptions", "basicDependencies"]
 #outputOptions = None
-outputOptions = ["-outputFormat", "wordsAndTags,oneline"]
+outputOptions = ["-outputFormat", "oneline"]
 
 for sentence in sentences:
     #sentence = UnicodeDammit(sentence, ["windows-1252", "utf8"]).unicode_markup
