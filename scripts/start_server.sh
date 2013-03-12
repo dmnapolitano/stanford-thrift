@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CMD="java -cp $CLASSPATH:stanford-parser-wrapper.jar StanfordParserServer"
+CMD="java -cp $CLASSPATH:stanford-corenlp-wrapper.jar StanfordCoreNLPServer"
 
 if [ $# -eq  2 ]; then
     PORT=$1

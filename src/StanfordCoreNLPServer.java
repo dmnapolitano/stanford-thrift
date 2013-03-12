@@ -11,21 +11,23 @@ import org.apache.thrift.transport.TServerTransport;
 import org.apache.thrift.transport.TSSLTransportFactory.TSSLTransportParameters;
 
 // Generated code
-import parser.*;
+import CoreNLP.*;
 
-public class StanfordParserServer {
-
-    public static class ServerThread implements Runnable {
-
+public class StanfordCoreNLPServer 
+{
+    public static class ServerThread implements Runnable 
+    {
         private Integer port;
 
-        public ServerThread(StanfordParser.Processor processor, Integer portNum) {
+        public ServerThread(StanfordCoreNLP.Processor processor, Integer portNum) 
+        {
             port = portNum;
         }
 
-        public void run() {
-            try {
-
+        public void run() 
+        {
+            try 
+            {
                 // Initialize the transport socket
                 TServerTransport serverTransport = new TServerSocket(port);
 
@@ -42,41 +44,50 @@ public class StanfordParserServer {
                 args.processor(processor);
                 TServer server = new TThreadPoolServer(args);
 
-                System.out.println("Starting the parser server...");
+                System.out.println("The CoreNLP server is running...");
                 server.serve();
-            } catch (Exception e) {
+            } 
+            catch (Exception e) 
+            {
                 e.printStackTrace();
             }
         }
     }
 
-    public static StanfordParserHandler handler;
+    public static StanfordCoreNLPHandler handler;
 
-    public static StanfordParser.Processor processor;
+    public static StanfordCoreNLP.Processor processor;
 
     public static void main(String [] args) {
 
         Integer portNum = 0;
         String modelFile = "";
 
-        if (args.length < 1 || args.length > 2) {
-            System.err.println("Usage: StanfordParserServer <port> [<modelFile>]");
+        if (args.length < 1 || args.length > 2) 
+        {
+            System.err.println("Usage: StanfordCoreNLPServer <port> [<modelFile>]");
             System.exit(2);
         }
-        else if (args.length == 1) {
+        else if (args.length == 1) 
+        {
             portNum = Integer.parseInt(args[0]);
         }
-        else {
+        else 
+        {
             portNum = Integer.parseInt(args[0]);
             modelFile = args[1];
         }
 
-        try {
-            handler = new StanfordParserHandler(modelFile);
-            processor = new StanfordParser.Processor(handler);
+        try 
+        {
+            //handler = new StanfordCoreNLPHandler(modelFile);
+        	handler = new StanfordCoreNLPHandler();
+            processor = new StanfordCoreNLP.Processor(handler);
             Runnable r = new ServerThread(processor, portNum);
             new Thread(r).start();
-        } catch (Exception x) {
+        } 
+        catch (Exception x) 
+        {
             x.printStackTrace();
         }
     }

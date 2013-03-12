@@ -1,5 +1,5 @@
 // Generated code
-import parser.*;
+import CoreNLP.*;
 
 import java.io.InputStream;
 import java.io.FileReader;
@@ -16,7 +16,7 @@ import org.apache.thrift.transport.TSSLTransportFactory.TSSLTransportParameters;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 
-public class StanfordParserClient {
+public class StanfordCoreNLPClient {
 
     public static void main(String [] args) {
 
@@ -30,7 +30,7 @@ public class StanfordParserClient {
             inputFilename = args[2];
         }
         else {
-            System.err.println("Usage: StanfordParserClient <server> <port> <inputfile>");
+            System.err.println("Usage: StanfordCoreNLPClient <server> <port> <inputfile>");
             System.exit(2);
         }
 
@@ -40,7 +40,7 @@ public class StanfordParserClient {
             transport.open();
 
             TProtocol protocol = new  TBinaryProtocol(transport);
-            StanfordParser.Client client = new StanfordParser.Client(protocol);
+            StanfordCoreNLP.Client client = new StanfordCoreNLP.Client(protocol);
 
             perform(client, inputFilename);
 
@@ -50,7 +50,7 @@ public class StanfordParserClient {
         }
     }
 
-    private static void perform(StanfordParser.Client client, String inputFilename) throws TException
+    private static void perform(StanfordCoreNLP.Client client, String inputFilename) throws TException
     {
         FileReader infile = null;
 

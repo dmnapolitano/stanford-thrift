@@ -1,6 +1,6 @@
-<project name="StanfordParser" default="main" basedir=".">
+<project name="StanfordCoreNLP" default="main" basedir=".">
 
-  <description>Stanford Parser Wrapper</description>
+  <description>Stanford CoreNLP Wrapper</description>
 
   <property name="src" location="src" />
   <property name="genjava" location="gen-java" />
@@ -11,8 +11,8 @@
     <fileset dir="/home/nlp-text/dynamic/NLPTools/thrift">
       <include name="*.jar" />
     </fileset>
-    <fileset dir="/home/nlp-text/dynamic/NLPTools/stanford-parser">
-      <include name="stanford-parser.jar" />
+    <fileset dir="/home/nlp-text/dynamic/NLPTools/stanford-core">
+      <include name="stanford-corenlp-1.3.4.jar" />
     </fileset>
   </path>
   <path id="build.classpath">
@@ -36,10 +36,10 @@
  <target name="generate">
     <!-- Generate the thrift gen-java and gen-py source -->
     <exec executable="/home/nlp-text/dynamic/NLPTools/thrift/bin/thrift" failonerror="true">
-      <arg line="--gen java parser.thrift"/>
+      <arg line="--gen java corenlp.thrift"/>
     </exec>
     <exec executable="/home/nlp-text/dynamic/NLPTools/thrift/bin/thrift" failonerror="true">
-      <arg line="--gen py:utf8strings,slots,new_style parser.thrift"/>
+      <arg line="--gen py:utf8strings,slots,new_style corenlp.thrift"/>
     </exec>
   </target>
 
@@ -49,14 +49,14 @@
   </target>
 
   <target name="main" description="Run" depends="compile">
-    <jar jarfile="stanford-parser-wrapper.jar" basedir="${build}"/>
+    <jar jarfile="stanford-corenlp-wrapper.jar" basedir="${build}"/>
   </target>
 
   <target name="clean">
     <delete dir="${genjava}" />
     <delete dir="${genpy}" />
     <delete dir="${build}" />
-    <delete file="stanford-parser-wrapper.jar" />
+    <delete file="stanford-corenlp-wrapper.jar" />
   </target>
 
 </project>
