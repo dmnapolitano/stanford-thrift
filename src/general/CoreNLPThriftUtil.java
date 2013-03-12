@@ -56,6 +56,32 @@ public class CoreNLPThriftUtil
 		return allSentences;
 	}
 	
+	// Assumed to be ONE SENTENCE WORTH OF TOKENS
+	public static Annotation getAnnotationFromTokens(List<String> tokens)
+	{
+		List<CoreMap> sentences = new ArrayList<CoreMap>();
+
+		String[] tokensArr = new String[tokens.size()];
+		tokens.toArray(tokensArr);
+		List<CoreLabel> sentenceTokens = Sentence.toCoreLabelList(tokensArr);
+		String originalText = Sentence.listToString(tokens);
+
+		CoreMap sentence = new Annotation(originalText);
+		sentence.set(CharacterOffsetBeginAnnotation.class, 0);
+		sentence.set(CharacterOffsetEndAnnotation.class, sentenceTokens.get(sentenceTokens.size() - 1).get(TextAnnotation.class).length());
+		sentence.set(CoreAnnotations.TokensAnnotation.class, sentenceTokens);
+		sentence.set(CoreAnnotations.TokenBeginAnnotation.class, 0);
+		sentence.set(CoreAnnotations.TokenEndAnnotation.class, sentenceTokens.size());
+
+		sentences.add(sentence);
+
+		Annotation allSentences = new Annotation(Sentence.listToString(tokens));
+		allSentences.set(CoreAnnotations.SentencesAnnotation.class, 
+					adjustCharacterOffsets(sentences, true));
+		
+		return allSentences;
+	}
+	
 	public static List<CoreMap> adjustCharacterOffsets(List<CoreMap> sentences, boolean setOriginalText)
 	{
 		List<CoreMap> sentencesCopy = sentences;
