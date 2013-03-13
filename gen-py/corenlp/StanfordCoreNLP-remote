@@ -27,8 +27,9 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
   print '   parse_text(string text,  outputFormat)'
   print '  ParseTree parse_tokens( tokens,  outputFormat)'
   print '  void zip()'
-  print '   getNamedEntitiesFromText(string text)'
-  print '   getNamedEntitiesFromTrees( trees)'
+  print '   get_entities_from_text(string text)'
+  print '   get_entities_from_tokens( tokens)'
+  print '   get_entities_from_trees( trees)'
   print ''
   sys.exit(0)
 
@@ -104,17 +105,23 @@ elif cmd == 'zip':
     sys.exit(1)
   pp.pprint(client.zip())
 
-elif cmd == 'getNamedEntitiesFromText':
+elif cmd == 'get_entities_from_text':
   if len(args) != 1:
-    print 'getNamedEntitiesFromText requires 1 args'
+    print 'get_entities_from_text requires 1 args'
     sys.exit(1)
-  pp.pprint(client.getNamedEntitiesFromText(args[0],))
+  pp.pprint(client.get_entities_from_text(args[0],))
 
-elif cmd == 'getNamedEntitiesFromTrees':
+elif cmd == 'get_entities_from_tokens':
   if len(args) != 1:
-    print 'getNamedEntitiesFromTrees requires 1 args'
+    print 'get_entities_from_tokens requires 1 args'
     sys.exit(1)
-  pp.pprint(client.getNamedEntitiesFromTrees(eval(args[0]),))
+  pp.pprint(client.get_entities_from_tokens(eval(args[0]),))
+
+elif cmd == 'get_entities_from_trees':
+  if len(args) != 1:
+    print 'get_entities_from_trees requires 1 args'
+    sys.exit(1)
+  pp.pprint(client.get_entities_from_trees(eval(args[0]),))
 
 else:
   print 'Unrecognized method %s' % cmd

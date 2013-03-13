@@ -40,14 +40,21 @@ class Iface(object):
   def zip(self, ):
     pass
 
-  def getNamedEntitiesFromText(self, text):
+  def get_entities_from_text(self, text):
     """
     Parameters:
      - text
     """
     pass
 
-  def getNamedEntitiesFromTrees(self, trees):
+  def get_entities_from_tokens(self, tokens):
+    """
+    Parameters:
+     - tokens
+    """
+    pass
+
+  def get_entities_from_trees(self, trees):
     """
     Parameters:
      - trees
@@ -158,65 +165,95 @@ class Client(Iface):
     args.write(self._oprot)
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
-  def getNamedEntitiesFromText(self, text):
+  def get_entities_from_text(self, text):
     """
     Parameters:
      - text
     """
-    self.send_getNamedEntitiesFromText(text)
-    return self.recv_getNamedEntitiesFromText()
+    self.send_get_entities_from_text(text)
+    return self.recv_get_entities_from_text()
 
-  def send_getNamedEntitiesFromText(self, text):
-    self._oprot.writeMessageBegin('getNamedEntitiesFromText', TMessageType.CALL, self._seqid)
-    args = getNamedEntitiesFromText_args()
+  def send_get_entities_from_text(self, text):
+    self._oprot.writeMessageBegin('get_entities_from_text', TMessageType.CALL, self._seqid)
+    args = get_entities_from_text_args()
     args.text = text
     args.write(self._oprot)
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
 
-  def recv_getNamedEntitiesFromText(self, ):
+  def recv_get_entities_from_text(self, ):
     (fname, mtype, rseqid) = self._iprot.readMessageBegin()
     if mtype == TMessageType.EXCEPTION:
       x = TApplicationException()
       x.read(self._iprot)
       self._iprot.readMessageEnd()
       raise x
-    result = getNamedEntitiesFromText_result()
+    result = get_entities_from_text_result()
     result.read(self._iprot)
     self._iprot.readMessageEnd()
     if result.success is not None:
       return result.success
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "getNamedEntitiesFromText failed: unknown result");
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "get_entities_from_text failed: unknown result");
 
-  def getNamedEntitiesFromTrees(self, trees):
+  def get_entities_from_tokens(self, tokens):
+    """
+    Parameters:
+     - tokens
+    """
+    self.send_get_entities_from_tokens(tokens)
+    return self.recv_get_entities_from_tokens()
+
+  def send_get_entities_from_tokens(self, tokens):
+    self._oprot.writeMessageBegin('get_entities_from_tokens', TMessageType.CALL, self._seqid)
+    args = get_entities_from_tokens_args()
+    args.tokens = tokens
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_get_entities_from_tokens(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = get_entities_from_tokens_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "get_entities_from_tokens failed: unknown result");
+
+  def get_entities_from_trees(self, trees):
     """
     Parameters:
      - trees
     """
-    self.send_getNamedEntitiesFromTrees(trees)
-    return self.recv_getNamedEntitiesFromTrees()
+    self.send_get_entities_from_trees(trees)
+    return self.recv_get_entities_from_trees()
 
-  def send_getNamedEntitiesFromTrees(self, trees):
-    self._oprot.writeMessageBegin('getNamedEntitiesFromTrees', TMessageType.CALL, self._seqid)
-    args = getNamedEntitiesFromTrees_args()
+  def send_get_entities_from_trees(self, trees):
+    self._oprot.writeMessageBegin('get_entities_from_trees', TMessageType.CALL, self._seqid)
+    args = get_entities_from_trees_args()
     args.trees = trees
     args.write(self._oprot)
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
 
-  def recv_getNamedEntitiesFromTrees(self, ):
+  def recv_get_entities_from_trees(self, ):
     (fname, mtype, rseqid) = self._iprot.readMessageBegin()
     if mtype == TMessageType.EXCEPTION:
       x = TApplicationException()
       x.read(self._iprot)
       self._iprot.readMessageEnd()
       raise x
-    result = getNamedEntitiesFromTrees_result()
+    result = get_entities_from_trees_result()
     result.read(self._iprot)
     self._iprot.readMessageEnd()
     if result.success is not None:
       return result.success
-    raise TApplicationException(TApplicationException.MISSING_RESULT, "getNamedEntitiesFromTrees failed: unknown result");
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "get_entities_from_trees failed: unknown result");
 
 
 class Processor(Iface, TProcessor):
@@ -227,8 +264,9 @@ class Processor(Iface, TProcessor):
     self._processMap["parse_text"] = Processor.process_parse_text
     self._processMap["parse_tokens"] = Processor.process_parse_tokens
     self._processMap["zip"] = Processor.process_zip
-    self._processMap["getNamedEntitiesFromText"] = Processor.process_getNamedEntitiesFromText
-    self._processMap["getNamedEntitiesFromTrees"] = Processor.process_getNamedEntitiesFromTrees
+    self._processMap["get_entities_from_text"] = Processor.process_get_entities_from_text
+    self._processMap["get_entities_from_tokens"] = Processor.process_get_entities_from_tokens
+    self._processMap["get_entities_from_trees"] = Processor.process_get_entities_from_trees
 
   def process(self, iprot, oprot):
     (name, type, seqid) = iprot.readMessageBegin()
@@ -285,24 +323,35 @@ class Processor(Iface, TProcessor):
     self._handler.zip()
     return
 
-  def process_getNamedEntitiesFromText(self, seqid, iprot, oprot):
-    args = getNamedEntitiesFromText_args()
+  def process_get_entities_from_text(self, seqid, iprot, oprot):
+    args = get_entities_from_text_args()
     args.read(iprot)
     iprot.readMessageEnd()
-    result = getNamedEntitiesFromText_result()
-    result.success = self._handler.getNamedEntitiesFromText(args.text)
-    oprot.writeMessageBegin("getNamedEntitiesFromText", TMessageType.REPLY, seqid)
+    result = get_entities_from_text_result()
+    result.success = self._handler.get_entities_from_text(args.text)
+    oprot.writeMessageBegin("get_entities_from_text", TMessageType.REPLY, seqid)
     result.write(oprot)
     oprot.writeMessageEnd()
     oprot.trans.flush()
 
-  def process_getNamedEntitiesFromTrees(self, seqid, iprot, oprot):
-    args = getNamedEntitiesFromTrees_args()
+  def process_get_entities_from_tokens(self, seqid, iprot, oprot):
+    args = get_entities_from_tokens_args()
     args.read(iprot)
     iprot.readMessageEnd()
-    result = getNamedEntitiesFromTrees_result()
-    result.success = self._handler.getNamedEntitiesFromTrees(args.trees)
-    oprot.writeMessageBegin("getNamedEntitiesFromTrees", TMessageType.REPLY, seqid)
+    result = get_entities_from_tokens_result()
+    result.success = self._handler.get_entities_from_tokens(args.tokens)
+    oprot.writeMessageBegin("get_entities_from_tokens", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_get_entities_from_trees(self, seqid, iprot, oprot):
+    args = get_entities_from_trees_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = get_entities_from_trees_result()
+    result.success = self._handler.get_entities_from_trees(args.trees)
+    oprot.writeMessageBegin("get_entities_from_trees", TMessageType.REPLY, seqid)
     result.write(oprot)
     oprot.writeMessageEnd()
     oprot.trans.flush()
@@ -815,7 +864,7 @@ class zip_args(object):
     return not (self == other)
 
 
-class getNamedEntitiesFromText_args(object):
+class get_entities_from_text_args(object):
   """
   Attributes:
    - text
@@ -856,7 +905,7 @@ class getNamedEntitiesFromText_args(object):
     if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
       oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
       return
-    oprot.writeStructBegin('getNamedEntitiesFromText_args')
+    oprot.writeStructBegin('get_entities_from_text_args')
     if self.text is not None:
       oprot.writeFieldBegin('text', TType.STRING, 1)
       oprot.writeString(self.text.encode('utf-8'))
@@ -887,7 +936,7 @@ class getNamedEntitiesFromText_args(object):
     return not (self == other)
 
 
-class getNamedEntitiesFromText_result(object):
+class get_entities_from_text_result(object):
   """
   Attributes:
    - success
@@ -933,7 +982,7 @@ class getNamedEntitiesFromText_result(object):
     if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
       oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
       return
-    oprot.writeStructBegin('getNamedEntitiesFromText_result')
+    oprot.writeStructBegin('get_entities_from_text_result')
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.LIST, 0)
       oprot.writeListBegin(TType.STRUCT, len(self.success))
@@ -967,23 +1016,23 @@ class getNamedEntitiesFromText_result(object):
     return not (self == other)
 
 
-class getNamedEntitiesFromTrees_args(object):
+class get_entities_from_tokens_args(object):
   """
   Attributes:
-   - trees
+   - tokens
   """
 
   __slots__ = [ 
-    'trees',
+    'tokens',
    ]
 
   thrift_spec = (
     None, # 0
-    (1, TType.LIST, 'trees', (TType.STRING,None), None, ), # 1
+    (1, TType.LIST, 'tokens', (TType.STRING,None), None, ), # 1
   )
 
-  def __init__(self, trees=None,):
-    self.trees = trees
+  def __init__(self, tokens=None,):
+    self.tokens = tokens
 
   def read(self, iprot):
     if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
@@ -996,11 +1045,11 @@ class getNamedEntitiesFromTrees_args(object):
         break
       if fid == 1:
         if ftype == TType.LIST:
-          self.trees = []
+          self.tokens = []
           (_etype38, _size35) = iprot.readListBegin()
           for _i39 in xrange(_size35):
             _elem40 = iprot.readString().decode('utf-8')
-            self.trees.append(_elem40)
+            self.tokens.append(_elem40)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1013,11 +1062,11 @@ class getNamedEntitiesFromTrees_args(object):
     if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
       oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
       return
-    oprot.writeStructBegin('getNamedEntitiesFromTrees_args')
-    if self.trees is not None:
-      oprot.writeFieldBegin('trees', TType.LIST, 1)
-      oprot.writeListBegin(TType.STRING, len(self.trees))
-      for iter41 in self.trees:
+    oprot.writeStructBegin('get_entities_from_tokens_args')
+    if self.tokens is not None:
+      oprot.writeFieldBegin('tokens', TType.LIST, 1)
+      oprot.writeListBegin(TType.STRING, len(self.tokens))
+      for iter41 in self.tokens:
         oprot.writeString(iter41.encode('utf-8'))
       oprot.writeListEnd()
       oprot.writeFieldEnd()
@@ -1047,7 +1096,7 @@ class getNamedEntitiesFromTrees_args(object):
     return not (self == other)
 
 
-class getNamedEntitiesFromTrees_result(object):
+class get_entities_from_tokens_result(object):
   """
   Attributes:
    - success
@@ -1093,12 +1142,172 @@ class getNamedEntitiesFromTrees_result(object):
     if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
       oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
       return
-    oprot.writeStructBegin('getNamedEntitiesFromTrees_result')
+    oprot.writeStructBegin('get_entities_from_tokens_result')
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.LIST, 0)
       oprot.writeListBegin(TType.STRUCT, len(self.success))
       for iter48 in self.success:
         iter48.write(oprot)
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, getattr(self, key))
+      for key in self.__slots__]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+    for attr in self.__slots__:
+      my_val = getattr(self, attr)
+      other_val = getattr(other, attr)
+      if my_val != other_val:
+        return False
+    return True
+
+  def __ne__(self, other):
+    return not (self == other)
+
+
+class get_entities_from_trees_args(object):
+  """
+  Attributes:
+   - trees
+  """
+
+  __slots__ = [ 
+    'trees',
+   ]
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.LIST, 'trees', (TType.STRING,None), None, ), # 1
+  )
+
+  def __init__(self, trees=None,):
+    self.trees = trees
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.LIST:
+          self.trees = []
+          (_etype52, _size49) = iprot.readListBegin()
+          for _i53 in xrange(_size49):
+            _elem54 = iprot.readString().decode('utf-8')
+            self.trees.append(_elem54)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('get_entities_from_trees_args')
+    if self.trees is not None:
+      oprot.writeFieldBegin('trees', TType.LIST, 1)
+      oprot.writeListBegin(TType.STRING, len(self.trees))
+      for iter55 in self.trees:
+        oprot.writeString(iter55.encode('utf-8'))
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, getattr(self, key))
+      for key in self.__slots__]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+    for attr in self.__slots__:
+      my_val = getattr(self, attr)
+      other_val = getattr(other, attr)
+      if my_val != other_val:
+        return False
+    return True
+
+  def __ne__(self, other):
+    return not (self == other)
+
+
+class get_entities_from_trees_result(object):
+  """
+  Attributes:
+   - success
+  """
+
+  __slots__ = [ 
+    'success',
+   ]
+
+  thrift_spec = (
+    (0, TType.LIST, 'success', (TType.STRUCT,(NamedEntity, NamedEntity.thrift_spec)), None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.LIST:
+          self.success = []
+          (_etype59, _size56) = iprot.readListBegin()
+          for _i60 in xrange(_size56):
+            _elem61 = NamedEntity()
+            _elem61.read(iprot)
+            self.success.append(_elem61)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('get_entities_from_trees_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.LIST, 0)
+      oprot.writeListBegin(TType.STRUCT, len(self.success))
+      for iter62 in self.success:
+        iter62.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()

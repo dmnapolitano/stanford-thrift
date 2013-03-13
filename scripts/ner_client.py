@@ -1,9 +1,5 @@
 #!/usr/bin/env python
 
-# The purpose of this client is to show how to send over a few sentences as you tokenize them with expunct.
-# It is also for me to unit test things. >:)
-# For an alternative way to call the parser (with Python), please see parser_client.py.
-
 from corenlp import StanfordCoreNLP
 from corenlp.ttypes import *
 from thrift import Thrift
@@ -14,7 +10,8 @@ from bs4 import UnicodeDammit
 import re
 import sys
 
-#import expunct
+import toksent
+import expunct
 
 # get command line arguments
 args = sys.argv[1:]
@@ -41,11 +38,15 @@ transport.open()
 
 
 try:
-    result = client.getNamedEntitiesFromText(text)
+    result = client.get_entities_from_text(text)
     print result
     print
-    result = client.getNamedEntitiesFromTrees(trees)
+    result = client.get_entities_from_trees(trees)
     print result
+    print
+    for sentence in toksent.sentence_tokenize(text):
+        result = client.get_entities_from_tokens(expunct.word_tokenize(sentence, ptb_normalization=True))
+        print result
 
 except Exception as e:
     print e
