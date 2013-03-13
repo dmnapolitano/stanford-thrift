@@ -28,48 +28,48 @@ import general.CoreNLPThriftUtil;
 
 public class StanfordNERThrift 
 {
-	private StanfordCoreNLP pipeline;
+//	private StanfordCoreNLP pipeline;
 	private NERCombinerAnnotator ner;
 
 	public StanfordNERThrift()
 	{
-		Properties props = new Properties();
-		props.put("annotators", "tokenize, ssplit, parse, lemma, ner");
-		pipeline = new StanfordCoreNLP(props, true);
-		ner = (NERCombinerAnnotator)StanfordCoreNLP.getExistingAnnotator("ner");
+//		Properties props = new Properties();
+//		props.put("annotators", "tokenize, ssplit, parse, lemma, ner");
+//		pipeline = new StanfordCoreNLP(props, true);
+//		ner = (NERCombinerAnnotator)StanfordCoreNLP.getExistingAnnotator("ner");
 
-//		try
-//		{
-//			ner = new NERCombinerAnnotator(false, 
-//					"edu/stanford/nlp/models/ner/english.all.3class.distsim.crf.ser.gz",
-//					"edu/stanford/nlp/models/ner/english.muc.7class.distsim.crf.ser.gz",
-//			"edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz");
-//		}
-//		catch (Exception e)
-//		{
-//			// TODO
-//			e.printStackTrace();
-//		}
-	}
-
-
-	public List<NamedEntity> getNamedEntitiesFromText(String text)
-	{
-		Annotation annotation = new Annotation(text);
-		pipeline.annotate(annotation);
-		
-		List<NamedEntity> allFoundEntities = new ArrayList<NamedEntity>();
-
-		List<CoreMap> sentences = CoreNLPThriftUtil.adjustCharacterOffsets(annotation.get(CoreAnnotations.SentencesAnnotation.class), false); 
-
-		for (CoreMap sentence : sentences)
+		try
 		{
-			List<NamedEntity> thisSentencesEntities = toNamedEntityObjects(sentence);
-			//System.out.println(thisSentencesEntities);
-			allFoundEntities.addAll(thisSentencesEntities);
+			ner = new NERCombinerAnnotator(false, 
+					"edu/stanford/nlp/models/ner/english.all.3class.distsim.crf.ser.gz",
+					"edu/stanford/nlp/models/ner/english.muc.7class.distsim.crf.ser.gz",
+			"edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz");
 		}
-		return allFoundEntities;
+		catch (Exception e)
+		{
+			// TODO
+			e.printStackTrace();
+		}
 	}
+
+
+//	public List<NamedEntity> getNamedEntitiesFromText(String text)
+//	{
+//		Annotation annotation = new Annotation(text);
+//		pipeline.annotate(annotation);
+//		
+//		List<NamedEntity> allFoundEntities = new ArrayList<NamedEntity>();
+//
+//		List<CoreMap> sentences = CoreNLPThriftUtil.adjustCharacterOffsets(annotation.get(CoreAnnotations.SentencesAnnotation.class), false); 
+//
+//		for (CoreMap sentence : sentences)
+//		{
+//			List<NamedEntity> thisSentencesEntities = toNamedEntityObjects(sentence);
+//			//System.out.println(thisSentencesEntities);
+//			allFoundEntities.addAll(thisSentencesEntities);
+//		}
+//		return allFoundEntities;
+//	}
 
 
 	public List<NamedEntity> getNamedEntitiesFromTrees(List<String> parseTrees)

@@ -1,5 +1,7 @@
 package general;
 
+import CoreNLP.ParseTree;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -107,5 +109,15 @@ public class CoreNLPThriftUtil
 			sentence.set(CoreAnnotations.TokensAnnotation.class, sentenceTokens);
 		}
 		return sentencesCopy;
+	}
+	
+	public static List<String> ParseTreeObjectsToString(List<ParseTree> parseTrees)
+	{
+		List<String> trees = new ArrayList<String>();
+		for (ParseTree tree : parseTrees)
+		{
+			trees.add(tree.tree);
+		}
+		return trees;
 	}
 }

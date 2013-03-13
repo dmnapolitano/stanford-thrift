@@ -112,8 +112,6 @@ public class StanfordParserThrift
 
     public List<ParseTree> parse_text(String text, List<String> outputFormat) throws TApplicationException
     {
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
         List<ParseTree> results = new ArrayList<ParseTree>();
         
         try
@@ -135,6 +133,8 @@ public class StanfordParserThrift
         	Iterator<List<HasWord>> foundSentences = preprocess.iterator();
         	while (foundSentences.hasNext())
         	{
+                StringWriter sw = new StringWriter();
+                PrintWriter pw = new PrintWriter(sw);
         		Tree parseTree = parser.apply(foundSentences.next());
         		treePrinter.printTree(parseTree, pw);
         		results.add(new ParseTree(sw.getBuffer().toString().trim(), parseTree.score()));
