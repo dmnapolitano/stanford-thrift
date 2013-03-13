@@ -10,8 +10,6 @@ from bs4 import UnicodeDammit
 import re
 import sys
 
-import toksent
-import expunct
 
 # get command line arguments
 args = sys.argv[1:]
@@ -28,6 +26,9 @@ text = "My name is Diane and I live in New Jersey.  I sometimes go to New York. 
 trees = ["(ROOT (S (S (NP (PRP$ My) (NN name)) (VP (VBZ is) (NP (NNP Diane)))) (CC and) (S (NP (PRP I)) (VP (VBP live) (PP (IN in) (NP (NNP New) (NNP Jersey))))) (. .)))",
          "(ROOT (S (NP (PRP I)) (ADVP (RB sometimes)) (VP (VBP go) (PP (TO to) (NP (NNP New) (NNP York)))) (. .)))",
          "(ROOT (S (NP (DT The) (NNP Food) (CC and) (NNP Drug) (NNP Administration)) (VP (VBZ is) (NP (DT an) (NN organization))) (. .)))"]
+tokenized_sentences = [["My", "name", "is", "Diane", "and", "I", "live", "in", "New", "Jersey", "."], 
+                       ["I", "sometimes", "go", "to", "New", "York", "."],
+                       ["The", "Food", "and", "Drug", "Administration", "is", "an", "organization", "."]]
 
 transport = TSocket.TSocket(server, port)
 transport = TTransport.TBufferedTransport(transport)
@@ -44,8 +45,8 @@ try:
     result = client.get_entities_from_trees(trees)
     print result
     print
-    for sentence in toksent.sentence_tokenize(text):
-        result = client.get_entities_from_tokens(expunct.word_tokenize(sentence, ptb_normalization=True))
+    for sentence in tokenized_sentences:
+        result = client.get_entities_from_tokens(sentence)
         print result
 
 except Exception as e:
