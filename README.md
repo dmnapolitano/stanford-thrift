@@ -1,6 +1,8 @@
 Apache Thrift Server for Stanford CoreNLP
 =========================================
 
+Authors: [Diane M. Napolitano](https://github.com/dmnapolitano), [Nitin Madnani](https://github.com/desilinguist)
+
 This is a client/server setup of Stanford's CoreNLP which uses [Apache Thrift](http://thrift.apache.org/).
 
 Things you can do with it:
