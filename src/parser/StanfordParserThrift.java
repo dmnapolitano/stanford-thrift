@@ -225,16 +225,7 @@ public class StanfordParserThrift
 //        	}
         }
     	//}
-//        return null;
 //    	return results;
     }
-    
-//    public void ping() {
-//        System.out.println("ping()");
-//    }
-//
-//    public void zip() {
-//        System.out.println("zip()");
-//    }
 }
 

@@ -26,6 +26,7 @@ service StanfordCoreNLP
     list<ParseTree> parse_text(1:string text, 2:list<string> outputFormat),
     ParseTree parse_tokens(1:list<string> tokens, 2:list<string> outputFormat),
     oneway void zip(),
-    list<NamedEntity> getNamedEntitiesFromText(1:string text),
-    list<NamedEntity> getNamedEntitiesFromTrees(1:list<string> trees)
+    list<NamedEntity> get_entities_from_text(1:string text),
+    list<NamedEntity> get_entities_from_tokens(1:list<string> tokens),
+    list<NamedEntity> get_entities_from_trees(1:list<string> trees)
 }

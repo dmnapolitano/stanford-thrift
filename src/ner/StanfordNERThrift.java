@@ -28,6 +28,12 @@ import general.CoreNLPThriftUtil;
 
 public class StanfordNERThrift 
 {
+	/*
+	 * TODO: When I add in the bit for the Stanford Tagger, add a method here that recognizes
+	 * named entities from POS-tagged text, similar to the one that recognizes them from parse
+	 * trees.
+	 */
+	
 //	private StanfordCoreNLP pipeline;
 	private NERCombinerAnnotator ner;
 
@@ -83,7 +89,6 @@ public class StanfordNERThrift
 		for (CoreMap sentence : sentenceMap)
 		{
 			List<NamedEntity> thisSentencesEntities = toNamedEntityObjects(sentence);
-			//System.out.println(thisSentencesEntities);
 			allFoundEntities.addAll(thisSentencesEntities);
 		}
 

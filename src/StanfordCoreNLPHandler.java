@@ -47,15 +47,23 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
     /* End Stanford Parser methods */
     
     /* Begin Stanford NER methods */
-    public List<NamedEntity> getNamedEntitiesFromText(String text) throws TApplicationException
+    public List<NamedEntity> get_entities_from_text(String text) throws TApplicationException
     {
+    	//return ner.getNamedEntitiesFromText(text);
     	List<ParseTree> parseTreeObjects = parser.parse_text(text, null);
     	List<String> parseTrees = CoreNLPThriftUtil.ParseTreeObjectsToString(parseTreeObjects);
-    	//return ner.getNamedEntitiesFromText(text);
     	return ner.getNamedEntitiesFromTrees(parseTrees);
     }
     
-    public List<NamedEntity> getNamedEntitiesFromTrees(List<String> trees)
+    public List<NamedEntity> get_entities_from_tokens(List<String> tokens) throws TApplicationException
+    {
+    	ParseTree parseTreeObject = parser.parse_tokens(tokens, null);
+    	List<String> parseTrees = new ArrayList<String>();
+    	parseTrees.add(parseTreeObject.tree);
+    	return ner.getNamedEntitiesFromTrees(parseTrees);
+    }
+    
+    public List<NamedEntity> get_entities_from_trees(List<String> trees)
     {
     	return ner.getNamedEntitiesFromTrees(trees);
     }
