@@ -16,7 +16,7 @@ In order to get these `ParseTree` objects, you have two choices, depending on wh
 
 * `parse_tokens(tokens, outputFormat)` where `tokens` is a Java `List<String>`/Python list containing `str`/`unicode`, `outputFormat` is a Java `List<String>`/Python list containing `str`/`unicode`.
    Returns: A `ParseTree` object.
-   Given a single sentence worth of output from toksent and expunct (for example), return that sentence's corresponding result from Stanford Parser.  Does not use Stanford's tokenizers.
+   Given a single sentence worth of output from the sentence and word tokenizers of your choice, return that sentence's corresponding result from Stanford Parser.  Does not use Stanford's tokenizers.
    
 ##### What one can do with the `outputFormat` argument to both of these methods
 
