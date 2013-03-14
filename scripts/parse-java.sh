@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CMD="java -cp $CLASSPATH StanfordParserClient"
+CMD="java -cp $CLASSPATH:stanford-corenlp-wrapper.jar StanfordCoreNLPClient"
 
 if [ $# -eq 3 ]; then
     SERVER=$1
@@ -8,5 +8,5 @@ if [ $# -eq 3 ]; then
     INFILE=$3
     $CMD $SERVER $PORT $INFILE
 else
-    echo "Usage: parse.sh <server> <port> [<inputfile>]"
+    echo "Usage: parse-java.sh <server> <port> [<inputfile>]"
 fi

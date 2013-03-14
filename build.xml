@@ -6,23 +6,20 @@
   <property name="genjava" location="gen-java" />
   <property name="genpy" location="gen-py" />
   <property name="build" location="build" />
-
+  <property environment="env"/>
+  
   <path id="libs.classpath">
-    <fileset dir="/home/nlp-text/dynamic/NLPTools/thrift">
-      <include name="*.jar" />
-    </fileset>
-    <fileset dir="/home/nlp-text/dynamic/NLPTools/stanford-core">
-      <include name="stanford-corenlp-1.3.4.jar" />
-    </fileset>
+    <pathelement path="${env.CLASSPATH}" />
   </path>
   <path id="build.classpath">
     <path refid="libs.classpath" />
     <pathelement path="${genjava}" />
   </path>
 
+  <!-- Set $THRIFTPATH to the root of your thrift installation. -->
   <target name="combine_thrift_jars">
-    <zip destfile="/home/nlp-text/dynamic/NLPTools/thrift/all_thrift_jars.jar">
-      <zipgroupfileset dir="/home/nlp-text/dynamic/NLPTools/thrift/lib" includes="*.jar"/>
+    <zip destfile="${env.THRIFTPATH}/all_thrift_jars.jar">
+      <zipgroupfileset dir="${env.THRIFTPATH}/lib" includes="*.jar"/>
     </zip>
   </target>
 
@@ -35,10 +32,11 @@
 
  <target name="generate">
     <!-- Generate the thrift gen-java and gen-py source -->
-    <exec executable="/home/nlp-text/dynamic/NLPTools/thrift/bin/thrift" failonerror="true">
+    <!-- Assumes thrift is on your path. -->
+    <exec executable="thrift" failonerror="true">
       <arg line="--gen java corenlp.thrift"/>
     </exec>
-    <exec executable="/home/nlp-text/dynamic/NLPTools/thrift/bin/thrift" failonerror="true">
+    <exec executable="thrift" failonerror="true">
       <arg line="--gen py:utf8strings,slots,new_style corenlp.thrift"/>
     </exec>
   </target>
