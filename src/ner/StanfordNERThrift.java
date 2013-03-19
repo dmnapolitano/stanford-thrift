@@ -81,9 +81,7 @@ public class StanfordNERThrift
 	public List<NamedEntity> getNamedEntitiesFromTrees(List<String> parseTrees)
 	{	
 		List<NamedEntity> allFoundEntities = new ArrayList<NamedEntity>();
-		
-		Annotation sentences = CoreNLPThriftUtil.getAnnotationFromParseTrees(parseTrees);
-		ner.annotate(sentences);
+		Annotation sentences = getNamedEntityAnnotationFromTrees(parseTrees);
 
 		List<CoreMap> sentenceMap = sentences.get(CoreAnnotations.SentencesAnnotation.class); 
 		for (CoreMap sentence : sentenceMap)
@@ -93,6 +91,14 @@ public class StanfordNERThrift
 		}
 
 		return allFoundEntities;
+	}
+	
+	public Annotation getNamedEntityAnnotationFromTrees(List<String> parseTrees)
+	{
+		Annotation sentences = CoreNLPThriftUtil.getAnnotationFromParseTrees(parseTrees);
+		ner.annotate(sentences);
+		
+		return sentences;
 	}
 	
 	private List<NamedEntity> toNamedEntityObjects(CoreMap results)
