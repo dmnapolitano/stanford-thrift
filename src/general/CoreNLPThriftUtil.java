@@ -1,6 +1,6 @@
 package general;
 
-//import CoreNLP.ParseTree;
+import CoreNLP.ParseTree;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,15 +113,15 @@ public class CoreNLPThriftUtil
 		return sentencesCopy;
 	}
 	
-//	public static List<String> ParseTreeObjectsToString(List<ParseTree> parseTrees)
-//	{
-//		List<String> trees = new ArrayList<String>();
-//		for (ParseTree tree : parseTrees)
-//		{
-//			trees.add(tree.tree);
-//		}
-//		return trees;
-//	}
+	public static List<String> ParseTreeObjectsToString(List<ParseTree> parseTrees)
+	{
+		List<String> trees = new ArrayList<String>();
+		for (ParseTree tree : parseTrees)
+		{
+			trees.add(tree.tree);
+		}
+		return trees;
+	}
 	
 	public static String closeHTMLTags(String original)
 	{
@@ -139,11 +139,5 @@ public class CoreNLPThriftUtil
 			
 		}
 		return improved;
-	}
-	
-	public static void main(String[] args)
-	{
-		String test = "current President of <COREF ID=\"9\">the <COREF ID=\"4\" REF=\"9\">United States</COREF> ";
-		System.out.println(CoreNLPThriftUtil.closeHTMLTags(test));
 	}
 }

@@ -23,10 +23,11 @@ exception SerializedException
 service StanfordCoreNLP
 {
     void ping(),
+    oneway void zip(),
     list<ParseTree> parse_text(1:string text, 2:list<string> outputFormat),
     ParseTree parse_tokens(1:list<string> tokens, 2:list<string> outputFormat),
-    oneway void zip(),
     list<NamedEntity> get_entities_from_text(1:string text),
     list<NamedEntity> get_entities_from_tokens(1:list<string> tokens),
-    list<NamedEntity> get_entities_from_trees(1:list<string> trees)
+    list<NamedEntity> get_entities_from_trees(1:list<string> trees),
+    list<string> resolve_coreferences_in_trees(1:list<string> trees)
 }

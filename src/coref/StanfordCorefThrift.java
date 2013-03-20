@@ -6,11 +6,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import ner.StanfordNERThrift;
+
 import edu.stanford.nlp.dcoref.CorefChain;
 import edu.stanford.nlp.dcoref.CorefCoreAnnotations;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.Annotation;
+import edu.stanford.nlp.pipeline.DeterministicCorefAnnotator;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.util.CoreMap;
 import edu.stanford.nlp.util.Pair;
@@ -19,25 +22,32 @@ import general.CoreNLPThriftUtil;
 
 public class StanfordCorefThrift 
 {
-	public static List<String> getCoreferencesFromText(String text)
+//	private StanfordCoreNLP pipeline;
+	private DeterministicCorefAnnotator coref;
+	
+	public StanfordCorefThrift()
 	{
-		Properties props = new Properties();
-		props.put("annotators", "tokenize, ssplit, parse, lemma, ner, dcoref");
-		StanfordCoreNLP pipeline = new StanfordCoreNLP(props, true);
-		Annotation annotation = new Annotation(text);
-		pipeline.annotate(annotation);
-
-//		List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
-//		for (CoreMap sentence : sentences)
-//		{
-//			System.out.println(sentences.indexOf(sentence)+1 + ": " + sentence);
-//		}
-
-//		newStyleCoreferenceGraphOutput(annotation);
+//		Properties props = new Properties();
+//		props.put("annotators", "tokenize, ssplit, parse, lemma, ner, dcoref");
+//		pipeline = new StanfordCoreNLP(props, true);
+		coref = new DeterministicCorefAnnotator(new Properties());
+	}
+	
+//	public List<String> getCoreferencesFromText(String text)
+//	{
+//		Annotation annotation = new Annotation(text);
+//		pipeline.annotate(annotation);
+//		return MUCStyleOutput(annotation);
+//	}
+	
+	public List<String> getCoreferencesFromTrees(List<String> parseTrees, StanfordNERThrift ner)
+	{
+		Annotation annotation = ner.getNamedEntityAnnotationFromTrees(parseTrees);
+		coref.annotate(annotation);
 		return MUCStyleOutput(annotation);
 	}
 
-	public static void newStyleCoreferenceGraphOutput(Annotation annotation)
+	private void newStyleCoreferenceGraphOutput(Annotation annotation)
 	{
 		// display the new-style coreference graph
 		//List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class); 
@@ -70,7 +80,7 @@ public class StanfordCorefThrift
 		}
 	}
 
-	private static List<String> MUCStyleOutput(Annotation annotation)
+	private List<String> MUCStyleOutput(Annotation annotation)
 	{
 		Map<Integer, CorefChain> corefChains = annotation.get(CorefCoreAnnotations.CorefChainAnnotation.class);
 		Map<Integer, Map<Integer, Pair<CorefChain.CorefMention, CorefChain.CorefMention>>> mentionMap = 
@@ -159,66 +169,36 @@ public class StanfordCorefThrift
 		return mucOutput;
 	}
 
-
-	//	public static List<String> getCoreferencesFromTrees(List<String> parseTrees)
-	//	{
-	//		StanfordNERThrift ner = new StanfordNERThrift();
-	//		Annotation annotation = ner.getNamedEntityAnnotationFromTrees(parseTrees);
-	//		
-	//		DeterministicCorefAnnotator coref = new DeterministicCorefAnnotator(new Properties());
-	//		coref.annotate(annotation);
-	//		
-	//		// display the new-style coreference graph
-	//		Map<Integer, CorefChain> corefChains = annotation.get(CorefCoreAnnotations.CorefChainAnnotation.class);
-	//		List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
-	//		if (corefChains != null && sentences != null) 
-	//		{
-	//			for (CorefChain chain : corefChains.values()) 
-	//			{
-	//				CorefChain.CorefMention representative = chain.getRepresentativeMention();
-	//				for (CorefChain.CorefMention mention : chain.getMentionsInTextualOrder()) 
-	//				{
-	//					if (mention == representative)
-	//						continue;
-	//					// all offsets start at 1!
-	//					System.out.println("\t(" + mention.sentNum + "," +
-	//							mention.headIndex + ",[" +
-	//							mention.startIndex + "," +
-	//							mention.endIndex + ")) -> (" +
-	//							representative.sentNum + "," +
-	//							representative.headIndex + ",[" +
-	//							representative.startIndex + "," +
-	//							representative.endIndex + ")), that is: \"" +
-	//							mention.mentionSpan + "\" -> \"" +
-	//							representative.mentionSpan + "\"");
-	//				}
-	//			}
-	//		}
-	//		return null;
-	//	}
-
-
-
+	
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) 
-	{
-		//String testSentences = "By proposing a meeting date, Eastern moved one step closer toward reopening current high-cost contract agreements with its unions.";
-		String testSentences = "Barack Hussein Obama II is the 44th and current President of the United States, in office since 2009. "
-				+ "He is the first African American to hold the office.  "
-				+ "Born in Honolulu, Hawaii, Obama is a graduate of Columbia University and Harvard Law School, where he was president of the Harvard Law Review. "
-				+ "He was a community organizer in Chicago before earning his law degree. "
-				+ "He worked as a civil rights attorney in Chicago and taught constitutional law at the University of Chicago Law School from 1992 to 2004. "
-				+ "He served three terms representing the 13th District in the Illinois Senate from 1997 to 2004, running unsuccessfully for the United States House of Representatives in 2000.";
-		List<String> results = getCoreferencesFromText(testSentences);
-		for (String s : results)
-		{
-			System.out.println(s);
-		}
-		//List<String> trees = new ArrayList<String>();
-		//trees.add("(ROOT (S (NP (NP (NNS Members)) (PP (IN of) (NP (QP (RB about) (CD 37)) (NNS species)))) (VP (VBP are) (VP (VBN referred) (PP (TO to) (NP (NP (RB as) (NNS foxes)) (, ,) (SBAR (WHPP (IN of) (WHNP (WDT which))) (S (NP (QP (RB only) (CD 12)) (NNS species)) (ADVP (RB actually)) (VP (VBP belong) (PP (TO to) (NP (NP (DT the) (NNP Vulpes) (NNS genus)) (PP (IN of) (NP (`` ``) (JJ true) (NNS foxes) ('' '')))))))))))) (. .)))");
-		//String[] tokensArr = "Members of about 37 species are referred to as foxes , of which only 12 species actually belong to the Vulpes genus of `` true foxes '' .".split(" ");
-		//getCoreferencesFromTrees(trees);
-	}
+//	public static void main(String[] args) 
+//	{
+//		StanfordCorefThrift coref = new StanfordCorefThrift();
+//		
+//		//String testSentences = "By proposing a meeting date, Eastern moved one step closer toward reopening current high-cost contract agreements with its unions.";
+//		String testSentences = "Barack Hussein Obama II is the 44th and current President of the United States, in office since 2009. "
+//				+ "He is the first African American to hold the office.  "
+//				+ "Born in Honolulu, Hawaii, Obama is a graduate of Columbia University and Harvard Law School, where he was president of the Harvard Law Review. "
+//				+ "He was a community organizer in Chicago before earning his law degree. "
+//				+ "He worked as a civil rights attorney in Chicago and taught constitutional law at the University of Chicago Law School from 1992 to 2004. "
+//				+ "He served three terms representing the 13th District in the Illinois Senate from 1997 to 2004, running unsuccessfully for the United States House of Representatives in 2000.";
+//		List<String> results = coref.getCoreferencesFromText(testSentences);
+//		for (String s : results)
+//		{
+//			System.out.println(s);
+//		}
+//		
+//		System.out.println();
+//		
+//		List<String> trees = new ArrayList<String>();
+//		trees.add("(ROOT (S (NP (NP (NNS Members)) (PP (IN of) (NP (QP (RB about) (CD 37)) (NNS species)))) (VP (VBP are) (VP (VBN referred) (PP (TO to) (NP (NP (RB as) (NNS foxes)) (, ,) (SBAR (WHPP (IN of) (WHNP (WDT which))) (S (NP (QP (RB only) (CD 12)) (NNS species)) (ADVP (RB actually)) (VP (VBP belong) (PP (TO to) (NP (NP (DT the) (NNP Vulpes) (NNS genus)) (PP (IN of) (NP (`` ``) (JJ true) (NNS foxes) ('' '')))))))))))) (. .)))");
+//		//String[] tokensArr = "Members of about 37 species are referred to as foxes , of which only 12 species actually belong to the Vulpes genus of `` true foxes '' .".split(" ");
+//		results = coref.getCoreferencesFromTrees(trees);
+//		for (String s : results)
+//		{
+//			System.out.println(s);
+//		}
+//	}
 }
