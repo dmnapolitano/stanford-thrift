@@ -34,6 +34,14 @@ tokenized_sentences = [u"Members of about 37 species are referred to as foxes , 
                        u"The presence of fox-like carnivores all over the globe , together with their widespread reputation for cunning , has contributed to their appearance in popular culture and folklore in many societies around the world -LRB- see also Foxes in culture -RRB- .".split(" "),
                        u"The hunting of foxes with packs of hounds , long an established pursuit in Europe , especially the British Isles , was exported by European settlers to various parts of the New World .".split(" ")]
 
+# a particularly useful example for coreference
+more_tokenized_sentences = [u"Barack Hussein Obama II is the 44th and current President of the United States , in office since 2009 .".split(" "),
+                            u"He is the first African American to hold the office .".split(" "),
+                            u"Born in Honolulu , Hawaii , Obama is a graduate of Columbia University and Harvard Law School , where he was president of the Harvard Law Review .".split(" "),
+                            u"He was a community organizer in Chicago before earning his law degree .".split(" "),
+                            u"He worked as a civil rights attorney in Chicago and taught constitutional law at the University of Chicago Law School from 1992 to 2004 .".split(" "),
+                            u"He served three terms representing the 13th District in the Illinois Senate from 1997 to 2004 , running unsuccessfully for the United States House of Representatives in 2000 .".split(" ")]
+
 
 # Make socket
 transport = TSocket.TSocket(server, port)
@@ -70,6 +78,15 @@ for sentence in tokenized_sentences:
     try:
         tree = client.parse_tokens(sentence, outputOptions)
         sys.stdout.write(tree.tree.strip() + " [" + str(tree.score) + "]\n")
+    except Exception as e:
+        print e
+
+print
+
+for sentence in more_tokenized_sentences:
+    try:
+        tree = client.parse_tokens(sentence, outputOptions)
+        sys.stdout.write(tree.tree.strip()+"\n")
     except Exception as e:
         print e
 

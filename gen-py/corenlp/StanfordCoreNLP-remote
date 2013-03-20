@@ -24,12 +24,13 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
   print ''
   print 'Functions:'
   print '  void ping()'
+  print '  void zip()'
   print '   parse_text(string text,  outputFormat)'
   print '  ParseTree parse_tokens( tokens,  outputFormat)'
-  print '  void zip()'
   print '   get_entities_from_text(string text)'
   print '   get_entities_from_tokens( tokens)'
   print '   get_entities_from_trees( trees)'
+  print '   resolve_coreferences_in_trees( trees)'
   print ''
   sys.exit(0)
 
@@ -87,6 +88,12 @@ if cmd == 'ping':
     sys.exit(1)
   pp.pprint(client.ping())
 
+elif cmd == 'zip':
+  if len(args) != 0:
+    print 'zip requires 0 args'
+    sys.exit(1)
+  pp.pprint(client.zip())
+
 elif cmd == 'parse_text':
   if len(args) != 2:
     print 'parse_text requires 2 args'
@@ -98,12 +105,6 @@ elif cmd == 'parse_tokens':
     print 'parse_tokens requires 2 args'
     sys.exit(1)
   pp.pprint(client.parse_tokens(eval(args[0]),eval(args[1]),))
-
-elif cmd == 'zip':
-  if len(args) != 0:
-    print 'zip requires 0 args'
-    sys.exit(1)
-  pp.pprint(client.zip())
 
 elif cmd == 'get_entities_from_text':
   if len(args) != 1:
@@ -122,6 +123,12 @@ elif cmd == 'get_entities_from_trees':
     print 'get_entities_from_trees requires 1 args'
     sys.exit(1)
   pp.pprint(client.get_entities_from_trees(eval(args[0]),))
+
+elif cmd == 'resolve_coreferences_in_trees':
+  if len(args) != 1:
+    print 'resolve_coreferences_in_trees requires 1 args'
+    sys.exit(1)
+  pp.pprint(client.resolve_coreferences_in_trees(eval(args[0]),))
 
 else:
   print 'Unrecognized method %s' % cmd
