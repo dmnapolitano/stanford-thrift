@@ -1,9 +1,11 @@
 package general;
 
-import CoreNLP.ParseTree;
+//import CoreNLP.ParseTree;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
@@ -111,13 +113,37 @@ public class CoreNLPThriftUtil
 		return sentencesCopy;
 	}
 	
-	public static List<String> ParseTreeObjectsToString(List<ParseTree> parseTrees)
+//	public static List<String> ParseTreeObjectsToString(List<ParseTree> parseTrees)
+//	{
+//		List<String> trees = new ArrayList<String>();
+//		for (ParseTree tree : parseTrees)
+//		{
+//			trees.add(tree.tree);
+//		}
+//		return trees;
+//	}
+	
+	public static String closeHTMLTags(String original)
 	{
-		List<String> trees = new ArrayList<String>();
-		for (ParseTree tree : parseTrees)
+		String improved = original;
+		Pattern pattern = Pattern.compile("(<COREF.+?</COREF>)");
+		Matcher matches = pattern.matcher(original);
+		while (matches.find())
 		{
-			trees.add(tree.tree);
+			String match = matches.group(0);
+			int tagCount = match.split("COREF").length-1;
+			if (tagCount % 2 != 0)
+			{
+				improved = improved.replace(match, match + "</COREF>");
+			}
+			
 		}
-		return trees;
+		return improved;
+	}
+	
+	public static void main(String[] args)
+	{
+		String test = "current President of <COREF ID=\"9\">the <COREF ID=\"4\" REF=\"9\">United States</COREF> ";
+		System.out.println(CoreNLPThriftUtil.closeHTMLTags(test));
 	}
 }
