@@ -30,6 +30,8 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
   print '   get_entities_from_text(string text)'
   print '   get_entities_from_tokens( tokens)'
   print '   get_entities_from_trees( trees)'
+  print '   resolve_coreferences_in_text(string text)'
+  print '   resolve_coreferences_in_tokenized_sentences( sentencesWithTokensSeparatedBySpace)'
   print '   resolve_coreferences_in_trees( trees)'
   print ''
   sys.exit(0)
@@ -123,6 +125,18 @@ elif cmd == 'get_entities_from_trees':
     print 'get_entities_from_trees requires 1 args'
     sys.exit(1)
   pp.pprint(client.get_entities_from_trees(eval(args[0]),))
+
+elif cmd == 'resolve_coreferences_in_text':
+  if len(args) != 1:
+    print 'resolve_coreferences_in_text requires 1 args'
+    sys.exit(1)
+  pp.pprint(client.resolve_coreferences_in_text(args[0],))
+
+elif cmd == 'resolve_coreferences_in_tokenized_sentences':
+  if len(args) != 1:
+    print 'resolve_coreferences_in_tokenized_sentences requires 1 args'
+    sys.exit(1)
+  pp.pprint(client.resolve_coreferences_in_tokenized_sentences(eval(args[0]),))
 
 elif cmd == 'resolve_coreferences_in_trees':
   if len(args) != 1:

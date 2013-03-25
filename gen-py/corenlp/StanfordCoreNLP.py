@@ -61,6 +61,20 @@ class Iface(object):
     """
     pass
 
+  def resolve_coreferences_in_text(self, text):
+    """
+    Parameters:
+     - text
+    """
+    pass
+
+  def resolve_coreferences_in_tokenized_sentences(self, sentencesWithTokensSeparatedBySpace):
+    """
+    Parameters:
+     - sentencesWithTokensSeparatedBySpace
+    """
+    pass
+
   def resolve_coreferences_in_trees(self, trees):
     """
     Parameters:
@@ -262,6 +276,66 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "get_entities_from_trees failed: unknown result");
 
+  def resolve_coreferences_in_text(self, text):
+    """
+    Parameters:
+     - text
+    """
+    self.send_resolve_coreferences_in_text(text)
+    return self.recv_resolve_coreferences_in_text()
+
+  def send_resolve_coreferences_in_text(self, text):
+    self._oprot.writeMessageBegin('resolve_coreferences_in_text', TMessageType.CALL, self._seqid)
+    args = resolve_coreferences_in_text_args()
+    args.text = text
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_resolve_coreferences_in_text(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = resolve_coreferences_in_text_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "resolve_coreferences_in_text failed: unknown result");
+
+  def resolve_coreferences_in_tokenized_sentences(self, sentencesWithTokensSeparatedBySpace):
+    """
+    Parameters:
+     - sentencesWithTokensSeparatedBySpace
+    """
+    self.send_resolve_coreferences_in_tokenized_sentences(sentencesWithTokensSeparatedBySpace)
+    return self.recv_resolve_coreferences_in_tokenized_sentences()
+
+  def send_resolve_coreferences_in_tokenized_sentences(self, sentencesWithTokensSeparatedBySpace):
+    self._oprot.writeMessageBegin('resolve_coreferences_in_tokenized_sentences', TMessageType.CALL, self._seqid)
+    args = resolve_coreferences_in_tokenized_sentences_args()
+    args.sentencesWithTokensSeparatedBySpace = sentencesWithTokensSeparatedBySpace
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_resolve_coreferences_in_tokenized_sentences(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = resolve_coreferences_in_tokenized_sentences_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "resolve_coreferences_in_tokenized_sentences failed: unknown result");
+
   def resolve_coreferences_in_trees(self, trees):
     """
     Parameters:
@@ -304,6 +378,8 @@ class Processor(Iface, TProcessor):
     self._processMap["get_entities_from_text"] = Processor.process_get_entities_from_text
     self._processMap["get_entities_from_tokens"] = Processor.process_get_entities_from_tokens
     self._processMap["get_entities_from_trees"] = Processor.process_get_entities_from_trees
+    self._processMap["resolve_coreferences_in_text"] = Processor.process_resolve_coreferences_in_text
+    self._processMap["resolve_coreferences_in_tokenized_sentences"] = Processor.process_resolve_coreferences_in_tokenized_sentences
     self._processMap["resolve_coreferences_in_trees"] = Processor.process_resolve_coreferences_in_trees
 
   def process(self, iprot, oprot):
@@ -390,6 +466,28 @@ class Processor(Iface, TProcessor):
     result = get_entities_from_trees_result()
     result.success = self._handler.get_entities_from_trees(args.trees)
     oprot.writeMessageBegin("get_entities_from_trees", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_resolve_coreferences_in_text(self, seqid, iprot, oprot):
+    args = resolve_coreferences_in_text_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = resolve_coreferences_in_text_result()
+    result.success = self._handler.resolve_coreferences_in_text(args.text)
+    oprot.writeMessageBegin("resolve_coreferences_in_text", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_resolve_coreferences_in_tokenized_sentences(self, seqid, iprot, oprot):
+    args = resolve_coreferences_in_tokenized_sentences_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = resolve_coreferences_in_tokenized_sentences_result()
+    result.success = self._handler.resolve_coreferences_in_tokenized_sentences(args.sentencesWithTokensSeparatedBySpace)
+    oprot.writeMessageBegin("resolve_coreferences_in_tokenized_sentences", TMessageType.REPLY, seqid)
     result.write(oprot)
     oprot.writeMessageEnd()
     oprot.trans.flush()
@@ -1385,6 +1483,316 @@ class get_entities_from_trees_result(object):
     return not (self == other)
 
 
+class resolve_coreferences_in_text_args(object):
+  """
+  Attributes:
+   - text
+  """
+
+  __slots__ = [ 
+    'text',
+   ]
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRING, 'text', None, None, ), # 1
+  )
+
+  def __init__(self, text=None,):
+    self.text = text
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.text = iprot.readString().decode('utf-8')
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('resolve_coreferences_in_text_args')
+    if self.text is not None:
+      oprot.writeFieldBegin('text', TType.STRING, 1)
+      oprot.writeString(self.text.encode('utf-8'))
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, getattr(self, key))
+      for key in self.__slots__]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+    for attr in self.__slots__:
+      my_val = getattr(self, attr)
+      other_val = getattr(other, attr)
+      if my_val != other_val:
+        return False
+    return True
+
+  def __ne__(self, other):
+    return not (self == other)
+
+
+class resolve_coreferences_in_text_result(object):
+  """
+  Attributes:
+   - success
+  """
+
+  __slots__ = [ 
+    'success',
+   ]
+
+  thrift_spec = (
+    (0, TType.LIST, 'success', (TType.STRING,None), None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.LIST:
+          self.success = []
+          (_etype66, _size63) = iprot.readListBegin()
+          for _i67 in xrange(_size63):
+            _elem68 = iprot.readString().decode('utf-8')
+            self.success.append(_elem68)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('resolve_coreferences_in_text_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.LIST, 0)
+      oprot.writeListBegin(TType.STRING, len(self.success))
+      for iter69 in self.success:
+        oprot.writeString(iter69.encode('utf-8'))
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, getattr(self, key))
+      for key in self.__slots__]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+    for attr in self.__slots__:
+      my_val = getattr(self, attr)
+      other_val = getattr(other, attr)
+      if my_val != other_val:
+        return False
+    return True
+
+  def __ne__(self, other):
+    return not (self == other)
+
+
+class resolve_coreferences_in_tokenized_sentences_args(object):
+  """
+  Attributes:
+   - sentencesWithTokensSeparatedBySpace
+  """
+
+  __slots__ = [ 
+    'sentencesWithTokensSeparatedBySpace',
+   ]
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.LIST, 'sentencesWithTokensSeparatedBySpace', (TType.STRING,None), None, ), # 1
+  )
+
+  def __init__(self, sentencesWithTokensSeparatedBySpace=None,):
+    self.sentencesWithTokensSeparatedBySpace = sentencesWithTokensSeparatedBySpace
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.LIST:
+          self.sentencesWithTokensSeparatedBySpace = []
+          (_etype73, _size70) = iprot.readListBegin()
+          for _i74 in xrange(_size70):
+            _elem75 = iprot.readString().decode('utf-8')
+            self.sentencesWithTokensSeparatedBySpace.append(_elem75)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('resolve_coreferences_in_tokenized_sentences_args')
+    if self.sentencesWithTokensSeparatedBySpace is not None:
+      oprot.writeFieldBegin('sentencesWithTokensSeparatedBySpace', TType.LIST, 1)
+      oprot.writeListBegin(TType.STRING, len(self.sentencesWithTokensSeparatedBySpace))
+      for iter76 in self.sentencesWithTokensSeparatedBySpace:
+        oprot.writeString(iter76.encode('utf-8'))
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, getattr(self, key))
+      for key in self.__slots__]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+    for attr in self.__slots__:
+      my_val = getattr(self, attr)
+      other_val = getattr(other, attr)
+      if my_val != other_val:
+        return False
+    return True
+
+  def __ne__(self, other):
+    return not (self == other)
+
+
+class resolve_coreferences_in_tokenized_sentences_result(object):
+  """
+  Attributes:
+   - success
+  """
+
+  __slots__ = [ 
+    'success',
+   ]
+
+  thrift_spec = (
+    (0, TType.LIST, 'success', (TType.STRING,None), None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.LIST:
+          self.success = []
+          (_etype80, _size77) = iprot.readListBegin()
+          for _i81 in xrange(_size77):
+            _elem82 = iprot.readString().decode('utf-8')
+            self.success.append(_elem82)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('resolve_coreferences_in_tokenized_sentences_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.LIST, 0)
+      oprot.writeListBegin(TType.STRING, len(self.success))
+      for iter83 in self.success:
+        oprot.writeString(iter83.encode('utf-8'))
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, getattr(self, key))
+      for key in self.__slots__]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+    for attr in self.__slots__:
+      my_val = getattr(self, attr)
+      other_val = getattr(other, attr)
+      if my_val != other_val:
+        return False
+    return True
+
+  def __ne__(self, other):
+    return not (self == other)
+
+
 class resolve_coreferences_in_trees_args(object):
   """
   Attributes:
@@ -1415,10 +1823,10 @@ class resolve_coreferences_in_trees_args(object):
       if fid == 1:
         if ftype == TType.LIST:
           self.trees = []
-          (_etype66, _size63) = iprot.readListBegin()
-          for _i67 in xrange(_size63):
-            _elem68 = iprot.readString().decode('utf-8')
-            self.trees.append(_elem68)
+          (_etype87, _size84) = iprot.readListBegin()
+          for _i88 in xrange(_size84):
+            _elem89 = iprot.readString().decode('utf-8')
+            self.trees.append(_elem89)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1435,8 +1843,8 @@ class resolve_coreferences_in_trees_args(object):
     if self.trees is not None:
       oprot.writeFieldBegin('trees', TType.LIST, 1)
       oprot.writeListBegin(TType.STRING, len(self.trees))
-      for iter69 in self.trees:
-        oprot.writeString(iter69.encode('utf-8'))
+      for iter90 in self.trees:
+        oprot.writeString(iter90.encode('utf-8'))
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -1494,10 +1902,10 @@ class resolve_coreferences_in_trees_result(object):
       if fid == 0:
         if ftype == TType.LIST:
           self.success = []
-          (_etype73, _size70) = iprot.readListBegin()
-          for _i74 in xrange(_size70):
-            _elem75 = iprot.readString().decode('utf-8')
-            self.success.append(_elem75)
+          (_etype94, _size91) = iprot.readListBegin()
+          for _i95 in xrange(_size91):
+            _elem96 = iprot.readString().decode('utf-8')
+            self.success.append(_elem96)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1514,8 +1922,8 @@ class resolve_coreferences_in_trees_result(object):
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.LIST, 0)
       oprot.writeListBegin(TType.STRING, len(self.success))
-      for iter76 in self.success:
-        oprot.writeString(iter76.encode('utf-8'))
+      for iter97 in self.success:
+        oprot.writeString(iter97.encode('utf-8'))
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()

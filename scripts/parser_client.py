@@ -65,23 +65,23 @@ outputOptions = None
 #outputOptions = ["-outputFormat", "oneline"]  # Same as specifying "None", as above.
 
 
-try:
-    parse_trees = client.parse_text(arbitrary_text, outputOptions)
-    for result in parse_trees:
-        sys.stdout.write(result.tree.strip() + " [" + str(result.score) + "]\n")
-except Exception as e:
-    print e
+#try:
+#    parse_trees = client.parse_text(arbitrary_text, outputOptions)
+#    for result in parse_trees:
+#        sys.stdout.write(result.tree.strip() + " [" + str(result.score) + "]\n")
+#except Exception as e:
+#    print e
 
-print
+#print
 
-for sentence in tokenized_sentences:
-    try:
-        tree = client.parse_tokens(sentence, outputOptions)
-        sys.stdout.write(tree.tree.strip() + " [" + str(tree.score) + "]\n")
-    except Exception as e:
-        print e
+#for sentence in tokenized_sentences:
+#    try:
+#        tree = client.parse_tokens(sentence, outputOptions)
+#        sys.stdout.write(tree.tree.strip() + " [" + str(tree.score) + "]\n")
+#    except Exception as e:
+#        print e
 
-print
+#print
 
 for sentence in more_tokenized_sentences:
     try:
