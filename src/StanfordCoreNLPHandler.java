@@ -4,6 +4,7 @@ import org.apache.thrift.TApplicationException;
 import org.apache.thrift.TException;
 
 import coref.StanfordCorefThrift;
+import edu.stanford.nlp.pipeline.Annotation;
 
 import parser.StanfordParserThrift;
 
@@ -86,7 +87,9 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
     
     public List<String> resolve_coreferences_in_trees(List<String> trees)
     {
-    	return coref.getCoreferencesFromTrees(trees, ner);
+    	Annotation annotation = CoreNLPThriftUtil.getAnnotationFromParseTrees(trees);
+    	annotation = ner.annotateForNamedEntities(annotation);
+    	return coref.getCoreferencesFromAnnotation(annotation);
     }
     /* End Stanford Coref methods */
     

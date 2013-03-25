@@ -13,7 +13,6 @@ import edu.stanford.nlp.dcoref.CorefCoreAnnotations;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.Annotation;
-import edu.stanford.nlp.pipeline.DeterministicCorefAnnotator;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.util.CoreMap;
 import edu.stanford.nlp.util.Pair;
@@ -22,15 +21,13 @@ import general.CoreNLPThriftUtil;
 
 public class StanfordCorefThrift 
 {
-//	private StanfordCoreNLP pipeline;
-	private DeterministicCorefAnnotator coref;
+	private StanfordCoreNLP coref;
 	
 	public StanfordCorefThrift()
 	{
-//		Properties props = new Properties();
-//		props.put("annotators", "tokenize, ssplit, parse, lemma, ner, dcoref");
-//		pipeline = new StanfordCoreNLP(props, true);
-		coref = new DeterministicCorefAnnotator(new Properties());
+		Properties props = new Properties();
+		props.put("annotators", "dcoref");
+		coref = new StanfordCoreNLP(props, false);
 	}
 	
 //	public List<String> getCoreferencesFromText(String text)
@@ -40,9 +37,8 @@ public class StanfordCorefThrift
 //		return MUCStyleOutput(annotation);
 //	}
 	
-	public List<String> getCoreferencesFromTrees(List<String> parseTrees, StanfordNERThrift ner)
+	public List<String> getCoreferencesFromAnnotation(Annotation annotation)
 	{
-		Annotation annotation = ner.getNamedEntityAnnotationFromTrees(parseTrees);
 		coref.annotate(annotation);
 		return MUCStyleOutput(annotation);
 	}
@@ -193,9 +189,15 @@ public class StanfordCorefThrift
 //		System.out.println();
 //		
 //		List<String> trees = new ArrayList<String>();
-//		trees.add("(ROOT (S (NP (NP (NNS Members)) (PP (IN of) (NP (QP (RB about) (CD 37)) (NNS species)))) (VP (VBP are) (VP (VBN referred) (PP (TO to) (NP (NP (RB as) (NNS foxes)) (, ,) (SBAR (WHPP (IN of) (WHNP (WDT which))) (S (NP (QP (RB only) (CD 12)) (NNS species)) (ADVP (RB actually)) (VP (VBP belong) (PP (TO to) (NP (NP (DT the) (NNP Vulpes) (NNS genus)) (PP (IN of) (NP (`` ``) (JJ true) (NNS foxes) ('' '')))))))))))) (. .)))");
-//		//String[] tokensArr = "Members of about 37 species are referred to as foxes , of which only 12 species actually belong to the Vulpes genus of `` true foxes '' .".split(" ");
-//		results = coref.getCoreferencesFromTrees(trees);
+//		trees.add("(ROOT (S (NP (NNP Barack) (NNP Hussein) (NNP Obama) (NNP II)) (VP (VBZ is) (NP (NP (DT the) (JJ 44th) (CC and) (JJ current) (NN President)) (PP (IN of) (NP (DT the) (NNP United) (NNPS States)))) (, ,) (PP (IN in) (NP (NP (NN office)) (PP (IN since) (NP (CD 2009)))))) (. .)))");
+//        trees.add("(ROOT (S (NP (PRP He)) (VP (VBZ is) (NP (DT the) (JJ first) (NNP African) (NNP American)) (S (VP (TO to) (VP (VB hold) (NP (DT the) (NN office)))))) (. .)))");
+//        trees.add("(ROOT (S (S (VP (VBN Born) (PP (IN in) (NP (NNP Honolulu) (, ,) (NNP Hawaii))))) (, ,) (NP (NNP Obama)) (VP (VBZ is) (NP (NP (DT a) (NN graduate)) (PP (IN of) (NP (NP (NNP Columbia) (NNP University)) (CC and) (NP (NNP Harvard) (NNP Law) (NNP School))))) (, ,) (SBAR (WHADVP (WRB where)) (S (NP (PRP he)) (VP (VBD was) (NP (NP (NN president)) (PP (IN of) (NP (DT the) (NNP Harvard) (NNP Law) (NNP Review)))))))) (. .)))");
+//        trees.add("(ROOT (S (NP (PRP He)) (VP (VBD was) (NP (NP (DT a) (NN community) (NN organizer)) (PP (IN in) (NP (NNP Chicago)))) (PP (IN before) (S (VP (VBG earning) (NP (PRP$ his) (NN law) (NN degree)))))) (. .)))");
+//        trees.add("(ROOT (S (NP (PRP He)) (VP (VP (VBD worked) (PP (IN as) (NP (NP (DT a) (JJ civil) (NNS rights) (NN attorney)) (PP (IN in) (NP (NNP Chicago)))))) (CC and) (VP (VBD taught) (NP (JJ constitutional) (NN law)) (PP (IN at) (NP (NP (DT the) (NNP University)) (PP (IN of) (NP (NP (NNP Chicago) (NNP Law) (NNP School)) (PP (IN from) (NP (CD 1992))))))) (PP (TO to) (NP (CD 2004))))) (. .)))");
+//        trees.add("(ROOT (S (NP (PRP He)) (VP (VBD served) (NP (NP (CD three) (NNS terms)) (VP (VBG representing) (NP (NP (DT the) (NAC (JJ 13th) (NNP District) (PP (IN in) (NP (DT the) (NNP Illinois)))) (NNP Senate)) (PP (IN from) (NP (CD 1997) (TO to) (CD 2004)))))) (, ,) (S (VP (VBG running) (ADVP (RB unsuccessfully)) (PP (IN for) (NP (NP (DT the) (NNP United) (NNPS States) (NNP House)) (PP (IN of) (NP (NP (NNS Representatives)) (PP (IN in) (NP (CD 2000)))))))))) (. .)))");
+//		Annotation annotation = CoreNLPThriftUtil.getAnnotationFromParseTrees(trees);
+//		StanfordNERThrift ner = new StanfordNERThrift();
+//        List<String> results = coref.getCoreferencesFromAnnotation(ner.annotateForNamedEntities(annotation));
 //		for (String s : results)
 //		{
 //			System.out.println(s);

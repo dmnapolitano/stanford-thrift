@@ -61,18 +61,17 @@ public class StanfordNERThrift
 
 	public List<NamedEntity> getNamedEntitiesFromTrees(List<String> parseTrees)
 	{	
-		Annotation sentences = getNamedEntityAnnotationFromTrees(parseTrees);
-
-		List<CoreMap> sentenceMap = sentences.get(CoreAnnotations.SentencesAnnotation.class);
+		Annotation annotation = CoreNLPThriftUtil.getAnnotationFromParseTrees(parseTrees);
+		ner.annotate(annotation);
+		List<CoreMap> sentenceMap = annotation.get(CoreAnnotations.SentencesAnnotation.class);
 		return toNamedEntityObjects(sentenceMap);
 	}
 	
-	public Annotation getNamedEntityAnnotationFromTrees(List<String> parseTrees)
+	public Annotation annotateForNamedEntities(Annotation annotation)
 	{
-		Annotation sentences = CoreNLPThriftUtil.getAnnotationFromParseTrees(parseTrees);
-		ner.annotate(sentences);
-		
-		return sentences;
+		Annotation withNE = annotation.copy();
+		ner.annotate(withNE);
+		return withNE;
 	}
 	
 	private List<NamedEntity> toNamedEntityObjects(List<CoreMap> results)
