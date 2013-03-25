@@ -28,13 +28,15 @@ trees = ["(ROOT (S (NP (NNP Barack) (NNP Hussein) (NNP Obama) (NNP II)) (VP (VBZ
          "(ROOT (S (NP (PRP He)) (VP (VP (VBD worked) (PP (IN as) (NP (NP (DT a) (JJ civil) (NNS rights) (NN attorney)) (PP (IN in) (NP (NNP Chicago)))))) (CC and) (VP (VBD taught) (NP (JJ constitutional) (NN law)) (PP (IN at) (NP (NP (DT the) (NNP University)) (PP (IN of) (NP (NP (NNP Chicago) (NNP Law) (NNP School)) (PP (IN from) (NP (CD 1992))))))) (PP (TO to) (NP (CD 2004))))) (. .)))",
          "(ROOT (S (NP (PRP He)) (VP (VBD served) (NP (NP (CD three) (NNS terms)) (VP (VBG representing) (NP (NP (DT the) (NAC (JJ 13th) (NNP District) (PP (IN in) (NP (DT the) (NNP Illinois)))) (NNP Senate)) (PP (IN from) (NP (CD 1997) (TO to) (CD 2004)))))) (, ,) (S (VP (VBG running) (ADVP (RB unsuccessfully)) (PP (IN for) (NP (NP (DT the) (NNP United) (NNPS States) (NNP House)) (PP (IN of) (NP (NP (NNS Representatives)) (PP (IN in) (NP (CD 2000)))))))))) (. .)))"]
 
-#text = "My name is Diane and I live in New Jersey.  I sometimes go to New York.  The Food and Drug Administration is an organization."
-more_trees = ["(ROOT (S (S (NP (PRP$ My) (NN name)) (VP (VBZ is) (NP (NNP Diane)))) (CC and) (S (NP (PRP I)) (VP (VBP live) (PP (IN in) (NP (NNP New) (NNP Jersey))))) (. .)))",
-         "(ROOT (S (NP (PRP I)) (ADVP (RB sometimes)) (VP (VBP go) (PP (TO to) (NP (NNP New) (NNP York)))) (. .)))",
-         "(ROOT (S (NP (DT The) (NNP Food) (CC and) (NNP Drug) (NNP Administration)) (VP (VBZ is) (NP (DT an) (NN organization))) (. .)))"]
-#tokenized_sentences = [["My", "name", "is", "Diane", "and", "I", "live", "in", "New", "Jersey", "."], 
-#                       ["I", "sometimes", "go", "to", "New", "York", "."],
-#                       ["The", "Food", "and", "Drug", "Administration", "is", "an", "organization", "."]]
+tokenized_sentences = ["Barack Hussein Obama II is the 44th and current President of the United States , in office since 2009 .",
+                       u"He is the first African American to hold the office .",
+                       u"Born in Honolulu , Hawaii , Obama is a graduate of Columbia University and Harvard Law School , where he was president of the Harvard Law Review .",
+                       u"He was a community organizer in Chicago before earning his law degree .",
+                       u"He worked as a civil rights attorney in Chicago and taught constitutional law at the University of Chicago Law School from 1992 to 2004 .",
+                       u"He served three terms representing the 13th District in the Illinois Senate from 1997 to 2004 , running unsuccessfully for the United States House of Representatives in 2000 ."]
+
+arbitrary_text = u"Barack Hussein Obama II is the 44th and current President of the United States, in office since 2009.  He is the first African American to hold the office.  Born in Honolulu, Hawaii, Obama is a graduate of Columbia University and Harvard Law School, where he was president of the Harvard Law Review.  He was a community organizer in Chicago before earning his law degree.  He worked as a civil rights attorney in Chicago and taught constitutional law at the University of Chicago Law School from 1992 to 2004.  He served three terms representing the 13th District in the Illinois Senate from 1997 to 2004, running unsuccessfully for the United States House of Representatives in 2000."
+
 
 transport = TSocket.TSocket(server, port)
 transport = TTransport.TBufferedTransport(transport)
@@ -45,14 +47,16 @@ transport.open()
 
 try:
     result = client.resolve_coreferences_in_trees(trees)
-    print result
-#    print
-#    result = client.resolve_coreferences_in_trees(more_trees)
-#    print result
-#    print
-#    for sentence in tokenized_sentences:
-#        result = client.get_entities_from_tokens(sentence)
-#        print result
+    for r in result:
+        print r
+    print
+    result = client.resolve_coreferences_in_tokens(tokenized_sentences)
+    for r in result:
+        print r
+    print
+    result = client.resolve_coreferences_in_text(arbitrary_text)
+    for r in result:
+        print r
 
 except Exception as e:
     print e

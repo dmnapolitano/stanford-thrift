@@ -13,6 +13,7 @@ import CoreNLP.*;
 import general.CoreNLPThriftUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -32,6 +33,7 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
     	coref = new StanfordCorefThrift();
     }
 
+    
     /* Begin Stanford Parser methods */
     public List<ParseTree> parse_text(String text, List<String> outputFormat) throws TApplicationException
     {
@@ -53,6 +55,7 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
     	return parser.parse_tokens(tokens, outputFormat);
     }
     /* End Stanford Parser methods */
+    
     
     /* Begin Stanford NER methods */
     public List<NamedEntity> get_entities_from_text(String text) throws TApplicationException
@@ -77,13 +80,29 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
     }
     /* End Stanford NER methods */
     
+    
     /* Begin Stanford Coref methods */
-//    public List<String> resolve_coreferences_in_text(String text)
-//    {
-//    	List<ParseTree> parseTreeObjects = parser.parse_text(text, null);
-//    	List<String> parseTrees = CoreNLPThriftUtil.ParseTreeObjectsToString(parseTreeObjects);
-//    	return coref.getCoreferencesFromTrees(parseTrees, ner);
-//    }
+    public List<String> resolve_coreferences_in_text(String text) throws TApplicationException
+    {
+    	List<ParseTree> parseTreeObjects = parser.parse_text(text, null);
+    	List<String> parseTrees = CoreNLPThriftUtil.ParseTreeObjectsToString(parseTreeObjects);
+    	Annotation annotation = ner.annotateForNamedEntities(CoreNLPThriftUtil.getAnnotationFromParseTrees(parseTrees));
+    	return coref.getCoreferencesFromAnnotation(annotation);
+    }
+    
+    public List<String> resolve_coreferences_in_tokenized_sentences(List<String> sentencesWithTokensSeparatedBySpace) throws TApplicationException
+    {
+    	List<String> parseTrees = new ArrayList<String>();
+    	for (String sentence : sentencesWithTokensSeparatedBySpace)
+    	{
+    		List<String> tokens = Arrays.asList(sentence.split(" "));
+    		ParseTree parseTreeObject = parser.parse_tokens(tokens, null);
+    		parseTrees.add(parseTreeObject.tree);
+    	}
+    	Annotation annotation = CoreNLPThriftUtil.getAnnotationFromParseTrees(parseTrees);
+    	annotation = ner.annotateForNamedEntities(annotation);
+    	return coref.getCoreferencesFromAnnotation(annotation);
+    }
     
     public List<String> resolve_coreferences_in_trees(List<String> trees)
     {
@@ -92,6 +111,7 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
     	return coref.getCoreferencesFromAnnotation(annotation);
     }
     /* End Stanford Coref methods */
+    
     
     public void ping() 
     {

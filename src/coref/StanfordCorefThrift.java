@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import ner.StanfordNERThrift;
-
 import edu.stanford.nlp.dcoref.CorefChain;
 import edu.stanford.nlp.dcoref.CorefCoreAnnotations;
 import edu.stanford.nlp.ling.CoreAnnotations;
@@ -25,17 +23,20 @@ public class StanfordCorefThrift
 	
 	public StanfordCorefThrift()
 	{
+		// This works, as opposed to creating a 
+		// edu.stanford.nlp.pipeline.DeterministicCorefAnnotator
+		// object directly, because the coreference code runs the
+		// parse tree a few times on its own, despite it having
+		// been run (and parse trees having been stored) as part
+		// of the mandatory NER.  Creating the object this way,
+		// the coreference system can create new parser objects
+		// on-the-fly, despite the fact that they're never
+		// initialized here.  Very strange.  These parsers
+		// seem to use the default PCFG model.
 		Properties props = new Properties();
 		props.put("annotators", "dcoref");
 		coref = new StanfordCoreNLP(props, false);
 	}
-	
-//	public List<String> getCoreferencesFromText(String text)
-//	{
-//		Annotation annotation = new Annotation(text);
-//		pipeline.annotate(annotation);
-//		return MUCStyleOutput(annotation);
-//	}
 	
 	public List<String> getCoreferencesFromAnnotation(Annotation annotation)
 	{
