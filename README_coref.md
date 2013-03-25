@@ -16,7 +16,8 @@ Notice that these results span two sentences.  You'll typically want to call the
 * one or more sentences' worth of tokens (the output from some sentence and then word tokenizer), where each sentence's tokens are separated by a space.  For example, if your tokenizer produced:
 
 ```Python
-output = [["Barack", "Hussein", "Obama", "II", "is", "the", "44th", "and", "current", "President", "of", "the", "United", "States", ",", "in", "office", "since", "2009" "."],
+output = [["Barack", "Hussein", "Obama", "II", "is", "the", "44th", "and", "current", "President", "of", "the", "United", "States", ",", "in", "office", 
+           "since", "2009" "."],
        	  ["He", "is", "the", "first", "African", "American", "to", "hold", "the", "office", "."]]
 ```
 
