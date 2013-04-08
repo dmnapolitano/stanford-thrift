@@ -1,5 +1,7 @@
 import java.net.ServerSocket;
 import java.net.InetAddress;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+
 import org.apache.thrift.server.TServer;
 import org.apache.thrift.server.TServer.Args;
 import org.apache.thrift.server.TSimpleServer;
@@ -18,6 +20,7 @@ public class StanfordCoreNLPServer
     public static class ServerThread implements Runnable 
     {
         private Integer port;
+        private final int THREAD_POOL_SIZE = 10;
 
         public ServerThread(StanfordCoreNLP.Processor processor, Integer portNum) 
         {
@@ -40,8 +43,9 @@ public class StanfordCoreNLPServer
                 // Use this for a multithreaded server with the max number of workers set to 10 (to avoid taking over the server)
                 // Default minimum number of workers for this server type is 5 which is fine.
                 TThreadPoolServer.Args args = new TThreadPoolServer.Args(serverTransport);
-                args.maxWorkerThreads(10);
+                args.maxWorkerThreads(THREAD_POOL_SIZE);
                 args.processor(processor);
+                args.executorService(new ScheduledThreadPoolExecutor(THREAD_POOL_SIZE));
                 TServer server = new TThreadPoolServer(args);
 
                 System.out.println("The CoreNLP server is running...");
