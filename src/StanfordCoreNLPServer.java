@@ -34,12 +34,6 @@ public class StanfordCoreNLPServer
                 // Initialize the transport socket
                 TServerTransport serverTransport = new TServerSocket(port);
 
-                // There are a bunch of servers that one can use.
-                // See https://github.com/m1ch1/mapkeeper/wiki/Thrift-Java-Servers-Compared for more details
-
-                // Use this for a single-threaded server. Shouldn't really be used in production.
-                // TServer server = new TSimpleServer(new Args(serverTransport).processor(processor));
-
                 // Use this for a multithreaded server with the max number of workers set to 10 (to avoid taking over the server)
                 // Default minimum number of workers for this server type is 5 which is fine.
                 TThreadPoolServer.Args args = new TThreadPoolServer.Args(serverTransport);
