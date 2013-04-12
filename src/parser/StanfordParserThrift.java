@@ -20,6 +20,8 @@ import java.util.List;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.ling.HasWord;
 import edu.stanford.nlp.ling.Sentence;
+import edu.stanford.nlp.ling.TaggedWord;
+import edu.stanford.nlp.ling.TaggedWordFactory;
 import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
 import edu.stanford.nlp.process.DocumentPreprocessor;
 import edu.stanford.nlp.trees.PennTreebankLanguagePack;
@@ -226,6 +228,45 @@ public class StanfordParserThrift
         }
     	//}
 //    	return results;
+    }
+    
+    public ParseTree parse_tagged_sentence(String taggedSentence, List<String> outputFormat, String divider) throws TApplicationException
+    {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+
+        try
+        {
+            if (outputFormat != null && outputFormat.size() > 0)
+            {
+            	setOptions(outputFormat);
+            }
+            else
+            {
+            	if (customOutputOptionsSet)
+            	{
+            		setOptions(null);
+            	}
+            }
+        	
+        	// a single sentence worth of tagged texted, better be properly tokenized >:D
+        	String[] taggedTokens = taggedSentence.split(" ");
+        	TaggedWordFactory tf = new TaggedWordFactory(divider.charAt(0));
+        	List<TaggedWord> taggedWordList = new ArrayList<TaggedWord>();
+        	for (String taggedToken : taggedTokens)
+        	{
+        		taggedWordList.add((TaggedWord)tf.newLabelFromString(taggedToken));
+        	}
+        	
+        	Tree parseTree = parser.apply(taggedWordList);
+        	treePrinter.printTree(parseTree, pw);
+        	return new ParseTree(sw.getBuffer().toString().trim(), parseTree.score());
+        }
+        catch (Exception e)
+        {
+        	// FIXME
+        	throw new TApplicationException(TApplicationException.INTERNAL_ERROR, e.getMessage());
+        }
     }
 }
 

@@ -17,6 +17,11 @@ In order to get these `ParseTree` objects, you have two choices, depending on wh
 * `parse_tokens(tokens, outputFormat)` where `tokens` is a Java `List<String>`/Python list containing `str`/`unicode`, `outputFormat` is a Java `List<String>`/Python list containing `str`/`unicode`.
    Returns: A `ParseTree` object.
    Given a single sentence worth of output from the sentence and word tokenizers of your choice, return that sentence's corresponding result from Stanford Parser.  Does not use Stanford's tokenizers.
+
+* `parse_tagged_sentence(taggedSentence, outputFormat, delimiter)` where `taggedSentence` is a single POS-tagged sentence (Java `String`/Python `str`/`unicode`), `outputFormat` is a Java `List<String>`/Python list containing `str`/`unicode`, and `delimiter` is a Java `String`/Python `str`/`unicode` containing the single character that separates the word from the tag in your `taggedSentence`.
+	Returns: A `ParseTree` object.
+	Given a single Penn Treebank part-of-speech-tagged sentence from the tokenizer and tagger combination of your choice, have Stanford generate a parse tree based on those tags.
+
    
 ##### What one can do with the `outputFormat` argument to both of these methods
 

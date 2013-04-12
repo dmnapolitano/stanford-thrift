@@ -40,6 +40,15 @@ class Iface(object):
     """
     pass
 
+  def parse_tagged_sentence(self, taggedSentence, outputFormat, divider):
+    """
+    Parameters:
+     - taggedSentence
+     - outputFormat
+     - divider
+    """
+    pass
+
   def get_entities_from_text(self, text):
     """
     Parameters:
@@ -185,6 +194,40 @@ class Client(Iface):
     if result.success is not None:
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "parse_tokens failed: unknown result");
+
+  def parse_tagged_sentence(self, taggedSentence, outputFormat, divider):
+    """
+    Parameters:
+     - taggedSentence
+     - outputFormat
+     - divider
+    """
+    self.send_parse_tagged_sentence(taggedSentence, outputFormat, divider)
+    return self.recv_parse_tagged_sentence()
+
+  def send_parse_tagged_sentence(self, taggedSentence, outputFormat, divider):
+    self._oprot.writeMessageBegin('parse_tagged_sentence', TMessageType.CALL, self._seqid)
+    args = parse_tagged_sentence_args()
+    args.taggedSentence = taggedSentence
+    args.outputFormat = outputFormat
+    args.divider = divider
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_parse_tagged_sentence(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = parse_tagged_sentence_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "parse_tagged_sentence failed: unknown result");
 
   def get_entities_from_text(self, text):
     """
@@ -375,6 +418,7 @@ class Processor(Iface, TProcessor):
     self._processMap["zip"] = Processor.process_zip
     self._processMap["parse_text"] = Processor.process_parse_text
     self._processMap["parse_tokens"] = Processor.process_parse_tokens
+    self._processMap["parse_tagged_sentence"] = Processor.process_parse_tagged_sentence
     self._processMap["get_entities_from_text"] = Processor.process_get_entities_from_text
     self._processMap["get_entities_from_tokens"] = Processor.process_get_entities_from_tokens
     self._processMap["get_entities_from_trees"] = Processor.process_get_entities_from_trees
@@ -433,6 +477,17 @@ class Processor(Iface, TProcessor):
     result = parse_tokens_result()
     result.success = self._handler.parse_tokens(args.tokens, args.outputFormat)
     oprot.writeMessageBegin("parse_tokens", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_parse_tagged_sentence(self, seqid, iprot, oprot):
+    args = parse_tagged_sentence_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = parse_tagged_sentence_result()
+    result.success = self._handler.parse_tagged_sentence(args.taggedSentence, args.outputFormat, args.divider)
+    oprot.writeMessageBegin("parse_tagged_sentence", TMessageType.REPLY, seqid)
     result.write(oprot)
     oprot.writeMessageEnd()
     oprot.trans.flush()
@@ -1011,6 +1066,184 @@ class parse_tokens_result(object):
     return not (self == other)
 
 
+class parse_tagged_sentence_args(object):
+  """
+  Attributes:
+   - taggedSentence
+   - outputFormat
+   - divider
+  """
+
+  __slots__ = [ 
+    'taggedSentence',
+    'outputFormat',
+    'divider',
+   ]
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRING, 'taggedSentence', None, None, ), # 1
+    (2, TType.LIST, 'outputFormat', (TType.STRING,None), None, ), # 2
+    (3, TType.STRING, 'divider', None, None, ), # 3
+  )
+
+  def __init__(self, taggedSentence=None, outputFormat=None, divider=None,):
+    self.taggedSentence = taggedSentence
+    self.outputFormat = outputFormat
+    self.divider = divider
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.taggedSentence = iprot.readString().decode('utf-8')
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.LIST:
+          self.outputFormat = []
+          (_etype31, _size28) = iprot.readListBegin()
+          for _i32 in xrange(_size28):
+            _elem33 = iprot.readString().decode('utf-8')
+            self.outputFormat.append(_elem33)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.STRING:
+          self.divider = iprot.readString().decode('utf-8')
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('parse_tagged_sentence_args')
+    if self.taggedSentence is not None:
+      oprot.writeFieldBegin('taggedSentence', TType.STRING, 1)
+      oprot.writeString(self.taggedSentence.encode('utf-8'))
+      oprot.writeFieldEnd()
+    if self.outputFormat is not None:
+      oprot.writeFieldBegin('outputFormat', TType.LIST, 2)
+      oprot.writeListBegin(TType.STRING, len(self.outputFormat))
+      for iter34 in self.outputFormat:
+        oprot.writeString(iter34.encode('utf-8'))
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    if self.divider is not None:
+      oprot.writeFieldBegin('divider', TType.STRING, 3)
+      oprot.writeString(self.divider.encode('utf-8'))
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, getattr(self, key))
+      for key in self.__slots__]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+    for attr in self.__slots__:
+      my_val = getattr(self, attr)
+      other_val = getattr(other, attr)
+      if my_val != other_val:
+        return False
+    return True
+
+  def __ne__(self, other):
+    return not (self == other)
+
+
+class parse_tagged_sentence_result(object):
+  """
+  Attributes:
+   - success
+  """
+
+  __slots__ = [ 
+    'success',
+   ]
+
+  thrift_spec = (
+    (0, TType.STRUCT, 'success', (ParseTree, ParseTree.thrift_spec), None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = ParseTree()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('parse_tagged_sentence_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, getattr(self, key))
+      for key in self.__slots__]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+    for attr in self.__slots__:
+      my_val = getattr(self, attr)
+      other_val = getattr(other, attr)
+      if my_val != other_val:
+        return False
+    return True
+
+  def __ne__(self, other):
+    return not (self == other)
+
+
 class get_entities_from_text_args(object):
   """
   Attributes:
@@ -1112,11 +1345,11 @@ class get_entities_from_text_result(object):
       if fid == 0:
         if ftype == TType.LIST:
           self.success = []
-          (_etype31, _size28) = iprot.readListBegin()
-          for _i32 in xrange(_size28):
-            _elem33 = NamedEntity()
-            _elem33.read(iprot)
-            self.success.append(_elem33)
+          (_etype38, _size35) = iprot.readListBegin()
+          for _i39 in xrange(_size35):
+            _elem40 = NamedEntity()
+            _elem40.read(iprot)
+            self.success.append(_elem40)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1133,8 +1366,8 @@ class get_entities_from_text_result(object):
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.LIST, 0)
       oprot.writeListBegin(TType.STRUCT, len(self.success))
-      for iter34 in self.success:
-        iter34.write(oprot)
+      for iter41 in self.success:
+        iter41.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -1193,10 +1426,10 @@ class get_entities_from_tokens_args(object):
       if fid == 1:
         if ftype == TType.LIST:
           self.tokens = []
-          (_etype38, _size35) = iprot.readListBegin()
-          for _i39 in xrange(_size35):
-            _elem40 = iprot.readString().decode('utf-8')
-            self.tokens.append(_elem40)
+          (_etype45, _size42) = iprot.readListBegin()
+          for _i46 in xrange(_size42):
+            _elem47 = iprot.readString().decode('utf-8')
+            self.tokens.append(_elem47)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1213,8 +1446,8 @@ class get_entities_from_tokens_args(object):
     if self.tokens is not None:
       oprot.writeFieldBegin('tokens', TType.LIST, 1)
       oprot.writeListBegin(TType.STRING, len(self.tokens))
-      for iter41 in self.tokens:
-        oprot.writeString(iter41.encode('utf-8'))
+      for iter48 in self.tokens:
+        oprot.writeString(iter48.encode('utf-8'))
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -1272,11 +1505,11 @@ class get_entities_from_tokens_result(object):
       if fid == 0:
         if ftype == TType.LIST:
           self.success = []
-          (_etype45, _size42) = iprot.readListBegin()
-          for _i46 in xrange(_size42):
-            _elem47 = NamedEntity()
-            _elem47.read(iprot)
-            self.success.append(_elem47)
+          (_etype52, _size49) = iprot.readListBegin()
+          for _i53 in xrange(_size49):
+            _elem54 = NamedEntity()
+            _elem54.read(iprot)
+            self.success.append(_elem54)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1293,8 +1526,8 @@ class get_entities_from_tokens_result(object):
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.LIST, 0)
       oprot.writeListBegin(TType.STRUCT, len(self.success))
-      for iter48 in self.success:
-        iter48.write(oprot)
+      for iter55 in self.success:
+        iter55.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -1353,10 +1586,10 @@ class get_entities_from_trees_args(object):
       if fid == 1:
         if ftype == TType.LIST:
           self.trees = []
-          (_etype52, _size49) = iprot.readListBegin()
-          for _i53 in xrange(_size49):
-            _elem54 = iprot.readString().decode('utf-8')
-            self.trees.append(_elem54)
+          (_etype59, _size56) = iprot.readListBegin()
+          for _i60 in xrange(_size56):
+            _elem61 = iprot.readString().decode('utf-8')
+            self.trees.append(_elem61)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1373,8 +1606,8 @@ class get_entities_from_trees_args(object):
     if self.trees is not None:
       oprot.writeFieldBegin('trees', TType.LIST, 1)
       oprot.writeListBegin(TType.STRING, len(self.trees))
-      for iter55 in self.trees:
-        oprot.writeString(iter55.encode('utf-8'))
+      for iter62 in self.trees:
+        oprot.writeString(iter62.encode('utf-8'))
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -1432,11 +1665,11 @@ class get_entities_from_trees_result(object):
       if fid == 0:
         if ftype == TType.LIST:
           self.success = []
-          (_etype59, _size56) = iprot.readListBegin()
-          for _i60 in xrange(_size56):
-            _elem61 = NamedEntity()
-            _elem61.read(iprot)
-            self.success.append(_elem61)
+          (_etype66, _size63) = iprot.readListBegin()
+          for _i67 in xrange(_size63):
+            _elem68 = NamedEntity()
+            _elem68.read(iprot)
+            self.success.append(_elem68)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1453,8 +1686,8 @@ class get_entities_from_trees_result(object):
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.LIST, 0)
       oprot.writeListBegin(TType.STRUCT, len(self.success))
-      for iter62 in self.success:
-        iter62.write(oprot)
+      for iter69 in self.success:
+        iter69.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -1584,10 +1817,10 @@ class resolve_coreferences_in_text_result(object):
       if fid == 0:
         if ftype == TType.LIST:
           self.success = []
-          (_etype66, _size63) = iprot.readListBegin()
-          for _i67 in xrange(_size63):
-            _elem68 = iprot.readString().decode('utf-8')
-            self.success.append(_elem68)
+          (_etype73, _size70) = iprot.readListBegin()
+          for _i74 in xrange(_size70):
+            _elem75 = iprot.readString().decode('utf-8')
+            self.success.append(_elem75)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1604,8 +1837,8 @@ class resolve_coreferences_in_text_result(object):
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.LIST, 0)
       oprot.writeListBegin(TType.STRING, len(self.success))
-      for iter69 in self.success:
-        oprot.writeString(iter69.encode('utf-8'))
+      for iter76 in self.success:
+        oprot.writeString(iter76.encode('utf-8'))
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -1664,10 +1897,10 @@ class resolve_coreferences_in_tokenized_sentences_args(object):
       if fid == 1:
         if ftype == TType.LIST:
           self.sentencesWithTokensSeparatedBySpace = []
-          (_etype73, _size70) = iprot.readListBegin()
-          for _i74 in xrange(_size70):
-            _elem75 = iprot.readString().decode('utf-8')
-            self.sentencesWithTokensSeparatedBySpace.append(_elem75)
+          (_etype80, _size77) = iprot.readListBegin()
+          for _i81 in xrange(_size77):
+            _elem82 = iprot.readString().decode('utf-8')
+            self.sentencesWithTokensSeparatedBySpace.append(_elem82)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1684,8 +1917,8 @@ class resolve_coreferences_in_tokenized_sentences_args(object):
     if self.sentencesWithTokensSeparatedBySpace is not None:
       oprot.writeFieldBegin('sentencesWithTokensSeparatedBySpace', TType.LIST, 1)
       oprot.writeListBegin(TType.STRING, len(self.sentencesWithTokensSeparatedBySpace))
-      for iter76 in self.sentencesWithTokensSeparatedBySpace:
-        oprot.writeString(iter76.encode('utf-8'))
+      for iter83 in self.sentencesWithTokensSeparatedBySpace:
+        oprot.writeString(iter83.encode('utf-8'))
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -1743,10 +1976,10 @@ class resolve_coreferences_in_tokenized_sentences_result(object):
       if fid == 0:
         if ftype == TType.LIST:
           self.success = []
-          (_etype80, _size77) = iprot.readListBegin()
-          for _i81 in xrange(_size77):
-            _elem82 = iprot.readString().decode('utf-8')
-            self.success.append(_elem82)
+          (_etype87, _size84) = iprot.readListBegin()
+          for _i88 in xrange(_size84):
+            _elem89 = iprot.readString().decode('utf-8')
+            self.success.append(_elem89)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1763,8 +1996,8 @@ class resolve_coreferences_in_tokenized_sentences_result(object):
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.LIST, 0)
       oprot.writeListBegin(TType.STRING, len(self.success))
-      for iter83 in self.success:
-        oprot.writeString(iter83.encode('utf-8'))
+      for iter90 in self.success:
+        oprot.writeString(iter90.encode('utf-8'))
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -1823,10 +2056,10 @@ class resolve_coreferences_in_trees_args(object):
       if fid == 1:
         if ftype == TType.LIST:
           self.trees = []
-          (_etype87, _size84) = iprot.readListBegin()
-          for _i88 in xrange(_size84):
-            _elem89 = iprot.readString().decode('utf-8')
-            self.trees.append(_elem89)
+          (_etype94, _size91) = iprot.readListBegin()
+          for _i95 in xrange(_size91):
+            _elem96 = iprot.readString().decode('utf-8')
+            self.trees.append(_elem96)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1843,8 +2076,8 @@ class resolve_coreferences_in_trees_args(object):
     if self.trees is not None:
       oprot.writeFieldBegin('trees', TType.LIST, 1)
       oprot.writeListBegin(TType.STRING, len(self.trees))
-      for iter90 in self.trees:
-        oprot.writeString(iter90.encode('utf-8'))
+      for iter97 in self.trees:
+        oprot.writeString(iter97.encode('utf-8'))
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
@@ -1902,10 +2135,10 @@ class resolve_coreferences_in_trees_result(object):
       if fid == 0:
         if ftype == TType.LIST:
           self.success = []
-          (_etype94, _size91) = iprot.readListBegin()
-          for _i95 in xrange(_size91):
-            _elem96 = iprot.readString().decode('utf-8')
-            self.success.append(_elem96)
+          (_etype101, _size98) = iprot.readListBegin()
+          for _i102 in xrange(_size98):
+            _elem103 = iprot.readString().decode('utf-8')
+            self.success.append(_elem103)
           iprot.readListEnd()
         else:
           iprot.skip(ftype)
@@ -1922,8 +2155,8 @@ class resolve_coreferences_in_trees_result(object):
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.LIST, 0)
       oprot.writeListBegin(TType.STRING, len(self.success))
-      for iter97 in self.success:
-        oprot.writeString(iter97.encode('utf-8'))
+      for iter104 in self.success:
+        oprot.writeString(iter104.encode('utf-8'))
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()

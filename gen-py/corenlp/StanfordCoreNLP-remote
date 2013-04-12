@@ -27,6 +27,7 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
   print '  void zip()'
   print '   parse_text(string text,  outputFormat)'
   print '  ParseTree parse_tokens( tokens,  outputFormat)'
+  print '  ParseTree parse_tagged_sentence(string taggedSentence,  outputFormat, string divider)'
   print '   get_entities_from_text(string text)'
   print '   get_entities_from_tokens( tokens)'
   print '   get_entities_from_trees( trees)'
@@ -107,6 +108,12 @@ elif cmd == 'parse_tokens':
     print 'parse_tokens requires 2 args'
     sys.exit(1)
   pp.pprint(client.parse_tokens(eval(args[0]),eval(args[1]),))
+
+elif cmd == 'parse_tagged_sentence':
+  if len(args) != 3:
+    print 'parse_tagged_sentence requires 3 args'
+    sys.exit(1)
+  pp.pprint(client.parse_tagged_sentence(args[0],eval(args[1]),args[2],))
 
 elif cmd == 'get_entities_from_text':
   if len(args) != 1:

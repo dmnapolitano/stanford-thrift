@@ -54,6 +54,16 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
     	}
     	return parser.parse_tokens(tokens, outputFormat);
     }
+    
+    public ParseTree parse_tagged_sentence(String taggedSentence, List<String> outputFormat, String divider) throws TApplicationException
+    {
+    	if (outputFormat == null)
+    	{
+    		List<String> oF = new ArrayList<String>();
+    		return parser.parse_tagged_sentence(taggedSentence, oF, divider);
+    	}
+    	return parser.parse_tagged_sentence(taggedSentence, outputFormat, divider);
+    }
     /* End Stanford Parser methods */
     
     
