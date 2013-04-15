@@ -91,6 +91,14 @@ class Iface(object):
     """
     pass
 
+  def evaluate_tregex_pattern(self, parseTree, tregexPattern):
+    """
+    Parameters:
+     - parseTree
+     - tregexPattern
+    """
+    pass
+
 
 class Client(Iface):
   def __init__(self, iprot, oprot=None):
@@ -409,6 +417,38 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "resolve_coreferences_in_trees failed: unknown result");
 
+  def evaluate_tregex_pattern(self, parseTree, tregexPattern):
+    """
+    Parameters:
+     - parseTree
+     - tregexPattern
+    """
+    self.send_evaluate_tregex_pattern(parseTree, tregexPattern)
+    return self.recv_evaluate_tregex_pattern()
+
+  def send_evaluate_tregex_pattern(self, parseTree, tregexPattern):
+    self._oprot.writeMessageBegin('evaluate_tregex_pattern', TMessageType.CALL, self._seqid)
+    args = evaluate_tregex_pattern_args()
+    args.parseTree = parseTree
+    args.tregexPattern = tregexPattern
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_evaluate_tregex_pattern(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = evaluate_tregex_pattern_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "evaluate_tregex_pattern failed: unknown result");
+
 
 class Processor(Iface, TProcessor):
   def __init__(self, handler):
@@ -425,6 +465,7 @@ class Processor(Iface, TProcessor):
     self._processMap["resolve_coreferences_in_text"] = Processor.process_resolve_coreferences_in_text
     self._processMap["resolve_coreferences_in_tokenized_sentences"] = Processor.process_resolve_coreferences_in_tokenized_sentences
     self._processMap["resolve_coreferences_in_trees"] = Processor.process_resolve_coreferences_in_trees
+    self._processMap["evaluate_tregex_pattern"] = Processor.process_evaluate_tregex_pattern
 
   def process(self, iprot, oprot):
     (name, type, seqid) = iprot.readMessageBegin()
@@ -554,6 +595,17 @@ class Processor(Iface, TProcessor):
     result = resolve_coreferences_in_trees_result()
     result.success = self._handler.resolve_coreferences_in_trees(args.trees)
     oprot.writeMessageBegin("resolve_coreferences_in_trees", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_evaluate_tregex_pattern(self, seqid, iprot, oprot):
+    args = evaluate_tregex_pattern_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = evaluate_tregex_pattern_result()
+    result.success = self._handler.evaluate_tregex_pattern(args.parseTree, args.tregexPattern)
+    oprot.writeMessageBegin("evaluate_tregex_pattern", TMessageType.REPLY, seqid)
     result.write(oprot)
     oprot.writeMessageEnd()
     oprot.trans.flush()
@@ -2157,6 +2209,170 @@ class resolve_coreferences_in_trees_result(object):
       oprot.writeListBegin(TType.STRING, len(self.success))
       for iter104 in self.success:
         oprot.writeString(iter104.encode('utf-8'))
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, getattr(self, key))
+      for key in self.__slots__]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+    for attr in self.__slots__:
+      my_val = getattr(self, attr)
+      other_val = getattr(other, attr)
+      if my_val != other_val:
+        return False
+    return True
+
+  def __ne__(self, other):
+    return not (self == other)
+
+
+class evaluate_tregex_pattern_args(object):
+  """
+  Attributes:
+   - parseTree
+   - tregexPattern
+  """
+
+  __slots__ = [ 
+    'parseTree',
+    'tregexPattern',
+   ]
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRING, 'parseTree', None, None, ), # 1
+    (2, TType.STRING, 'tregexPattern', None, None, ), # 2
+  )
+
+  def __init__(self, parseTree=None, tregexPattern=None,):
+    self.parseTree = parseTree
+    self.tregexPattern = tregexPattern
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.parseTree = iprot.readString().decode('utf-8')
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRING:
+          self.tregexPattern = iprot.readString().decode('utf-8')
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('evaluate_tregex_pattern_args')
+    if self.parseTree is not None:
+      oprot.writeFieldBegin('parseTree', TType.STRING, 1)
+      oprot.writeString(self.parseTree.encode('utf-8'))
+      oprot.writeFieldEnd()
+    if self.tregexPattern is not None:
+      oprot.writeFieldBegin('tregexPattern', TType.STRING, 2)
+      oprot.writeString(self.tregexPattern.encode('utf-8'))
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, getattr(self, key))
+      for key in self.__slots__]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+    for attr in self.__slots__:
+      my_val = getattr(self, attr)
+      other_val = getattr(other, attr)
+      if my_val != other_val:
+        return False
+    return True
+
+  def __ne__(self, other):
+    return not (self == other)
+
+
+class evaluate_tregex_pattern_result(object):
+  """
+  Attributes:
+   - success
+  """
+
+  __slots__ = [ 
+    'success',
+   ]
+
+  thrift_spec = (
+    (0, TType.LIST, 'success', (TType.STRING,None), None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.LIST:
+          self.success = []
+          (_etype108, _size105) = iprot.readListBegin()
+          for _i109 in xrange(_size105):
+            _elem110 = iprot.readString().decode('utf-8')
+            self.success.append(_elem110)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('evaluate_tregex_pattern_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.LIST, 0)
+      oprot.writeListBegin(TType.STRING, len(self.success))
+      for iter111 in self.success:
+        oprot.writeString(iter111.encode('utf-8'))
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
