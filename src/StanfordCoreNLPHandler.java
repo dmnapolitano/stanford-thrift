@@ -7,6 +7,7 @@ import coref.StanfordCorefThrift;
 import edu.stanford.nlp.pipeline.Annotation;
 
 import parser.StanfordParserThrift;
+import tregex.StanfordTregexThrift;
 
 import CoreNLP.*;
 
@@ -22,6 +23,7 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
 	private StanfordParserThrift parser;
 	private StanfordNERThrift ner;
 	private StanfordCorefThrift coref;
+	private StanfordTregexThrift tregex;
 
     public StanfordCoreNLPHandler() 
     {
@@ -31,6 +33,8 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
     	ner = new StanfordNERThrift();
     	System.err.println("Initializing Coreference Resolver...");
     	coref = new StanfordCorefThrift();
+    	System.err.println("Initializing Tregex...");
+    	tregex = new StanfordTregexThrift();
     }
 
     
@@ -121,6 +125,14 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
     	return coref.getCoreferencesFromAnnotation(annotation);
     }
     /* End Stanford Coref methods */
+    
+    
+    /* Begin Stanford Tregex methods */
+    public List<String> evaluate_tregex_pattern(String parseTree, String tregexPattern)
+    {
+    	return tregex.evaluateTregexPattern(parseTree, tregexPattern);
+    }
+    /* End Stanford Tregex methods */
     
     
     public void ping() 

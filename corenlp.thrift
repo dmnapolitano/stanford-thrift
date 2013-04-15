@@ -32,5 +32,6 @@ service StanfordCoreNLP
     list<NamedEntity> get_entities_from_trees(1:list<string> trees),
     list<string> resolve_coreferences_in_text(1:string text),
     list<string> resolve_coreferences_in_tokenized_sentences(1:list<string> sentencesWithTokensSeparatedBySpace),
-    list<string> resolve_coreferences_in_trees(1:list<string> trees)
+    list<string> resolve_coreferences_in_trees(1:list<string> trees),
+    list<string> evaluate_tregex_pattern(1:string parseTree, 2:string tregexPattern)
 }
