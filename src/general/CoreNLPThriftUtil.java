@@ -10,6 +10,8 @@ import java.util.regex.Pattern;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.ling.Sentence;
+import edu.stanford.nlp.ling.TaggedWord;
+import edu.stanford.nlp.ling.TaggedWordFactory;
 import edu.stanford.nlp.ling.CoreAnnotations.CharacterOffsetBeginAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations.CharacterOffsetEndAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations.TextAnnotation;
@@ -61,10 +63,14 @@ public class CoreNLPThriftUtil
 		return allSentences;
 	}
 	
-	// Assumed to be ONE SENTENCE WORTH OF TOKENS
-	public static Annotation getAnnotationFromTokens(List<String> tokens)
+	// Call this once for the first sentence worth of tokens,
+	// Call this again for each additional sentence worth of tokens,
+	// passing in that Annotation that was just returned from that first call.
+	// Otherwise pass in null as the second argument.
+	public static Annotation getAnnotationFromTokens(List<String> tokens, Annotation existingAnnotation)
 	{
 		List<CoreMap> sentences = new ArrayList<CoreMap>();
+		Annotation allSentences;
 
 		String[] tokensArr = new String[tokens.size()];
 		tokens.toArray(tokensArr);
@@ -73,16 +79,27 @@ public class CoreNLPThriftUtil
 
 		CoreMap sentence = new Annotation(originalText);
 		sentence.set(CharacterOffsetBeginAnnotation.class, 0);
-		sentence.set(CharacterOffsetEndAnnotation.class, sentenceTokens.get(sentenceTokens.size() - 1).get(TextAnnotation.class).length());
+		sentence.set(CharacterOffsetEndAnnotation.class, 
+				sentenceTokens.get(sentenceTokens.size() - 1).get(TextAnnotation.class).length());
 		sentence.set(CoreAnnotations.TokensAnnotation.class, sentenceTokens);
 		sentence.set(CoreAnnotations.TokenBeginAnnotation.class, 0);
 		sentence.set(CoreAnnotations.TokenEndAnnotation.class, sentenceTokens.size());
 
 		sentences.add(sentence);
 
-		Annotation allSentences = new Annotation(Sentence.listToString(tokens));
-		allSentences.set(CoreAnnotations.SentencesAnnotation.class, 
+		if (existingAnnotation != null)
+		{
+			sentences.addAll(existingAnnotation.get(CoreAnnotations.SentencesAnnotation.class));
+			allSentences = existingAnnotation.copy();
+			allSentences.set(CoreAnnotations.SentencesAnnotation.class, 
 					adjustCharacterOffsets(sentences, true));
+		}
+		else
+		{
+			allSentences = new Annotation(Sentence.listToString(tokens));
+			allSentences.set(CoreAnnotations.SentencesAnnotation.class, 
+					adjustCharacterOffsets(sentences, true));
+		}
 		
 		return allSentences;
 	}
@@ -140,5 +157,17 @@ public class CoreNLPThriftUtil
 			
 		}
 		return improved;
+	}
+	
+	public static List<TaggedWord> getListOfTaggedWordsFromTaggedSentence(String taggedSentence, String divider)
+	{
+    	String[] taggedTokens = taggedSentence.split(" ");
+    	TaggedWordFactory tf = new TaggedWordFactory(divider.charAt(0));
+    	List<TaggedWord> taggedWordList = new ArrayList<TaggedWord>();
+    	for (String taggedToken : taggedTokens)
+    	{
+    		taggedWordList.add((TaggedWord)tf.newLabelFromString(taggedToken));
+    	}
+    	return taggedWordList;
 	}
 }

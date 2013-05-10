@@ -35,6 +35,8 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
   print '   resolve_coreferences_in_tokenized_sentences( sentencesWithTokensSeparatedBySpace)'
   print '   resolve_coreferences_in_trees( trees)'
   print '   evaluate_tregex_pattern(string parseTree, string tregexPattern)'
+  print '   tag_text(string untokenizedText)'
+  print '   tag_tokenized_sentence( tokenizedSentence)'
   print ''
   sys.exit(0)
 
@@ -157,6 +159,18 @@ elif cmd == 'evaluate_tregex_pattern':
     print 'evaluate_tregex_pattern requires 2 args'
     sys.exit(1)
   pp.pprint(client.evaluate_tregex_pattern(args[0],args[1],))
+
+elif cmd == 'tag_text':
+  if len(args) != 1:
+    print 'tag_text requires 1 args'
+    sys.exit(1)
+  pp.pprint(client.tag_text(args[0],))
+
+elif cmd == 'tag_tokenized_sentence':
+  if len(args) != 1:
+    print 'tag_tokenized_sentence requires 1 args'
+    sys.exit(1)
+  pp.pprint(client.tag_tokenized_sentence(eval(args[0]),))
 
 else:
   print 'Unrecognized method %s' % cmd

@@ -10,6 +10,7 @@ import java.util.Stack;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.Annotation;
+import edu.stanford.nlp.pipeline.DefaultPaths;
 import edu.stanford.nlp.pipeline.NERCombinerAnnotator;
 import edu.stanford.nlp.util.CoreMap;
 
@@ -37,9 +38,9 @@ public class StanfordNERThrift
 		try
 		{
 			ner = new NERCombinerAnnotator(false, 
-					"edu/stanford/nlp/models/ner/english.all.3class.distsim.crf.ser.gz",
-					"edu/stanford/nlp/models/ner/english.muc.7class.distsim.crf.ser.gz",
-			"edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz");
+					DefaultPaths.DEFAULT_NER_CONLL_MODEL,
+					DefaultPaths.DEFAULT_NER_MUC_MODEL,
+					DefaultPaths.DEFAULT_NER_THREECLASS_MODEL);
 		}
 		catch (Exception e)
 		{

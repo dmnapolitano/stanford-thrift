@@ -15,6 +15,12 @@ struct NamedEntity
 	4:i32 endOffset
 }
 
+struct TaggedToken
+{
+	1:string tag,
+	2:string token
+}
+
 exception SerializedException
 {
     1: required binary payload
@@ -33,5 +39,7 @@ service StanfordCoreNLP
     list<string> resolve_coreferences_in_text(1:string text),
     list<string> resolve_coreferences_in_tokenized_sentences(1:list<string> sentencesWithTokensSeparatedBySpace),
     list<string> resolve_coreferences_in_trees(1:list<string> trees),
-    list<string> evaluate_tregex_pattern(1:string parseTree, 2:string tregexPattern)
+    list<string> evaluate_tregex_pattern(1:string parseTree, 2:string tregexPattern),
+    list<list<TaggedToken>> tag_text(1:string untokenizedText),
+    list<TaggedToken> tag_tokenized_sentence(1:list<string> tokenizedSentence)
 }

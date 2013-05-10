@@ -7,6 +7,7 @@ import coref.StanfordCorefThrift;
 import edu.stanford.nlp.pipeline.Annotation;
 
 import parser.StanfordParserThrift;
+import tagger.StanfordTaggerThrift;
 import tregex.StanfordTregexThrift;
 
 import CoreNLP.*;
@@ -24,6 +25,7 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
 	private StanfordNERThrift ner;
 	private StanfordCorefThrift coref;
 	private StanfordTregexThrift tregex;
+	private StanfordTaggerThrift tagger;
 
     public StanfordCoreNLPHandler() 
     {
@@ -35,6 +37,8 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
     	coref = new StanfordCorefThrift();
     	System.err.println("Initializing Tregex...");
     	tregex = new StanfordTregexThrift();
+    	System.err.println("Initializing Tagger...");
+    	tagger = new StanfordTaggerThrift();
     }
 
     
@@ -104,6 +108,7 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
     	return coref.getCoreferencesFromAnnotation(annotation);
     }
     
+    // TODO: Why did I...?
     public List<String> resolve_coreferences_in_tokenized_sentences(List<String> sentencesWithTokensSeparatedBySpace) throws TApplicationException
     {
     	List<String> parseTrees = new ArrayList<String>();
@@ -133,6 +138,19 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
     	return tregex.evaluateTregexPattern(parseTree, tregexPattern);
     }
     /* End Stanford Tregex methods */
+    
+    
+    /* Begin Stanford Tagger methods */
+    public List<List<TaggedToken>> tag_text(String untokenizedText)
+    {
+    	return tagger.tag_text(untokenizedText);
+    }
+    
+    public List<TaggedToken> tag_tokenized_sentence(List<String> tokenizedSentence)
+    {
+    	return tagger.tag_tokenized_sentence(tokenizedSentence);
+    }
+    /* End Stanford Tagger methods */
     
     
     public void ping() 

@@ -99,6 +99,20 @@ class Iface(object):
     """
     pass
 
+  def tag_text(self, untokenizedText):
+    """
+    Parameters:
+     - untokenizedText
+    """
+    pass
+
+  def tag_tokenized_sentence(self, tokenizedSentence):
+    """
+    Parameters:
+     - tokenizedSentence
+    """
+    pass
+
 
 class Client(Iface):
   def __init__(self, iprot, oprot=None):
@@ -449,6 +463,66 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "evaluate_tregex_pattern failed: unknown result");
 
+  def tag_text(self, untokenizedText):
+    """
+    Parameters:
+     - untokenizedText
+    """
+    self.send_tag_text(untokenizedText)
+    return self.recv_tag_text()
+
+  def send_tag_text(self, untokenizedText):
+    self._oprot.writeMessageBegin('tag_text', TMessageType.CALL, self._seqid)
+    args = tag_text_args()
+    args.untokenizedText = untokenizedText
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_tag_text(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = tag_text_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "tag_text failed: unknown result");
+
+  def tag_tokenized_sentence(self, tokenizedSentence):
+    """
+    Parameters:
+     - tokenizedSentence
+    """
+    self.send_tag_tokenized_sentence(tokenizedSentence)
+    return self.recv_tag_tokenized_sentence()
+
+  def send_tag_tokenized_sentence(self, tokenizedSentence):
+    self._oprot.writeMessageBegin('tag_tokenized_sentence', TMessageType.CALL, self._seqid)
+    args = tag_tokenized_sentence_args()
+    args.tokenizedSentence = tokenizedSentence
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_tag_tokenized_sentence(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = tag_tokenized_sentence_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "tag_tokenized_sentence failed: unknown result");
+
 
 class Processor(Iface, TProcessor):
   def __init__(self, handler):
@@ -466,6 +540,8 @@ class Processor(Iface, TProcessor):
     self._processMap["resolve_coreferences_in_tokenized_sentences"] = Processor.process_resolve_coreferences_in_tokenized_sentences
     self._processMap["resolve_coreferences_in_trees"] = Processor.process_resolve_coreferences_in_trees
     self._processMap["evaluate_tregex_pattern"] = Processor.process_evaluate_tregex_pattern
+    self._processMap["tag_text"] = Processor.process_tag_text
+    self._processMap["tag_tokenized_sentence"] = Processor.process_tag_tokenized_sentence
 
   def process(self, iprot, oprot):
     (name, type, seqid) = iprot.readMessageBegin()
@@ -606,6 +682,28 @@ class Processor(Iface, TProcessor):
     result = evaluate_tregex_pattern_result()
     result.success = self._handler.evaluate_tregex_pattern(args.parseTree, args.tregexPattern)
     oprot.writeMessageBegin("evaluate_tregex_pattern", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_tag_text(self, seqid, iprot, oprot):
+    args = tag_text_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = tag_text_result()
+    result.success = self._handler.tag_text(args.untokenizedText)
+    oprot.writeMessageBegin("tag_text", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_tag_tokenized_sentence(self, seqid, iprot, oprot):
+    args = tag_tokenized_sentence_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = tag_tokenized_sentence_result()
+    result.success = self._handler.tag_tokenized_sentence(args.tokenizedSentence)
+    oprot.writeMessageBegin("tag_tokenized_sentence", TMessageType.REPLY, seqid)
     result.write(oprot)
     oprot.writeMessageEnd()
     oprot.trans.flush()
@@ -2373,6 +2471,326 @@ class evaluate_tregex_pattern_result(object):
       oprot.writeListBegin(TType.STRING, len(self.success))
       for iter111 in self.success:
         oprot.writeString(iter111.encode('utf-8'))
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, getattr(self, key))
+      for key in self.__slots__]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+    for attr in self.__slots__:
+      my_val = getattr(self, attr)
+      other_val = getattr(other, attr)
+      if my_val != other_val:
+        return False
+    return True
+
+  def __ne__(self, other):
+    return not (self == other)
+
+
+class tag_text_args(object):
+  """
+  Attributes:
+   - untokenizedText
+  """
+
+  __slots__ = [ 
+    'untokenizedText',
+   ]
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRING, 'untokenizedText', None, None, ), # 1
+  )
+
+  def __init__(self, untokenizedText=None,):
+    self.untokenizedText = untokenizedText
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.untokenizedText = iprot.readString().decode('utf-8')
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('tag_text_args')
+    if self.untokenizedText is not None:
+      oprot.writeFieldBegin('untokenizedText', TType.STRING, 1)
+      oprot.writeString(self.untokenizedText.encode('utf-8'))
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, getattr(self, key))
+      for key in self.__slots__]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+    for attr in self.__slots__:
+      my_val = getattr(self, attr)
+      other_val = getattr(other, attr)
+      if my_val != other_val:
+        return False
+    return True
+
+  def __ne__(self, other):
+    return not (self == other)
+
+
+class tag_text_result(object):
+  """
+  Attributes:
+   - success
+  """
+
+  __slots__ = [ 
+    'success',
+   ]
+
+  thrift_spec = (
+    (0, TType.LIST, 'success', (TType.LIST,(TType.STRUCT,(TaggedToken, TaggedToken.thrift_spec))), None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.LIST:
+          self.success = []
+          (_etype115, _size112) = iprot.readListBegin()
+          for _i116 in xrange(_size112):
+            _elem117 = []
+            (_etype121, _size118) = iprot.readListBegin()
+            for _i122 in xrange(_size118):
+              _elem123 = TaggedToken()
+              _elem123.read(iprot)
+              _elem117.append(_elem123)
+            iprot.readListEnd()
+            self.success.append(_elem117)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('tag_text_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.LIST, 0)
+      oprot.writeListBegin(TType.LIST, len(self.success))
+      for iter124 in self.success:
+        oprot.writeListBegin(TType.STRUCT, len(iter124))
+        for iter125 in iter124:
+          iter125.write(oprot)
+        oprot.writeListEnd()
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, getattr(self, key))
+      for key in self.__slots__]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+    for attr in self.__slots__:
+      my_val = getattr(self, attr)
+      other_val = getattr(other, attr)
+      if my_val != other_val:
+        return False
+    return True
+
+  def __ne__(self, other):
+    return not (self == other)
+
+
+class tag_tokenized_sentence_args(object):
+  """
+  Attributes:
+   - tokenizedSentence
+  """
+
+  __slots__ = [ 
+    'tokenizedSentence',
+   ]
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.LIST, 'tokenizedSentence', (TType.STRING,None), None, ), # 1
+  )
+
+  def __init__(self, tokenizedSentence=None,):
+    self.tokenizedSentence = tokenizedSentence
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.LIST:
+          self.tokenizedSentence = []
+          (_etype129, _size126) = iprot.readListBegin()
+          for _i130 in xrange(_size126):
+            _elem131 = iprot.readString().decode('utf-8')
+            self.tokenizedSentence.append(_elem131)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('tag_tokenized_sentence_args')
+    if self.tokenizedSentence is not None:
+      oprot.writeFieldBegin('tokenizedSentence', TType.LIST, 1)
+      oprot.writeListBegin(TType.STRING, len(self.tokenizedSentence))
+      for iter132 in self.tokenizedSentence:
+        oprot.writeString(iter132.encode('utf-8'))
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, getattr(self, key))
+      for key in self.__slots__]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+    for attr in self.__slots__:
+      my_val = getattr(self, attr)
+      other_val = getattr(other, attr)
+      if my_val != other_val:
+        return False
+    return True
+
+  def __ne__(self, other):
+    return not (self == other)
+
+
+class tag_tokenized_sentence_result(object):
+  """
+  Attributes:
+   - success
+  """
+
+  __slots__ = [ 
+    'success',
+   ]
+
+  thrift_spec = (
+    (0, TType.LIST, 'success', (TType.STRUCT,(TaggedToken, TaggedToken.thrift_spec)), None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.LIST:
+          self.success = []
+          (_etype136, _size133) = iprot.readListBegin()
+          for _i137 in xrange(_size133):
+            _elem138 = TaggedToken()
+            _elem138.read(iprot)
+            self.success.append(_elem138)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('tag_tokenized_sentence_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.LIST, 0)
+      oprot.writeListBegin(TType.STRUCT, len(self.success))
+      for iter139 in self.success:
+        iter139.write(oprot)
       oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()

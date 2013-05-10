@@ -23,10 +23,12 @@ import edu.stanford.nlp.ling.Sentence;
 import edu.stanford.nlp.ling.TaggedWord;
 import edu.stanford.nlp.ling.TaggedWordFactory;
 import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
+import edu.stanford.nlp.pipeline.DefaultPaths;
 import edu.stanford.nlp.process.DocumentPreprocessor;
 import edu.stanford.nlp.trees.PennTreebankLanguagePack;
 import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.trees.TreePrint;
+import general.CoreNLPThriftUtil;
 
 public class StanfordParserThrift
 {
@@ -47,7 +49,7 @@ public class StanfordParserThrift
     private void loadModel(String modelFile)
     {
         if (modelFile.equals("") || modelFile == null) {
-            parser = LexicalizedParser.loadModel("edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz", new String[]{});
+        	parser = LexicalizedParser.loadModel(DefaultPaths.DEFAULT_PARSER_MODEL, new String[]{});
         }
         else {
             parser = LexicalizedParser.loadModel(modelFile, new String[]{});
@@ -249,16 +251,8 @@ public class StanfordParserThrift
             	}
             }
         	
-        	// a single sentence worth of tagged texted, better be properly tokenized >:D
-        	String[] taggedTokens = taggedSentence.split(" ");
-        	TaggedWordFactory tf = new TaggedWordFactory(divider.charAt(0));
-        	List<TaggedWord> taggedWordList = new ArrayList<TaggedWord>();
-        	for (String taggedToken : taggedTokens)
-        	{
-        		taggedWordList.add((TaggedWord)tf.newLabelFromString(taggedToken));
-        	}
-        	
-        	Tree parseTree = parser.apply(taggedWordList);
+        	// a single sentence worth of tagged text, better be properly tokenized >:D        	
+        	Tree parseTree = parser.apply(CoreNLPThriftUtil.getListOfTaggedWordsFromTaggedSentence(taggedSentence, divider));
         	treePrinter.printTree(parseTree, pw);
         	return new ParseTree(sw.getBuffer().toString().trim(), parseTree.score());
         }
