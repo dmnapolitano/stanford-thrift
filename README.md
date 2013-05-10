@@ -9,7 +9,8 @@ Things you can do with it:
 	- Parse Trees **See README_parser.md**
 	- Named Entities **See README_ner.md**
 	- Resolved Coreferences **See README_coref.md**
-	- Evaluate Stanford Tregex patterns over parse trees **See README_tregex.md **
+	- Stanford Tregex patterns evaluated over parse trees **See README_tregex.md**
+	- Sentences tagged for Part-of-Speech **See README_tagger.md**
 * Send unicode (optional), receive unicode (always).
 * Do these things in a multithreaded way without having to think about it too much (Thrift provides ten threads).
 * Communicate with the server using the language of your choice (with some additional coding if your choice isn't "Java" or "Python").

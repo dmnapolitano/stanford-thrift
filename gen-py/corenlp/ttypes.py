@@ -213,6 +213,91 @@ class NamedEntity(object):
     return not (self == other)
 
 
+class TaggedToken(object):
+  """
+  Attributes:
+   - tag
+   - token
+  """
+
+  __slots__ = [ 
+    'tag',
+    'token',
+   ]
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRING, 'tag', None, None, ), # 1
+    (2, TType.STRING, 'token', None, None, ), # 2
+  )
+
+  def __init__(self, tag=None, token=None,):
+    self.tag = tag
+    self.token = token
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.tag = iprot.readString().decode('utf-8')
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRING:
+          self.token = iprot.readString().decode('utf-8')
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('TaggedToken')
+    if self.tag is not None:
+      oprot.writeFieldBegin('tag', TType.STRING, 1)
+      oprot.writeString(self.tag.encode('utf-8'))
+      oprot.writeFieldEnd()
+    if self.token is not None:
+      oprot.writeFieldBegin('token', TType.STRING, 2)
+      oprot.writeString(self.token.encode('utf-8'))
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, getattr(self, key))
+      for key in self.__slots__]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+    for attr in self.__slots__:
+      my_val = getattr(self, attr)
+      other_val = getattr(other, attr)
+      if my_val != other_val:
+        return False
+    return True
+
+  def __ne__(self, other):
+    return not (self == other)
+
+
 class SerializedException(TException):
   """
   Attributes:
