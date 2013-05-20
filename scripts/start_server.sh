@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CMD="java -cp $CLASSPATH:stanford-corenlp-wrapper.jar -Xmx2048m -XX:-UseGCOverheadLimit StanfordCoreNLPServer"
+CMD="java -cp $CLASSPATH:stanford-corenlp-wrapper.jar -Xmx4096m -XX:-UseGCOverheadLimit StanfordCoreNLPServer"
 
 if [ $# -eq  2 ]; then
     PORT=$1
