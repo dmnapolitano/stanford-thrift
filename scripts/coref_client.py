@@ -50,7 +50,7 @@ try:
     for r in result:
         print r
     print
-    result = client.resolve_coreferences_in_tokens(tokenized_sentences)
+    result = client.resolve_coreferences_in_tokenized_sentences(tokenized_sentences)
     for r in result:
         print r
     print

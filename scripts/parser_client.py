@@ -45,6 +45,7 @@ more_tokenized_sentences = [u"Barack Hussein Obama II is the 44th and current Pr
 tokenized_sentence = u"Members of about 37 species are referred to as foxes , of which only 12 species actually belong to the Vulpes genus of `` true foxes '' .".split(" ")
 tagged_sentence = u"Members/NNS of/IN about/IN 37/CD species/NNS are/VBP referred/VBN to/TO as/IN foxes/NNS ,/, of/IN which/WDT only/RB 12/CD species/NNS actually/RB belong/VBP to/TO the/DT Vulpes/NNP genus/NN of/IN ``/`` true/JJ foxes/NNS ''/'' ./."
 
+weird_sentence = [u'While', u'the', u'child', u'spends', u'about', u'five', u'hours', u'or', u'less', u'with', u'his', u'parents', u',', u'and', u'whenever', u'that', u'child', u'wants', u'to', u'go', u'out', u'he', u'will', u'most', u'probably', u'go', u'out', u'with', u'his', u'friends', u'which', u'are', u'his', u'classmates', u',', u'so', u'most', u'of', u'his', u'school', u'life', u'will', u'be', u'spent', u'with', u'his', u'classmates', u',', u'and', u'this', u'will', u'have', u'a', u'great', u'affect', u'on', u'his', u'personality', u'which', u'will', u'determine', u'the', u'way', u'the', u'child', u'will', u'react', u'towards', u'his', u'school', u'and', u'will', u'determine', u'how', u'he', u'will', u'use', u'his', u'life', u'.']
 
 # Make socket
 transport = TSocket.TSocket(server, port)
@@ -64,10 +65,11 @@ transport.open()
 # This list is for options for how we'd like the output formatted.  See README.md for the full list of possible options.
 # Note that the DEFAULT is what you would get if you specified "oneline" on the command line, or "None" here.
 #outputOptions = ["-outputFormat", "typedDependencies,penn", "-outputFormatOptions", "basicDependencies"]
-outputOptions = None
+#outputOptions = None
 #outputOptions = ["-outputFormat", "oneline"]  # Same as specifying "None", as above.
+outputOptions = ["-outputFormat", "oneline,typedDependencies"]
 
-
+'''
 try:
     parse_trees = client.parse_text(arbitrary_text, outputOptions)
     for result in parse_trees:
@@ -92,12 +94,16 @@ for sentence in more_tokenized_sentences:
         sys.stdout.write(tree.tree.strip()+"\n")
     except Exception as e:
         print e
+'''
 
-tree = client.parse_tokens(tokenized_sentence, None)
-sys.stdout.write(tree.tree.strip() + "\n")
+try:
+    tree = client.parse_tokens(weird_sentence, outputOptions)
+    sys.stdout.write(tree.tree.strip() + "\n")
+except Exception as e:
+    print e
 
-tree = client.parse_tagged_sentence(tagged_sentence, outputOptions, "/")
-sys.stdout.write("\n" + tree.tree.strip() + "\n")
+#tree = client.parse_tagged_sentence(tagged_sentence, outputOptions, "/")
+#sys.stdout.write("\n" + tree.tree.strip() + "\n")
 
 # All done
 transport.close()

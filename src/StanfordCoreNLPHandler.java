@@ -21,16 +21,17 @@ import java.util.List;
 
 public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface 
 {
-	private StanfordParserThrift parser;
-	private StanfordNERThrift ner;
-	private StanfordCorefThrift coref;
-	private StanfordTregexThrift tregex;
-	private StanfordTaggerThrift tagger;
-
-    public StanfordCoreNLPHandler() 
+    private StanfordParserThrift parser;
+    private StanfordNERThrift ner;
+    private StanfordCorefThrift coref;
+    private StanfordTregexThrift tregex;
+    private StanfordTaggerThrift tagger;
+    
+    // TODO: This NEEDS to be able to accept paths to alternate models other than just the Parser.
+    public StanfordCoreNLPHandler(String parserModelFilePath)
     {
     	System.err.println("Initializing Parser...");
-    	parser = new StanfordParserThrift("");
+	parser = new StanfordParserThrift(parserModelFilePath);
     	System.err.println("Initializing Named Entity Recognizer...");
     	ner = new StanfordNERThrift();
     	System.err.println("Initializing Coreference Resolver...");
