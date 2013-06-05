@@ -37,6 +37,8 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
   print '   evaluate_tregex_pattern(string parseTree, string tregexPattern)'
   print '   tag_text(string untokenizedText)'
   print '   tag_tokenized_sentence( tokenizedSentence)'
+  print '  string untokenize_sentence( sentenceTokens)'
+  print '   tokenize_text(string arbitraryText)'
   print ''
   sys.exit(0)
 
@@ -171,6 +173,18 @@ elif cmd == 'tag_tokenized_sentence':
     print 'tag_tokenized_sentence requires 1 args'
     sys.exit(1)
   pp.pprint(client.tag_tokenized_sentence(eval(args[0]),))
+
+elif cmd == 'untokenize_sentence':
+  if len(args) != 1:
+    print 'untokenize_sentence requires 1 args'
+    sys.exit(1)
+  pp.pprint(client.untokenize_sentence(eval(args[0]),))
+
+elif cmd == 'tokenize_text':
+  if len(args) != 1:
+    print 'tokenize_text requires 1 args'
+    sys.exit(1)
+  pp.pprint(client.tokenize_text(args[0],))
 
 else:
   print 'Unrecognized method %s' % cmd

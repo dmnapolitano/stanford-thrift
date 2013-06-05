@@ -8,6 +8,7 @@ import edu.stanford.nlp.pipeline.Annotation;
 
 import parser.StanfordParserThrift;
 import tagger.StanfordTaggerThrift;
+import tokenizer.StanfordTokenizerThrift;
 import tregex.StanfordTregexThrift;
 
 import CoreNLP.*;
@@ -26,12 +27,13 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
     private StanfordCorefThrift coref;
     private StanfordTregexThrift tregex;
     private StanfordTaggerThrift tagger;
+    private StanfordTokenizerThrift tokenizer;
     
     // TODO: This NEEDS to be able to accept paths to alternate models other than just the Parser.
     public StanfordCoreNLPHandler(String parserModelFilePath)
     {
     	System.err.println("Initializing Parser...");
-	parser = new StanfordParserThrift(parserModelFilePath);
+    	parser = new StanfordParserThrift(parserModelFilePath);
     	System.err.println("Initializing Named Entity Recognizer...");
     	ner = new StanfordNERThrift();
     	System.err.println("Initializing Coreference Resolver...");
@@ -40,6 +42,8 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
     	tregex = new StanfordTregexThrift();
     	System.err.println("Initializing Tagger...");
     	tagger = new StanfordTaggerThrift();
+    	System.err.println("Initializing Tokenizer...");
+    	tokenizer = new StanfordTokenizerThrift();
     }
 
     
@@ -152,6 +156,19 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
     	return tagger.tag_tokenized_sentence(tokenizedSentence);
     }
     /* End Stanford Tagger methods */
+    
+    
+    /* Begin Stanford Tokenizer methods */
+    public String untokenize_sentence(List<String> sentenceTokens)
+    {
+    	return tokenizer.untokenizeSentence(sentenceTokens);
+    }
+    
+    public List<List<String>> tokenize_text(String arbitraryText)
+    {
+    	return tokenizer.tokenizeText(arbitraryText);
+    }
+    /* End Stanford Tokenizer methods */
     
     
     public void ping() 
