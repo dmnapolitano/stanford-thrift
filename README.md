@@ -3,6 +3,8 @@ Apache Thrift Server for Stanford CoreNLP
 
 This is a client/server setup of Stanford's [CoreNLP](http://nlp.stanford.edu/software/corenlp.shtml) which uses [Apache Thrift](http://thrift.apache.org/).
 
+**To submit an issue, go [here](https://github.com/EducationalTestingService/stanford-thrift/issues).**
+
 Things you can do with it:
 
 * Send over text/data in a variety of formats and receive:
