@@ -25,9 +25,15 @@ import edu.stanford.nlp.ling.TaggedWordFactory;
 import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
 import edu.stanford.nlp.pipeline.DefaultPaths;
 import edu.stanford.nlp.process.DocumentPreprocessor;
+import edu.stanford.nlp.trees.AbstractCollinsHeadFinder;
+import edu.stanford.nlp.trees.ModCollinsHeadFinder;
 import edu.stanford.nlp.trees.PennTreebankLanguagePack;
 import edu.stanford.nlp.trees.Tree;
+import edu.stanford.nlp.trees.TreeFunctions;
 import edu.stanford.nlp.trees.TreePrint;
+import edu.stanford.nlp.trees.TreebankLanguagePack;
+import edu.stanford.nlp.trees.Trees;
+import edu.stanford.nlp.util.Function;
 import general.CoreNLPThriftUtil;
 
 public class StanfordParserThrift
@@ -37,14 +43,24 @@ public class StanfordParserThrift
     private boolean customOutputOptionsSet;
 //    private boolean customParserOptionsSet;
     private TreePrint treePrinter;
+    private TreebankLanguagePack tlp;
 
     public StanfordParserThrift(String modelFile) 
     {
         loadModel(modelFile);
-        treePrinter = new TreePrint("oneline", "", new PennTreebankLanguagePack());
+        tlp = new PennTreebankLanguagePack();
+        treePrinter = new TreePrint("oneline", "", tlp);
         customOutputOptionsSet = false;
 //        customParserOptionsSet = false;
     }
+
+	private String TreeObjectToString(Tree tree)
+	{
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+    	treePrinter.printTree(tree, pw);
+    	return sw.getBuffer().toString().trim();
+	}
 
     private void loadModel(String modelFile)
     {
@@ -87,7 +103,7 @@ public class StanfordParserThrift
         	customOutputOptionsSet = false;
         }
         
-        treePrinter = new TreePrint(outputFormatStr, outputFormatOptionsStr, new PennTreebankLanguagePack());
+        treePrinter = new TreePrint(outputFormatStr, outputFormatOptionsStr, tlp);
 
         // for everything else; disabled for now
 //        if (!options.isEmpty())
@@ -137,11 +153,8 @@ public class StanfordParserThrift
         	Iterator<List<HasWord>> foundSentences = preprocess.iterator();
         	while (foundSentences.hasNext())
         	{
-                StringWriter sw = new StringWriter();
-                PrintWriter pw = new PrintWriter(sw);
         		Tree parseTree = parser.apply(foundSentences.next());
-        		treePrinter.printTree(parseTree, pw);
-        		results.add(new ParseTree(sw.getBuffer().toString().trim(), parseTree.score()));
+        		results.add(new ParseTree(TreeObjectToString(parseTree), parseTree.score()));
         	}
         }
         catch (Exception e)
@@ -155,8 +168,6 @@ public class StanfordParserThrift
 
     public ParseTree parse_tokens(List<String> tokens, List<String> outputFormat) throws TApplicationException
     {
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
 //        List<ParseTree> results = new ArrayList<ParseTree>();
     	
     	// assume an array of tokens was passed in
@@ -209,24 +220,12 @@ public class StanfordParserThrift
         	tokens.toArray(tokenArray);
         	List<CoreLabel> crazyStanfordFormat = Sentence.toCoreLabelList(tokenArray);
         	Tree parseTree = parser.apply(crazyStanfordFormat);
-        	treePrinter.printTree(parseTree, pw);
-//        	results.add(new ParseTree(sw.getBuffer().toString().trim(), parseTree.score()));
-        	return new ParseTree(sw.getBuffer().toString().trim(), parseTree.score());
+        	return new ParseTree(TreeObjectToString(parseTree), parseTree.score());
         }
         catch (Exception e)
         {
         	// FIXME
         	throw new TApplicationException(TApplicationException.INTERNAL_ERROR, e.getMessage());
-//        	try
-//        	{
-//        		ByteArrayOutputStream os = new ByteArrayOutputStream();
-//        		new ObjectOutputStream(os).writeObject(e);
-//        		throw new SerializedException(ByteBuffer.wrap(os.toByteArray()));
-//        	}
-//        	catch (Exception ex)
-//        	{
-//        		System.err.println(ex.getMessage());
-//        	}
         }
     	//}
 //    	return results;
@@ -234,9 +233,6 @@ public class StanfordParserThrift
     
     public ParseTree parse_tagged_sentence(String taggedSentence, List<String> outputFormat, String divider) throws TApplicationException
     {
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-
         try
         {
             if (outputFormat != null && outputFormat.size() > 0)
@@ -253,14 +249,29 @@ public class StanfordParserThrift
         	
         	// a single sentence worth of tagged text, better be properly tokenized >:D        	
         	Tree parseTree = parser.apply(CoreNLPThriftUtil.getListOfTaggedWordsFromTaggedSentence(taggedSentence, divider));
-        	treePrinter.printTree(parseTree, pw);
-        	return new ParseTree(sw.getBuffer().toString().trim(), parseTree.score());
+        	return new ParseTree(TreeObjectToString(parseTree), parseTree.score());
         }
         catch (Exception e)
         {
         	// FIXME
         	throw new TApplicationException(TApplicationException.INTERNAL_ERROR, e.getMessage());
         }
+    }
+    
+    /* If one were to call any of these other methods to get a parse tree for some input sentence
+     * with the -outputFormatOptions flag of "lexicalize", they would receive their parse tree,
+     * in the -outputFormat of their choice, with every leaf marked with it's head word.
+     * This function does exactly that on an existing parse tree.
+     * NOTE that this WILL re-lexicalize a pre-lexicalized tree, so don't pass in a tree that
+     * has been lexicalized and expect to get back the same thing as what you passed in.
+     */
+    public String lexicalize_parse_tree(String tree)
+    {
+    	Tree parseTree = Tree.valueOf(tree);
+    	Tree lexicalizedTree = Trees.lexicalize(parseTree, tlp.headFinder());
+    	Function<Tree, Tree> a = TreeFunctions.getLabeledToDescriptiveCoreLabelTreeFunction();
+    	lexicalizedTree = a.apply(lexicalizedTree);
+    	return TreeObjectToString(lexicalizedTree);
     }
 }
 

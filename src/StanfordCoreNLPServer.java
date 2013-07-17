@@ -64,9 +64,9 @@ public class StanfordCoreNLPServer
         if (args.length < 1 || args.length > 2) 
         {
             System.err.println("Usage: StanfordCoreNLPServer <port> [<path to parser model file>]");
-	    System.err.println("You only need to specify the full path to a model if you wish to use a model "
+            System.err.println("You only need to specify the full path to a model if you wish to use a model "
 			       + "other than the English PCFG one.");
-	    System.err.println("English Factored model path = edu/stanford/nlp/models/lexparser/englishFactored.ser.gz");
+            System.err.println("English Factored model path = edu/stanford/nlp/models/lexparser/englishFactored.ser.gz");
             System.exit(2);
         }
         else if (args.length == 1) 
@@ -79,10 +79,12 @@ public class StanfordCoreNLPServer
             parserModelFile = args[1];
         }
 
+        org.apache.log4j.BasicConfigurator.configure();
+        
         try 
         {
             handler = new StanfordCoreNLPHandler(parserModelFile);
-	    processor = new StanfordCoreNLP.Processor(handler);
+            processor = new StanfordCoreNLP.Processor(handler);
             Runnable r = new ServerThread(processor, portNum);
             new Thread(r).start();
         } 

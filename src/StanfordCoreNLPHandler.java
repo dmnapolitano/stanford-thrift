@@ -77,6 +77,11 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
     	}
     	return parser.parse_tagged_sentence(taggedSentence, outputFormat, divider);
     }
+    
+    public String lexicalize_parse_tree(String tree)
+    {
+    	return parser.lexicalize_parse_tree(tree);
+    }
     /* End Stanford Parser methods */
     
     

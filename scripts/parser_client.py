@@ -65,18 +65,20 @@ transport.open()
 # This list is for options for how we'd like the output formatted.  See README.md for the full list of possible options.
 # Note that the DEFAULT is what you would get if you specified "oneline" on the command line, or "None" here.
 #outputOptions = ["-outputFormat", "typedDependencies,penn", "-outputFormatOptions", "basicDependencies"]
-#outputOptions = None
-#outputOptions = ["-outputFormat", "oneline"]  # Same as specifying "None", as above.
-outputOptions = ["-outputFormat", "oneline,typedDependencies"]
+#outputOptions = []
+outputOptions = ["-outputFormat", "penn"]
+#outputOptions = ["-outputFormat", "oneline,typedDependencies"]
 
-'''
+
 try:
     parse_trees = client.parse_text(arbitrary_text, outputOptions)
     for result in parse_trees:
         sys.stdout.write(result.tree.strip() + " [" + str(result.score) + "]\n")
+        sys.stdout.write(client.lexicalize_parse_tree(result.tree.strip()) + "\n\n")
 except Exception as e:
     print e
 
+'''
 print
 
 for sentence in tokenized_sentences:
@@ -85,9 +87,11 @@ for sentence in tokenized_sentences:
         sys.stdout.write(tree.tree.strip() + " [" + str(tree.score) + "]\n")
     except Exception as e:
         print e
+'''
 
 print
 
+'''
 for sentence in more_tokenized_sentences:
     try:
         tree = client.parse_tokens(sentence, outputOptions)
@@ -96,14 +100,16 @@ for sentence in more_tokenized_sentences:
         print e
 '''
 
+'''
 try:
     tree = client.parse_tokens(weird_sentence, outputOptions)
-    sys.stdout.write(tree.tree.strip() + "\n")
+    sys.stdout.write(tree.tree.strip() + "\n\n")
 except Exception as e:
     print e
+'''
 
-#tree = client.parse_tagged_sentence(tagged_sentence, outputOptions, "/")
-#sys.stdout.write("\n" + tree.tree.strip() + "\n")
+tree = client.parse_tagged_sentence(tagged_sentence, outputOptions, "/")
+sys.stdout.write("\n" + tree.tree.strip() + "\n")
 
 # All done
 transport.close()

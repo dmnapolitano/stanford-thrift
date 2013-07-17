@@ -33,6 +33,7 @@ service StanfordCoreNLP
     list<ParseTree> parse_text(1:string text, 2:list<string> outputFormat),
     ParseTree parse_tokens(1:list<string> tokens, 2:list<string> outputFormat),
     ParseTree parse_tagged_sentence(1:string taggedSentence, 2:list<string> outputFormat, 3:string divider),
+    string lexicalize_parse_tree(1:string tree),
     list<NamedEntity> get_entities_from_text(1:string text),
     list<NamedEntity> get_entities_from_tokens(1:list<string> tokens),
     list<NamedEntity> get_entities_from_trees(1:list<string> trees),
