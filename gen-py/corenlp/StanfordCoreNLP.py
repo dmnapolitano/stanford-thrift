@@ -49,6 +49,13 @@ class Iface(object):
     """
     pass
 
+  def lexicalize_parse_tree(self, tree):
+    """
+    Parameters:
+     - tree
+    """
+    pass
+
   def get_entities_from_text(self, text):
     """
     Parameters:
@@ -264,6 +271,36 @@ class Client(Iface):
     if result.success is not None:
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "parse_tagged_sentence failed: unknown result");
+
+  def lexicalize_parse_tree(self, tree):
+    """
+    Parameters:
+     - tree
+    """
+    self.send_lexicalize_parse_tree(tree)
+    return self.recv_lexicalize_parse_tree()
+
+  def send_lexicalize_parse_tree(self, tree):
+    self._oprot.writeMessageBegin('lexicalize_parse_tree', TMessageType.CALL, self._seqid)
+    args = lexicalize_parse_tree_args()
+    args.tree = tree
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_lexicalize_parse_tree(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = lexicalize_parse_tree_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "lexicalize_parse_tree failed: unknown result");
 
   def get_entities_from_text(self, text):
     """
@@ -607,6 +644,7 @@ class Processor(Iface, TProcessor):
     self._processMap["parse_text"] = Processor.process_parse_text
     self._processMap["parse_tokens"] = Processor.process_parse_tokens
     self._processMap["parse_tagged_sentence"] = Processor.process_parse_tagged_sentence
+    self._processMap["lexicalize_parse_tree"] = Processor.process_lexicalize_parse_tree
     self._processMap["get_entities_from_text"] = Processor.process_get_entities_from_text
     self._processMap["get_entities_from_tokens"] = Processor.process_get_entities_from_tokens
     self._processMap["get_entities_from_trees"] = Processor.process_get_entities_from_trees
@@ -681,6 +719,17 @@ class Processor(Iface, TProcessor):
     result = parse_tagged_sentence_result()
     result.success = self._handler.parse_tagged_sentence(args.taggedSentence, args.outputFormat, args.divider)
     oprot.writeMessageBegin("parse_tagged_sentence", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_lexicalize_parse_tree(self, seqid, iprot, oprot):
+    args = lexicalize_parse_tree_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = lexicalize_parse_tree_result()
+    result.success = self._handler.lexicalize_parse_tree(args.tree)
+    oprot.writeMessageBegin("lexicalize_parse_tree", TMessageType.REPLY, seqid)
     result.write(oprot)
     oprot.writeMessageEnd()
     oprot.trans.flush()
@@ -1465,6 +1514,149 @@ class parse_tagged_sentence_result(object):
     if self.success is not None:
       oprot.writeFieldBegin('success', TType.STRUCT, 0)
       self.success.write(oprot)
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, getattr(self, key))
+      for key in self.__slots__]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+    for attr in self.__slots__:
+      my_val = getattr(self, attr)
+      other_val = getattr(other, attr)
+      if my_val != other_val:
+        return False
+    return True
+
+  def __ne__(self, other):
+    return not (self == other)
+
+
+class lexicalize_parse_tree_args(object):
+  """
+  Attributes:
+   - tree
+  """
+
+  __slots__ = [ 
+    'tree',
+   ]
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRING, 'tree', None, None, ), # 1
+  )
+
+  def __init__(self, tree=None,):
+    self.tree = tree
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.tree = iprot.readString().decode('utf-8')
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('lexicalize_parse_tree_args')
+    if self.tree is not None:
+      oprot.writeFieldBegin('tree', TType.STRING, 1)
+      oprot.writeString(self.tree.encode('utf-8'))
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, getattr(self, key))
+      for key in self.__slots__]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+    for attr in self.__slots__:
+      my_val = getattr(self, attr)
+      other_val = getattr(other, attr)
+      if my_val != other_val:
+        return False
+    return True
+
+  def __ne__(self, other):
+    return not (self == other)
+
+
+class lexicalize_parse_tree_result(object):
+  """
+  Attributes:
+   - success
+  """
+
+  __slots__ = [ 
+    'success',
+   ]
+
+  thrift_spec = (
+    (0, TType.STRING, 'success', None, None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRING:
+          self.success = iprot.readString().decode('utf-8')
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('lexicalize_parse_tree_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.STRING, 0)
+      oprot.writeString(self.success.encode('utf-8'))
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()

@@ -8,7 +8,7 @@ The core return type here is a data structure called `ParseTree` which has two m
 * `tree`: A string representing your parse tree (or, quite optionally, parse treeS; keep reading).
 * `score`: A double representing the score for that parse.
 
-In order to get these `ParseTree` objects, you have two choices, depending on whether or not you'd like Stanford's tokenizer to do some of the work for you.  The arguments are supplied in both Python and Java terms for ease of understanding, but again, see the clients if you're confused.  Keep reading for more information on the `outputFormat` parameter to each of these methods.
+In order to get these `ParseTree` objects, you have three choices, depending on whether or not you'd like Stanford's tokenizer to do some of the work for you.  The arguments are supplied in both Python and Java terms for ease of understanding, but again, see the clients if you're confused.  Keep reading for more information on the `outputFormat` parameter to each of these methods.
 
 * `parse_text(text, outputFormat)` where `text` is a Java `String`/Python `str` or `unicode`, `outputFormat` is a Java `List<String>`/Python list containing `str`/`unicode`.
   Returns: Java `List<ParseTree>`/Python list containing `ParseTree` objects.
@@ -22,8 +22,9 @@ In order to get these `ParseTree` objects, you have two choices, depending on wh
 	Returns: A `ParseTree` object.
 	Given a single Penn Treebank part-of-speech-tagged sentence from the tokenizer and tagger combination of your choice, have Stanford generate a parse tree based on those tags.
 
+If you already have a `ParseTree` or a `String`/`str` or `unicode` that represents a valid parse tree, and you'd like to find the head words for each phrase, you can call `lexicalize_parse_tree(tree)` where `tree` a Java `String`/Python `str`/`unicode`.  This method returns a `String`/etc. that would be the same if you generated a parse tree using any of the methods above and had specified `-outputFormatOptions lexicalize` in the `outputFormat` argument.  Please note that if you pass in a tree that is already lexicalized, CoreNLP will just re-lexicalize that tree for you, resulting in duplicate head word information.  Whatever format `tree` was in when you called this function will be the same format as your output, only the tree itself will be annotated with head word information.
    
-##### What one can do with the `outputFormat` argument to both of these methods
+##### What one can do with the `outputFormat` argument to the methods which take it
 
 The purpose of the `outputFormat` argument is to allow one to supply arguments in the same style as one would via command-line call to the Stanford Parser. **The only command-line switches supported here are `-outputFormat` and `-outputFormatOptions`, but they are supported in full.**  By that I mean any valid argument to each of those options is also valid here.
 You can also pass in `null`/`None` and that will return parse trees in this server's default format of `-outputFormat "oneline"`.
