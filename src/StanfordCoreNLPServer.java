@@ -2,11 +2,16 @@ import java.net.ServerSocket;
 import java.net.InetAddress;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
+import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.server.TServer;
 import org.apache.thrift.server.TServer.Args;
 import org.apache.thrift.server.TSimpleServer;
 import org.apache.thrift.server.TThreadPoolServer;
 import org.apache.thrift.server.THsHaServer;
+import org.apache.thrift.server.TThreadedSelectorServer;
+import org.apache.thrift.transport.TFramedTransport;
+import org.apache.thrift.transport.TNonblockingServerSocket;
+import org.apache.thrift.transport.TNonblockingServerTransport;
 import org.apache.thrift.transport.TSSLTransportFactory;
 import org.apache.thrift.transport.TServerSocket;
 import org.apache.thrift.transport.TServerTransport;
@@ -33,14 +38,21 @@ public class StanfordCoreNLPServer
             {
                 // Initialize the transport socket
                 TServerTransport serverTransport = new TServerSocket(port);
-
-                // Use this for a multithreaded server with the max number of workers set to 10 (to avoid taking over the server)
-                // Default minimum number of workers for this server type is 5 which is fine.
                 TThreadPoolServer.Args args = new TThreadPoolServer.Args(serverTransport);
                 args.maxWorkerThreads(THREAD_POOL_SIZE);
                 args.processor(processor);
                 args.executorService(new ScheduledThreadPoolExecutor(THREAD_POOL_SIZE));
                 TServer server = new TThreadPoolServer(args);
+                
+            	// From https://github.com/m1ch1/mapkeeper/blob/eb798bb94090c7366abc6b13142bf91e4ed5993b/stubjava/StubServer.java#L93
+                /*TNonblockingServerTransport trans = new TNonblockingServerSocket(port);
+                TThreadedSelectorServer.Args args = new TThreadedSelectorServer.Args(trans);
+                args.transportFactory(new TFramedTransport.Factory());
+                args.protocolFactory(new TBinaryProtocol.Factory());
+                args.processor(processor);
+                args.selectorThreads(4);
+                args.workerThreads(32);
+                TServer server = new TThreadedSelectorServer(args);*/
 
                 System.out.println("The CoreNLP server is running...");
                 server.serve();
@@ -51,9 +63,8 @@ public class StanfordCoreNLPServer
             }
         }
     }
-
+    
     public static StanfordCoreNLPHandler handler;
-
     public static StanfordCoreNLP.Processor processor;
 
     public static void main(String[] args) 

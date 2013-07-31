@@ -47,6 +47,8 @@ tagged_sentence = u"Members/NNS of/IN about/IN 37/CD species/NNS are/VBP referre
 
 weird_sentence = [u'While', u'the', u'child', u'spends', u'about', u'five', u'hours', u'or', u'less', u'with', u'his', u'parents', u',', u'and', u'whenever', u'that', u'child', u'wants', u'to', u'go', u'out', u'he', u'will', u'most', u'probably', u'go', u'out', u'with', u'his', u'friends', u'which', u'are', u'his', u'classmates', u',', u'so', u'most', u'of', u'his', u'school', u'life', u'will', u'be', u'spent', u'with', u'his', u'classmates', u',', u'and', u'this', u'will', u'have', u'a', u'great', u'affect', u'on', u'his', u'personality', u'which', u'will', u'determine', u'the', u'way', u'the', u'child', u'will', u'react', u'towards', u'his', u'school', u'and', u'will', u'determine', u'how', u'he', u'will', u'use', u'his', u'life', u'.']
 
+ahs_test = "And be it further enacted, That the seat of government of said Territory is hereby located temporarily at Fort Leavenworth; and that such portions of the public buildings as may not be actually used and needed for military purposes, may be occupied and used, under the direction of the Governor and Legislative Assembly, for such public purposes as may be required under the provisions of this act."
+
 # Make socket
 transport = TSocket.TSocket(server, port)
 
@@ -66,12 +68,12 @@ transport.open()
 # Note that the DEFAULT is what you would get if you specified "oneline" on the command line, or "None" here.
 #outputOptions = ["-outputFormat", "typedDependencies,penn", "-outputFormatOptions", "basicDependencies"]
 #outputOptions = []
-outputOptions = ["-outputFormat", "penn"]
+outputOptions = ["-outputFormat", "oneline"]
 #outputOptions = ["-outputFormat", "oneline,typedDependencies"]
 
 
 try:
-    parse_trees = client.parse_text(arbitrary_text, outputOptions)
+    parse_trees = client.parse_text(ahs_test, outputOptions)
     for result in parse_trees:
         sys.stdout.write(result.tree.strip() + " [" + str(result.score) + "]\n")
         sys.stdout.write(client.lexicalize_parse_tree(result.tree.strip()) + "\n\n")
