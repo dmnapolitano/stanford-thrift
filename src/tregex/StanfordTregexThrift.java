@@ -2,6 +2,7 @@ package tregex;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.trees.tregex.TregexMatcher;
@@ -23,6 +24,14 @@ public class StanfordTregexThrift
 		while (matches.find())
 		{
 			foundMatches.add(matches.getMatch().pennString());
+		}
+		Set<String> nodes = matches.getNodeNames();
+		if (nodes.size() > 0)
+		{
+			for (String node : nodes)
+			{
+				foundMatches.add(matches.getNode(node).pennString());
+			}
 		}
 		return foundMatches;
 	}
