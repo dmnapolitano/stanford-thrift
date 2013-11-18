@@ -21,13 +21,10 @@ public class StanfordTregexThrift
 		
 		TregexPattern pattern = TregexPattern.compile(tregexPattern);
 		TregexMatcher matches = pattern.matcher(Tree.valueOf(parseTree));
+		Set<String> nodes = matches.getNodeNames();
 		while (matches.find())
 		{
 			foundMatches.add(matches.getMatch().pennString());
-		}
-		Set<String> nodes = matches.getNodeNames();
-		if (nodes.size() > 0)
-		{
 			for (String node : nodes)
 			{
 				foundMatches.add(matches.getNode(node).pennString());
