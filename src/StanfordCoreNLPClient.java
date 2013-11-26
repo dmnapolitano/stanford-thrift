@@ -1,7 +1,6 @@
 // Generated code
 import CoreNLP.*;
 
-import java.io.InputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.BufferedReader;
@@ -9,10 +8,8 @@ import java.util.List;
 
 
 import org.apache.thrift.TException;
-import org.apache.thrift.transport.TSSLTransportFactory;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TSocket;
-import org.apache.thrift.transport.TSSLTransportFactory.TSSLTransportParameters;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 

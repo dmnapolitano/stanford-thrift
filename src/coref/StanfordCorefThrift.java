@@ -64,6 +64,7 @@ public class StanfordCorefThrift
 		return MUCStyleOutput(annotation);
 	}
 
+	@SuppressWarnings("unused")
 	private void newStyleCoreferenceGraphOutput(Annotation annotation)
 	{
 		// display the new-style coreference graph

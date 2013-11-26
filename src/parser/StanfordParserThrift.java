@@ -23,30 +23,20 @@ package parser;
 import CoreNLP.*;
 
 import org.apache.thrift.TApplicationException;
-import org.apache.thrift.TException;
 
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.net.InetAddress;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.ling.HasWord;
 import edu.stanford.nlp.ling.Sentence;
-import edu.stanford.nlp.ling.TaggedWord;
-import edu.stanford.nlp.ling.TaggedWordFactory;
 import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
 import edu.stanford.nlp.pipeline.DefaultPaths;
 import edu.stanford.nlp.process.DocumentPreprocessor;
-import edu.stanford.nlp.trees.AbstractCollinsHeadFinder;
-import edu.stanford.nlp.trees.ModCollinsHeadFinder;
 import edu.stanford.nlp.trees.PennTreebankLanguagePack;
 import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.trees.TreeFunctions;
@@ -92,7 +82,8 @@ public class StanfordParserThrift
         }
     }
 
-    private void setOptions(List<String> outputOptions) throws Exception
+    @SuppressWarnings("unused")
+	private void setOptions(List<String> outputOptions) throws Exception
     {
         String outputFormatStr = "oneline";
         String outputFormatOptionsStr = "";

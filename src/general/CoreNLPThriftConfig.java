@@ -1,7 +1,27 @@
+/*
+  Apache Thrift Server for Stanford CoreNLP (stanford-thrift)
+  Copyright (C) 2013 Diane M. Napolitano, Educational Testing Service
+  
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation, version 2
+  of the License.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+*/
+
 package general;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -55,6 +75,18 @@ public class CoreNLPThriftConfig
 	@SuppressWarnings("unchecked")
 	public List<String> getNERModels()
 	{
+		Object nerModels = config.get("ner_models");
+		if (nerModels.getClass().getCanonicalName().contains("String"))
+		{
+			List<String> returnVal = new ArrayList<String>();
+			returnVal.add((String)nerModels);
+			return returnVal;
+		}
 		return (List<String>)config.get("ner_models");
+	}
+	
+	public String getTaggerModel()
+	{
+		return (String)config.get("tagger_model");
 	}
 }

@@ -39,7 +39,6 @@ import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.ParserAnnotatorUtils;
 import edu.stanford.nlp.trees.EnglishGrammaticalStructureFactory;
 import edu.stanford.nlp.trees.Tree;
-import edu.stanford.nlp.trees.TreePrint;
 import edu.stanford.nlp.util.CoreMap;
 
 public class CoreNLPThriftUtil 

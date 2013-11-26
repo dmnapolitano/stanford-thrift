@@ -74,13 +74,13 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
     		System.err.println("Initializing Parser...");
     		parser = new StanfordParserThrift(config.getParserModel());
     		System.err.println("Initializing Named Entity Recognizer...");
-    		ner = new StanfordNERThrift();
+    		ner = new StanfordNERThrift(config.getNERModels());
     		System.err.println("Initializing Coreference Resolver...");
     		coref = new StanfordCorefThrift();
     		System.err.println("Initializing Tregex...");
     		tregex = new StanfordTregexThrift();
     		System.err.println("Initializing Tagger...");
-    		tagger = new StanfordTaggerThrift();
+    		tagger = new StanfordTaggerThrift(config.getTaggerModel());
     		System.err.println("Initializing Tokenizer...");
     		tokenizer = new StanfordTokenizerThrift();
     	}
