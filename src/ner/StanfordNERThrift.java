@@ -30,7 +30,6 @@ import java.util.Stack;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.Annotation;
-import edu.stanford.nlp.pipeline.DefaultPaths;
 import edu.stanford.nlp.pipeline.NERCombinerAnnotator;
 import edu.stanford.nlp.util.CoreMap;
 
@@ -48,19 +47,13 @@ public class StanfordNERThrift
 //	private StanfordCoreNLP pipeline;
 	private NERCombinerAnnotator ner;
 
-	public StanfordNERThrift()
+	public StanfordNERThrift(List<String> nerModels)
 	{
-//		Properties props = new Properties();
-//		props.put("annotators", "tokenize, ssplit, parse, lemma, ner");
-//		pipeline = new StanfordCoreNLP(props, true);
-//		ner = (NERCombinerAnnotator)StanfordCoreNLP.getExistingAnnotator("ner");
-
 		try
 		{
-			ner = new NERCombinerAnnotator(false, 
-					DefaultPaths.DEFAULT_NER_CONLL_MODEL,
-					DefaultPaths.DEFAULT_NER_MUC_MODEL,
-					DefaultPaths.DEFAULT_NER_THREECLASS_MODEL);
+			String[] models = new String[nerModels.size()];
+			nerModels.toArray(models);
+			ner = new NERCombinerAnnotator(false, models);
 		}
 		catch (Exception e)
 		{

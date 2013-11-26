@@ -20,8 +20,6 @@
 import ner.StanfordNERThrift;
 
 import org.apache.thrift.TApplicationException;
-import org.apache.thrift.TException;
-
 import coref.StanfordCorefThrift;
 import edu.stanford.nlp.pipeline.Annotation;
 
@@ -32,6 +30,7 @@ import tregex.StanfordTregexThrift;
 
 import CoreNLP.*;
 
+import general.CoreNLPThriftConfig;
 import general.CoreNLPThriftUtil;
 
 import java.util.ArrayList;
@@ -49,7 +48,7 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
     private StanfordTokenizerThrift tokenizer;
     
     // TODO: This NEEDS to be able to accept paths to alternate models other than just the Parser.
-    public StanfordCoreNLPHandler(String parserModelFilePath)
+/*    public StanfordCoreNLPHandler(String parserModelFilePath)
     {
     	System.err.println("Initializing Parser...");
     	parser = new StanfordParserThrift(parserModelFilePath);
@@ -64,7 +63,32 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
     	System.err.println("Initializing Tokenizer...");
     	tokenizer = new StanfordTokenizerThrift();
     }
-
+*/
+    
+    public StanfordCoreNLPHandler(String configFilePath) throws Exception
+    {
+    	try
+    	{
+        	System.err.println("Reading in configuration from " + configFilePath + "...");
+    		CoreNLPThriftConfig config = new CoreNLPThriftConfig(configFilePath);
+    		System.err.println("Initializing Parser...");
+    		parser = new StanfordParserThrift(config.getParserModel());
+    		System.err.println("Initializing Named Entity Recognizer...");
+    		ner = new StanfordNERThrift(config.getNERModels());
+    		System.err.println("Initializing Coreference Resolver...");
+    		coref = new StanfordCorefThrift();
+    		System.err.println("Initializing Tregex...");
+    		tregex = new StanfordTregexThrift();
+    		System.err.println("Initializing Tagger...");
+    		tagger = new StanfordTaggerThrift(config.getTaggerModel());
+    		System.err.println("Initializing Tokenizer...");
+    		tokenizer = new StanfordTokenizerThrift();
+    	}
+    	catch (Exception e)
+    	{
+    		throw e;
+    	}
+    }
     
     /* Begin Stanford Parser methods */
     public List<ParseTree> parse_text(String text, List<String> outputFormat) throws TApplicationException

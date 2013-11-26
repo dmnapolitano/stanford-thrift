@@ -18,25 +18,12 @@
 */
 
 
-import java.net.ServerSocket;
-import java.net.InetAddress;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
-import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.server.TServer;
-import org.apache.thrift.server.TServer.Args;
-import org.apache.thrift.server.TSimpleServer;
 import org.apache.thrift.server.TThreadPoolServer;
-import org.apache.thrift.server.THsHaServer;
-import org.apache.thrift.server.TThreadedSelectorServer;
-import org.apache.thrift.transport.TFramedTransport;
-import org.apache.thrift.transport.TNonblockingServerSocket;
-import org.apache.thrift.transport.TNonblockingServerTransport;
-import org.apache.thrift.transport.TSSLTransportFactory;
 import org.apache.thrift.transport.TServerSocket;
 import org.apache.thrift.transport.TServerTransport;
-import org.apache.thrift.transport.TSSLTransportFactory.TSSLTransportParameters;
-
 // Generated code
 import CoreNLP.*;
 
@@ -47,7 +34,8 @@ public class StanfordCoreNLPServer
         private Integer port;
         private final int THREAD_POOL_SIZE = 10;
 
-        public ServerThread(StanfordCoreNLP.Processor processor, Integer portNum) 
+        @SuppressWarnings("rawtypes")
+		public ServerThread(StanfordCoreNLP.Processor processor, Integer portNum) 
         {
             port = portNum;
         }
@@ -85,36 +73,31 @@ public class StanfordCoreNLPServer
     }
     
     public static StanfordCoreNLPHandler handler;
-    public static StanfordCoreNLP.Processor processor;
+    @SuppressWarnings("rawtypes")
+	public static StanfordCoreNLP.Processor processor;
 
-    public static void main(String[] args) 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	public static void main(String[] args) 
     {
         Integer portNum = 0;
-        String parserModelFile = "";
+        String configFile = "";
 
-        if (args.length < 1 || args.length > 2) 
+        if (args.length != 2) 
         {
-            System.err.println("Usage: StanfordCoreNLPServer <port> [<path to parser model file>]");
-            System.err.println("You only need to specify the full path to a model if you wish to use a model "
-			       + "other than the English PCFG one.");
-            System.err.println("English Factored model path = edu/stanford/nlp/models/lexparser/englishFactored.ser.gz");
+            System.err.println("Usage: StanfordCoreNLPServer <port> <config file>");
             System.exit(2);
-        }
-        else if (args.length == 1) 
-        {
-            portNum = Integer.parseInt(args[0]);
         }
         else 
         {
             portNum = Integer.parseInt(args[0]);
-            parserModelFile = args[1];
+            configFile = args[1];
         }
 
         org.apache.log4j.BasicConfigurator.configure();
         
         try 
         {
-            handler = new StanfordCoreNLPHandler(parserModelFile);
+            handler = new StanfordCoreNLPHandler(configFile);
             processor = new StanfordCoreNLP.Processor(handler);
             Runnable r = new ServerThread(processor, portNum);
             new Thread(r).start();

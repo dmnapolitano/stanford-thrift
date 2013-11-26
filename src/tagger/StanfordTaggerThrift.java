@@ -29,7 +29,6 @@ import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.ling.HasWord;
 import edu.stanford.nlp.ling.Sentence;
 import edu.stanford.nlp.ling.TaggedWord;
-import edu.stanford.nlp.pipeline.DefaultPaths;
 import edu.stanford.nlp.process.DocumentPreprocessor;
 import edu.stanford.nlp.tagger.maxent.MaxentTagger;
 import CoreNLP.*;
@@ -38,9 +37,9 @@ public class StanfordTaggerThrift
 {
 	private MaxentTagger tagger;
 	
-	public StanfordTaggerThrift()
+	public StanfordTaggerThrift(String taggerModel)
 	{
-		tagger = new MaxentTagger(DefaultPaths.DEFAULT_POS_MODEL);
+		tagger = new MaxentTagger(taggerModel);
 	}
 	
 	public List<List<TaggedToken>> tag_text(String untokenizedText)
@@ -60,8 +59,6 @@ public class StanfordTaggerThrift
 	
 	public List<TaggedToken> tag_tokenized_sentence(List<String> tokenizedSentence)
 	{
-		List<TaggedToken> taggedTokenizedSentence = new ArrayList<TaggedToken>();
-		
 		// a single sentence worth of tokens
     	String[] tokenArray = new String[tokenizedSentence.size()];
     	tokenizedSentence.toArray(tokenArray);
