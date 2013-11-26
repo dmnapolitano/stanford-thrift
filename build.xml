@@ -19,7 +19,7 @@
   <!-- Set $THRIFTPATH to the root of your thrift installation. -->
   <target name="combine_thrift_jars">
     <zip destfile="${env.THRIFTPATH}/all_thrift_jars.jar">
-      <zipgroupfileset dir="${env.THRIFTPATH}/lib" includes="*.jar"/>
+      <zipgroupfileset dir="${env.THRIFTPATH}" includes="*.jar"/>
     </zip>
   </target>
 

@@ -1,0 +1,5 @@
+# So far, only custom parser and NER models are supported.
+# The parser can only use one model at a time, but the NER can use up to three.
+# Use '[' ']' and separate model paths with ',' to indicate a list and load multiple models.
+parser_model = "edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz"
+ner_models = ["edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz", "edu/stanford/nlp/models/ner/english.muc.7class.distsim.crf.ser.gz", "edu/stanford/nlp/models/ner/english.all.3class.distsim.crf.ser.gz"]
