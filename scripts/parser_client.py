@@ -35,12 +35,12 @@ tokenized_sentences = [u"Members of about 37 species are referred to as foxes , 
                        u"The hunting of foxes with packs of hounds , long an established pursuit in Europe , especially the British Isles , was exported by European settlers to various parts of the New World .".split(" ")]
 
 # a particularly useful example for coreference
-more_tokenized_sentences = [u"Barack Hussein Obama II is the 44th and current President of the United States , in office since 2009 .".split(" "),
-                            u"He is the first African American to hold the office .".split(" "),
-                            u"Born in Honolulu , Hawaii , Obama is a graduate of Columbia University and Harvard Law School , where he was president of the Harvard Law Review .".split(" "),
-                            u"He was a community organizer in Chicago before earning his law degree .".split(" "),
-                            u"He worked as a civil rights attorney in Chicago and taught constitutional law at the University of Chicago Law School from 1992 to 2004 .".split(" "),
-                            u"He served three terms representing the 13th District in the Illinois Senate from 1997 to 2004 , running unsuccessfully for the United States House of Representatives in 2000 .".split(" ")]
+more_tokenized_sentences = [u"Barack Hussein Obama II is the 44th and current President of the United States , in office since 2009 .".split(" ")]
+                            #u"He is the first African American to hold the office .".split(" "),
+                            #u"Born in Honolulu , Hawaii , Obama is a graduate of Columbia University and Harvard Law School , where he was president of the Harvard Law Review .".split(" "),
+                            #u"He was a community organizer in Chicago before earning his law degree .".split(" "),
+                            #u"He worked as a civil rights attorney in Chicago and taught constitutional law at the University of Chicago Law School from 1992 to 2004 .".split(" "),
+                            #u"He served three terms representing the 13th District in the Illinois Senate from 1997 to 2004 , running unsuccessfully for the United States House of Representatives in 2000 .".split(" ")]
 
 tokenized_sentence = u"Members of about 37 species are referred to as foxes , of which only 12 species actually belong to the Vulpes genus of `` true foxes '' .".split(" ")
 tagged_sentence = u"Members/NNS of/IN about/IN 37/CD species/NNS are/VBP referred/VBN to/TO as/IN foxes/NNS ,/, of/IN which/WDT only/RB 12/CD species/NNS actually/RB belong/VBP to/TO the/DT Vulpes/NNP genus/NN of/IN ``/`` true/JJ foxes/NNS ''/'' ./."
@@ -66,12 +66,13 @@ transport.open()
 
 # This list is for options for how we'd like the output formatted.  See README.md for the full list of possible options.
 # Note that the DEFAULT is what you would get if you specified "oneline" on the command line, or "None" here.
-#outputOptions = ["-outputFormat", "typedDependencies,penn", "-outputFormatOptions", "basicDependencies"]
+outputOptions = ["-outputFormat", "typedDependencies", "-outputFormatOptions", "basicDependencies"]
 #outputOptions = []
-outputOptions = ["-outputFormat", "oneline"]
-#outputOptions = ["-outputFormat", "oneline,typedDependencies"]
+#outputOptions = ["-outputFormat", "oneline"]
+#outputOptions = ["-outputFormat", "typedDependencies"]
 
 
+'''
 try:
     parse_trees = client.parse_text(ahs_test, outputOptions)
     for result in parse_trees:
@@ -79,6 +80,7 @@ try:
         sys.stdout.write(client.lexicalize_parse_tree(result.tree.strip()) + "\n\n")
 except Exception as e:
     print e
+'''
 
 '''
 print
@@ -93,14 +95,15 @@ for sentence in tokenized_sentences:
 
 print
 
-'''
+
 for sentence in more_tokenized_sentences:
+    print sentence
+    print
     try:
         tree = client.parse_tokens(sentence, outputOptions)
         sys.stdout.write(tree.tree.strip()+"\n")
     except Exception as e:
         print e
-'''
 
 '''
 try:
@@ -110,8 +113,10 @@ except Exception as e:
     print e
 '''
 
+'''
 tree = client.parse_tagged_sentence(tagged_sentence, outputOptions, "/")
 sys.stdout.write("\n" + tree.tree.strip() + "\n")
+'''
 
 # All done
 transport.close()
