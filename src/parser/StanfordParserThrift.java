@@ -50,8 +50,6 @@ public class StanfordParserThrift
 {
 
     private LexicalizedParser parser;
-    private boolean customOutputOptionsSet;
-//    private boolean customParserOptionsSet;
     private TreePrint treePrinter;
     private TreebankLanguagePack tlp;
 
@@ -59,9 +57,7 @@ public class StanfordParserThrift
     {
         loadModel(modelFile);
         tlp = new PennTreebankLanguagePack();
-        treePrinter = new TreePrint("oneline", "", tlp);
-        customOutputOptionsSet = false;
-//        customParserOptionsSet = false;
+//        treePrinter = new TreePrint("oneline", "", tlp);
     }
 
 	private String TreeObjectToString(Tree tree)
@@ -82,7 +78,6 @@ public class StanfordParserThrift
         }
     }
 
-    @SuppressWarnings("unused")
 	private void setOptions(List<String> outputOptions) throws Exception
     {
         String outputFormatStr = "oneline";
@@ -106,12 +101,6 @@ public class StanfordParserThrift
         	{
         		throw new Exception("Invalid option(s): " + outputOptions.toString());
         	}
-        	
-            customOutputOptionsSet = true;
-        }
-        else
-        {
-        	customOutputOptionsSet = false;
         }
         
         treePrinter = new TreePrint(outputFormatStr, outputFormatOptionsStr, tlp);
@@ -125,39 +114,14 @@ public class StanfordParserThrift
 //        	customParserOptionsSet = true;
 //        }
     }
-
-//    private void resetOptions()
-//    {
-//        if (customParserOptionsSet)
-//        {
-//            loadModel(modelFile);
-//            customParserOptionsSet = false;
-//        }
-//
-//        if (customOutputOptionsSet)
-//        {
-//            treePrinter = new TreePrint("oneline", "", new PennTreebankLanguagePack());
-//            customOutputOptionsSet = false;
-//        }
-//    }
-
+    
     public List<ParseTree> parse_text(String text, List<String> outputFormat) throws TApplicationException
     {
         List<ParseTree> results = new ArrayList<ParseTree>();
         
         try
         {
-            if (outputFormat != null && outputFormat.size() > 0)
-            {
-            	setOptions(outputFormat);
-            }
-            else
-            {
-            	if (customOutputOptionsSet)
-            	{
-            		setOptions(null);
-            	}
-            }
+        	setOptions(outputFormat);
             
         	// assume no tokenization was done; use Stanford's default tokenizer
         	DocumentPreprocessor preprocess = new DocumentPreprocessor(new StringReader(text));
@@ -214,17 +178,7 @@ public class StanfordParserThrift
     	{*/
         try
         {
-            if (outputFormat != null && outputFormat.size() > 0)
-            {
-            	setOptions(outputFormat);
-            }
-            else
-            {
-            	if (customOutputOptionsSet)
-            	{
-            		setOptions(null);
-            	}
-            }
+        	setOptions(outputFormat);
         	
         	// a single sentence worth of tokens
         	String[] tokenArray = new String[tokens.size()];
@@ -238,25 +192,13 @@ public class StanfordParserThrift
         	// FIXME
         	throw new TApplicationException(TApplicationException.INTERNAL_ERROR, e.getMessage());
         }
-    	//}
-//    	return results;
     }
     
     public ParseTree parse_tagged_sentence(String taggedSentence, List<String> outputFormat, String divider) throws TApplicationException
     {
         try
         {
-            if (outputFormat != null && outputFormat.size() > 0)
-            {
-            	setOptions(outputFormat);
-            }
-            else
-            {
-            	if (customOutputOptionsSet)
-            	{
-            		setOptions(null);
-            	}
-            }
+        	setOptions(outputFormat);
         	
         	// a single sentence worth of tagged text, better be properly tokenized >:D        	
         	Tree parseTree = parser.apply(CoreNLPThriftUtil.getListOfTaggedWordsFromTaggedSentence(taggedSentence, divider));
@@ -269,7 +211,7 @@ public class StanfordParserThrift
         }
     }
     
-    /* If one were to call any of these other methods to get a parse tree for some input sentence
+    /** If one were to call any of these other methods to get a parse tree for some input sentence
      * with the -outputFormatOptions flag of "lexicalize", they would receive their parse tree,
      * in the -outputFormat of their choice, with every leaf marked with it's head word.
      * This function does exactly that on an existing parse tree.
