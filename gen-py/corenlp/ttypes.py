@@ -109,6 +109,7 @@ class NamedEntity(object):
    - tag
    - startOffset
    - endOffset
+   - sentence_number
   """
 
   __slots__ = [ 
@@ -116,6 +117,7 @@ class NamedEntity(object):
     'tag',
     'startOffset',
     'endOffset',
+    'sentence_number',
    ]
 
   thrift_spec = (
@@ -124,13 +126,15 @@ class NamedEntity(object):
     (2, TType.STRING, 'tag', None, None, ), # 2
     (3, TType.I32, 'startOffset', None, None, ), # 3
     (4, TType.I32, 'endOffset', None, None, ), # 4
+    (5, TType.I32, 'sentence_number', None, None, ), # 5
   )
 
-  def __init__(self, entity=None, tag=None, startOffset=None, endOffset=None,):
+  def __init__(self, entity=None, tag=None, startOffset=None, endOffset=None, sentence_number=None,):
     self.entity = entity
     self.tag = tag
     self.startOffset = startOffset
     self.endOffset = endOffset
+    self.sentence_number = sentence_number
 
   def read(self, iprot):
     if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
@@ -161,6 +165,11 @@ class NamedEntity(object):
           self.endOffset = iprot.readI32();
         else:
           iprot.skip(ftype)
+      elif fid == 5:
+        if ftype == TType.I32:
+          self.sentence_number = iprot.readI32();
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -186,6 +195,10 @@ class NamedEntity(object):
     if self.endOffset is not None:
       oprot.writeFieldBegin('endOffset', TType.I32, 4)
       oprot.writeI32(self.endOffset)
+      oprot.writeFieldEnd()
+    if self.sentence_number is not None:
+      oprot.writeFieldBegin('sentence_number', TType.I32, 5)
+      oprot.writeI32(self.sentence_number)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()

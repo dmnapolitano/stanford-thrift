@@ -93,6 +93,7 @@ public class StanfordNERThrift
 		List<NamedEntity> entities = new ArrayList<NamedEntity>();
 		
 		Stack<CoreLabel> namedEntityStack = new Stack<CoreLabel>();
+		int sentenceNum = 0;
 		for (CoreMap sentence : results)
 		{
 			List<CoreLabel> tokens = sentence.get(CoreAnnotations.TokensAnnotation.class);
@@ -121,11 +122,12 @@ public class StanfordNERThrift
 					}
 					if (!tag.equals("O"))
 					{
-						entities.add(new NamedEntity(entity.trim(), tag, startIndex, endIndex));
+						entities.add(new NamedEntity(entity.trim(), tag, startIndex, endIndex, sentenceNum));
 					}
 					namedEntityStack.push(wi);
 				}
 			}
+			sentenceNum++;
 		}
 	
 		return entities;
