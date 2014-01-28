@@ -37,6 +37,7 @@ public class NamedEntity implements org.apache.thrift.TBase<NamedEntity, NamedEn
   private static final org.apache.thrift.protocol.TField TAG_FIELD_DESC = new org.apache.thrift.protocol.TField("tag", org.apache.thrift.protocol.TType.STRING, (short)2);
   private static final org.apache.thrift.protocol.TField START_OFFSET_FIELD_DESC = new org.apache.thrift.protocol.TField("startOffset", org.apache.thrift.protocol.TType.I32, (short)3);
   private static final org.apache.thrift.protocol.TField END_OFFSET_FIELD_DESC = new org.apache.thrift.protocol.TField("endOffset", org.apache.thrift.protocol.TType.I32, (short)4);
+  private static final org.apache.thrift.protocol.TField SENTENCE_NUMBER_FIELD_DESC = new org.apache.thrift.protocol.TField("sentence_number", org.apache.thrift.protocol.TType.I32, (short)5);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -48,13 +49,15 @@ public class NamedEntity implements org.apache.thrift.TBase<NamedEntity, NamedEn
   public String tag; // required
   public int startOffset; // required
   public int endOffset; // required
+  public int sentence_number; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
     ENTITY((short)1, "entity"),
     TAG((short)2, "tag"),
     START_OFFSET((short)3, "startOffset"),
-    END_OFFSET((short)4, "endOffset");
+    END_OFFSET((short)4, "endOffset"),
+    SENTENCE_NUMBER((short)5, "sentence_number");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -77,6 +80,8 @@ public class NamedEntity implements org.apache.thrift.TBase<NamedEntity, NamedEn
           return START_OFFSET;
         case 4: // END_OFFSET
           return END_OFFSET;
+        case 5: // SENTENCE_NUMBER
+          return SENTENCE_NUMBER;
         default:
           return null;
       }
@@ -119,6 +124,7 @@ public class NamedEntity implements org.apache.thrift.TBase<NamedEntity, NamedEn
   // isset id assignments
   private static final int __STARTOFFSET_ISSET_ID = 0;
   private static final int __ENDOFFSET_ISSET_ID = 1;
+  private static final int __SENTENCE_NUMBER_ISSET_ID = 2;
   private byte __isset_bitfield = 0;
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
@@ -131,6 +137,8 @@ public class NamedEntity implements org.apache.thrift.TBase<NamedEntity, NamedEn
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
     tmpMap.put(_Fields.END_OFFSET, new org.apache.thrift.meta_data.FieldMetaData("endOffset", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
+    tmpMap.put(_Fields.SENTENCE_NUMBER, new org.apache.thrift.meta_data.FieldMetaData("sentence_number", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(NamedEntity.class, metaDataMap);
   }
@@ -142,7 +150,8 @@ public class NamedEntity implements org.apache.thrift.TBase<NamedEntity, NamedEn
     String entity,
     String tag,
     int startOffset,
-    int endOffset)
+    int endOffset,
+    int sentence_number)
   {
     this();
     this.entity = entity;
@@ -151,6 +160,8 @@ public class NamedEntity implements org.apache.thrift.TBase<NamedEntity, NamedEn
     setStartOffsetIsSet(true);
     this.endOffset = endOffset;
     setEndOffsetIsSet(true);
+    this.sentence_number = sentence_number;
+    setSentence_numberIsSet(true);
   }
 
   /**
@@ -166,6 +177,7 @@ public class NamedEntity implements org.apache.thrift.TBase<NamedEntity, NamedEn
     }
     this.startOffset = other.startOffset;
     this.endOffset = other.endOffset;
+    this.sentence_number = other.sentence_number;
   }
 
   public NamedEntity deepCopy() {
@@ -180,6 +192,8 @@ public class NamedEntity implements org.apache.thrift.TBase<NamedEntity, NamedEn
     this.startOffset = 0;
     setEndOffsetIsSet(false);
     this.endOffset = 0;
+    setSentence_numberIsSet(false);
+    this.sentence_number = 0;
   }
 
   public String getEntity() {
@@ -276,6 +290,29 @@ public class NamedEntity implements org.apache.thrift.TBase<NamedEntity, NamedEn
     __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __ENDOFFSET_ISSET_ID, value);
   }
 
+  public int getSentence_number() {
+    return this.sentence_number;
+  }
+
+  public NamedEntity setSentence_number(int sentence_number) {
+    this.sentence_number = sentence_number;
+    setSentence_numberIsSet(true);
+    return this;
+  }
+
+  public void unsetSentence_number() {
+    __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __SENTENCE_NUMBER_ISSET_ID);
+  }
+
+  /** Returns true if field sentence_number is set (has been assigned a value) and false otherwise */
+  public boolean isSetSentence_number() {
+    return EncodingUtils.testBit(__isset_bitfield, __SENTENCE_NUMBER_ISSET_ID);
+  }
+
+  public void setSentence_numberIsSet(boolean value) {
+    __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __SENTENCE_NUMBER_ISSET_ID, value);
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case ENTITY:
@@ -310,6 +347,14 @@ public class NamedEntity implements org.apache.thrift.TBase<NamedEntity, NamedEn
       }
       break;
 
+    case SENTENCE_NUMBER:
+      if (value == null) {
+        unsetSentence_number();
+      } else {
+        setSentence_number((Integer)value);
+      }
+      break;
+
     }
   }
 
@@ -326,6 +371,9 @@ public class NamedEntity implements org.apache.thrift.TBase<NamedEntity, NamedEn
 
     case END_OFFSET:
       return Integer.valueOf(getEndOffset());
+
+    case SENTENCE_NUMBER:
+      return Integer.valueOf(getSentence_number());
 
     }
     throw new IllegalStateException();
@@ -346,6 +394,8 @@ public class NamedEntity implements org.apache.thrift.TBase<NamedEntity, NamedEn
       return isSetStartOffset();
     case END_OFFSET:
       return isSetEndOffset();
+    case SENTENCE_NUMBER:
+      return isSetSentence_number();
     }
     throw new IllegalStateException();
   }
@@ -396,6 +446,15 @@ public class NamedEntity implements org.apache.thrift.TBase<NamedEntity, NamedEn
       if (!(this_present_endOffset && that_present_endOffset))
         return false;
       if (this.endOffset != that.endOffset)
+        return false;
+    }
+
+    boolean this_present_sentence_number = true;
+    boolean that_present_sentence_number = true;
+    if (this_present_sentence_number || that_present_sentence_number) {
+      if (!(this_present_sentence_number && that_present_sentence_number))
+        return false;
+      if (this.sentence_number != that.sentence_number)
         return false;
     }
 
@@ -455,6 +514,16 @@ public class NamedEntity implements org.apache.thrift.TBase<NamedEntity, NamedEn
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetSentence_number()).compareTo(typedOther.isSetSentence_number());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSentence_number()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.sentence_number, typedOther.sentence_number);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -497,6 +566,10 @@ public class NamedEntity implements org.apache.thrift.TBase<NamedEntity, NamedEn
     if (!first) sb.append(", ");
     sb.append("endOffset:");
     sb.append(this.endOffset);
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("sentence_number:");
+    sb.append(this.sentence_number);
     first = false;
     sb.append(")");
     return sb.toString();
@@ -575,6 +648,14 @@ public class NamedEntity implements org.apache.thrift.TBase<NamedEntity, NamedEn
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
+          case 5: // SENTENCE_NUMBER
+            if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
+              struct.sentence_number = iprot.readI32();
+              struct.setSentence_numberIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
           default:
             org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
         }
@@ -606,6 +687,9 @@ public class NamedEntity implements org.apache.thrift.TBase<NamedEntity, NamedEn
       oprot.writeFieldBegin(END_OFFSET_FIELD_DESC);
       oprot.writeI32(struct.endOffset);
       oprot.writeFieldEnd();
+      oprot.writeFieldBegin(SENTENCE_NUMBER_FIELD_DESC);
+      oprot.writeI32(struct.sentence_number);
+      oprot.writeFieldEnd();
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
@@ -636,7 +720,10 @@ public class NamedEntity implements org.apache.thrift.TBase<NamedEntity, NamedEn
       if (struct.isSetEndOffset()) {
         optionals.set(3);
       }
-      oprot.writeBitSet(optionals, 4);
+      if (struct.isSetSentence_number()) {
+        optionals.set(4);
+      }
+      oprot.writeBitSet(optionals, 5);
       if (struct.isSetEntity()) {
         oprot.writeString(struct.entity);
       }
@@ -649,12 +736,15 @@ public class NamedEntity implements org.apache.thrift.TBase<NamedEntity, NamedEn
       if (struct.isSetEndOffset()) {
         oprot.writeI32(struct.endOffset);
       }
+      if (struct.isSetSentence_number()) {
+        oprot.writeI32(struct.sentence_number);
+      }
     }
 
     @Override
     public void read(org.apache.thrift.protocol.TProtocol prot, NamedEntity struct) throws org.apache.thrift.TException {
       TTupleProtocol iprot = (TTupleProtocol) prot;
-      BitSet incoming = iprot.readBitSet(4);
+      BitSet incoming = iprot.readBitSet(5);
       if (incoming.get(0)) {
         struct.entity = iprot.readString();
         struct.setEntityIsSet(true);
@@ -670,6 +760,10 @@ public class NamedEntity implements org.apache.thrift.TBase<NamedEntity, NamedEn
       if (incoming.get(3)) {
         struct.endOffset = iprot.readI32();
         struct.setEndOffsetIsSet(true);
+      }
+      if (incoming.get(4)) {
+        struct.sentence_number = iprot.readI32();
+        struct.setSentence_numberIsSet(true);
       }
     }
   }

@@ -9,6 +9,7 @@ The core return type here is a data structure called `NamedEntity` which has fou
 * `tag`: A string containing the tag assigned to this named entity (PERSON, LOCATION, etc.).  Should always be upper-case.
 * `startOffset`: All named entities exist in some sentence.  This integer represents the starting character offset of this named entity in its sentence.
 * `endOffset`: Like `startOffset`, only tells you the character offset of the last character of the named entity in its sentence.
+* `sentence_num`: An `integer` referring to the index (starting from 0) into the original `list` of sentences provided to Stanford NER, showing in which sentence this named entity occurred.
 
 In order to get these `NamedEntity` objects, you have three choices, depending on what kind of data you'd like to recognize named entities in.  The return type for ALL of these is a Java `ArrayList`/Python list containing `NamedEntity` objects corresponding to entities recognized across the ENTIRETY of your text, no matter how many sentences, parse trees, etc. were passed in.  If you'd like to recognize named entities in:
 
