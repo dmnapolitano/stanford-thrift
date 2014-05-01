@@ -109,15 +109,15 @@ public class StanfordNERThrift
 					String tag = "";
 					String entity = "";
 					int startIndex = namedEntityStack.peek().beginPosition();
-					int endIndex = 0;
+					int endIndex = namedEntityStack.peek().endPosition();
 					while (!namedEntityStack.empty())
 					{
 						CoreLabel popped = namedEntityStack.pop();
 						tag = popped.ner();
 						entity = popped.word() + " " + entity;
-						if (popped.endPosition() > endIndex)
+						if (popped.beginPosition() < startIndex)
 						{
-							endIndex = popped.endPosition();
+							startIndex = popped.beginPosition();
 						}
 					}
 					if (!tag.equals("O"))
