@@ -29,7 +29,6 @@
     <mkdir dir="${build}/log"/>
   </target>
 
-
  <target name="generate">
     <!-- Generate the thrift gen-java and gen-py source -->
     <!-- Assumes thrift is on your path. -->
@@ -42,7 +41,7 @@
   </target>
 
   <target name="compile" depends="init, generate">
-    <javac srcdir="${genjava}" destdir="${build}" classpathref="libs.classpath" />
+    <javac srcdir="${genjava}" destdir="${build}" />
     <javac srcdir="${src}" destdir="${build}" classpathref="build.classpath" />
   </target>
 
