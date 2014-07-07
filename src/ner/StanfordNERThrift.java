@@ -44,7 +44,6 @@ public class StanfordNERThrift
 	 * trees.
 	 */
 	
-//	private StanfordCoreNLP pipeline;
 	private NERCombinerAnnotator ner;
 
 	public StanfordNERThrift(List<String> nerModels)
@@ -61,17 +60,6 @@ public class StanfordNERThrift
 			e.printStackTrace();
 		}
 	}
-
-
-//	public List<NamedEntity> getNamedEntitiesFromText(String text)
-//	{
-//		Annotation annotation = new Annotation(text);
-//		pipeline.annotate(annotation);
-
-//		List<CoreMap> sentences = CoreNLPThriftUtil.adjustCharacterOffsets(annotation.get(CoreAnnotations.SentencesAnnotation.class), false); 
-//		return toNamedEntityObjects(sentences);
-//	}
-
 
 	public List<NamedEntity> getNamedEntitiesFromTrees(List<String> parseTrees)
 	{	

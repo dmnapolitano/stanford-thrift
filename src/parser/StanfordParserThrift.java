@@ -57,7 +57,6 @@ public class StanfordParserThrift
     {
         loadModel(modelFile);
         tlp = new PennTreebankLanguagePack();
-//        treePrinter = new TreePrint("oneline", "", tlp);
     }
 
 	private String TreeObjectToString(Tree tree)
@@ -80,11 +79,11 @@ public class StanfordParserThrift
 
 	private void setOptions(List<String> outputOptions) throws Exception
     {
-        String outputFormatStr = "oneline";
+        String outputFormatStr = "oneline";  // default
         String outputFormatOptionsStr = "";
 
         // for output formatting
-        if (outputOptions.size() > 0 || outputOptions != null)
+        if (outputOptions != null && outputOptions.size() > 0)
         {
         	int ofIndex = outputOptions.indexOf("-outputFormat");
         	int ofoIndex = outputOptions.indexOf("-outputFormatOptions");
@@ -114,6 +113,12 @@ public class StanfordParserThrift
 //        	customParserOptionsSet = true;
 //        }
     }
+	
+	//public List<ParseTree> parse_text(String text) throws TApplicationException
+	//{
+	//	List<String> outputFormat = Arrays.asList(DEFAULTOPTIONS);
+	//	return parse_text(text, outputFormat);
+	//}
     
     public List<ParseTree> parse_text(String text, List<String> outputFormat) throws TApplicationException
     {
@@ -140,42 +145,14 @@ public class StanfordParserThrift
 
         return results;
     }
-
+    
+    /**
+     * @param tokens One sentence worth of tokens at a time.
+     * @return A ParseTree object of the String representation of the tree, plus its probability.
+     * @throws TApplicationException
+     */
     public ParseTree parse_tokens(List<String> tokens, List<String> outputFormat) throws TApplicationException
     {
-//        List<ParseTree> results = new ArrayList<ParseTree>();
-    	
-    	// assume an array of tokens was passed in
-        // This doesn't seem to be getting used much; the typical case is to pass in one sentence worth of tokens.
-        // This code here handled the case where you wanted two parse trees, one for each sentence "This is a sentence.  It is about cats."
-        // and you wanted to pass in [["This", "is", "a", "sentence", "."], ["It", "is", "about", "cats", "."]]
-        // but instead this code is looking for ["This", "is", "a", "sentence", ".", "\n", "It", "is", "about", "cats", "."]
-    	/*if (tokens.contains("\n"))
-    	{
-    		StringBuilder builder = new StringBuilder();
-    		// at least one sentence worth of tokens
-    		for(String token : tokens)
-    		{
-    			builder.append(token+" ");
-    		}
-    		String[] multipleSentences = builder.toString().split("\n");
-    		for (String s : multipleSentences)
-    		{
-    			try
-    			{
-    				List<CoreLabel> crazyStanfordFormat = Sentence.toCoreLabelList(s.trim().split(" "));
-    				Tree parseTree = parser.apply(crazyStanfordFormat);
-    				treePrinter.printTree(parseTree, pw);
-    				results.add(new ParseTree(sw.getBuffer().toString().trim(), parseTree.score()));
-    			}
-    			catch (Exception e)
-    			{
-    				throw new TApplicationException(TApplicationException.INTERNAL_ERROR, e.getMessage());
-    			}
-    		}
-    	}
-    	else
-    	{*/
         try
         {
         	setOptions(outputFormat);

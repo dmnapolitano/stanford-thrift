@@ -47,23 +47,6 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
     private StanfordTaggerThrift tagger;
     private StanfordTokenizerThrift tokenizer;
     
-    // TODO: This NEEDS to be able to accept paths to alternate models other than just the Parser.
-/*    public StanfordCoreNLPHandler(String parserModelFilePath)
-    {
-    	System.err.println("Initializing Parser...");
-    	parser = new StanfordParserThrift(parserModelFilePath);
-    	System.err.println("Initializing Named Entity Recognizer...");
-    	ner = new StanfordNERThrift();
-    	System.err.println("Initializing Coreference Resolver...");
-    	coref = new StanfordCorefThrift();
-    	System.err.println("Initializing Tregex...");
-    	tregex = new StanfordTregexThrift();
-    	System.err.println("Initializing Tagger...");
-    	tagger = new StanfordTaggerThrift();
-    	System.err.println("Initializing Tokenizer...");
-    	tokenizer = new StanfordTokenizerThrift();
-    }
-*/
     
     public StanfordCoreNLPHandler(String configFilePath) throws Exception
     {
@@ -71,16 +54,22 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
     	{
         	System.err.println("Reading in configuration from " + configFilePath + "...");
     		CoreNLPThriftConfig config = new CoreNLPThriftConfig(configFilePath);
+    		
     		System.err.println("Initializing Parser...");
     		parser = new StanfordParserThrift(config.getParserModel());
+    		
     		System.err.println("Initializing Named Entity Recognizer...");
     		ner = new StanfordNERThrift(config.getNERModels());
+    		
     		System.err.println("Initializing Coreference Resolver...");
     		coref = new StanfordCorefThrift();
+    		
     		System.err.println("Initializing Tregex...");
     		tregex = new StanfordTregexThrift();
+    		
     		System.err.println("Initializing Tagger...");
     		tagger = new StanfordTaggerThrift(config.getTaggerModel());
+    		
     		System.err.println("Initializing Tokenizer...");
     		tokenizer = new StanfordTokenizerThrift();
     	}
@@ -131,7 +120,6 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
     /* Begin Stanford NER methods */
     public List<NamedEntity> get_entities_from_text(String text) throws TApplicationException
     {
-    	//return ner.getNamedEntitiesFromText(text);
     	List<ParseTree> parseTreeObjects = parser.parse_text(text, null);
     	List<String> parseTrees = CoreNLPThriftUtil.ParseTreeObjectsToString(parseTreeObjects);
     	return ner.getNamedEntitiesFromTrees(parseTrees);
