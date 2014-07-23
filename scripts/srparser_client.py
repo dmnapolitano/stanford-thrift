@@ -24,16 +24,16 @@ else:
 # Taken from the English Wikipedia entry for "Fox". :)
 arbitrary_text = u"Members of about 37 species are referred to as foxes, of which only 12 species actually belong to the Vulpes genus of \"true foxes\".  By far the most common and widespread species of fox is the red fox (Vulpes vulpes), although various species are found on almost every continent.  The presence of fox-like carnivores all over the globe, together with their widespread reputation for cunning, has contributed to their appearance in popular culture and folklore in many societies around the world (see also Foxes in culture).  The hunting of foxes with packs of hounds, long an established pursuit in Europe, especially the British Isles, was exported by European settlers to various parts of the New World."
 
-#tokenized_sentences = [u"Members of about 37 species are referred to as foxes , of which only 12 species actually belong to the Vulpes genus of `` true foxes '' .".split(" "),
-#                       u"By far the most common and widespread species of fox is the red fox -LRB- Vulpes vulpes -RRB- , although various species are found on almost every continent .".split(" "),
-#                       u"The presence of fox-like carnivores all over the globe , together with their widespread reputation for cunning , has contributed to their appearance in popular culture and folklore in many societies around the world -LRB- see also Foxes in culture -RRB- .".split(" "),
-#                       u"The hunting of foxes with packs of hounds , long an established pursuit in Europe , especially the British Isles , was exported by European settlers to various parts of the New World .".split(" "),
-#                       u"Barack Hussein Obama II is the 44th and current President of the United States , in office since 2009 .".split(" "),
-#                       u"He is the first African American to hold the office .".split(" "),
-#                       u"Born in Honolulu , Hawaii , Obama is a graduate of Columbia University and Harvard Law School , where he was president of the Harvard Law Review .".split(" "),
-#                       u"He was a community organizer in Chicago before earning his law degree .".split(" "),
-#                       u"He worked as a civil rights attorney in Chicago and taught constitutional law at the University of Chicago Law School from 1992 to 2004 .".split(" "),
-#                       u"He served three terms representing the 13th District in the Illinois Senate from 1997 to 2004 , running unsuccessfully for the United States House of Representatives in 2000 .".split(" ")]
+tokenized_sentences = [u"Members of about 37 species are referred to as foxes , of which only 12 species actually belong to the Vulpes genus of `` true foxes '' .".split(" "),
+                       u"By far the most common and widespread species of fox is the red fox -LRB- Vulpes vulpes -RRB- , although various species are found on almost every continent .".split(" "),
+                       u"The presence of fox-like carnivores all over the globe , together with their widespread reputation for cunning , has contributed to their appearance in popular culture and folklore in many societies around the world -LRB- see also Foxes in culture -RRB- .".split(" "),
+                       u"The hunting of foxes with packs of hounds , long an established pursuit in Europe , especially the British Isles , was exported by European settlers to various parts of the New World .".split(" "),
+                       u"Barack Hussein Obama II is the 44th and current President of the United States , in office since 2009 .".split(" "),
+                       u"He is the first African American to hold the office .".split(" "),
+                       u"Born in Honolulu , Hawaii , Obama is a graduate of Columbia University and Harvard Law School , where he was president of the Harvard Law Review .".split(" "),
+                       u"He was a community organizer in Chicago before earning his law degree .".split(" "),
+                       u"He worked as a civil rights attorney in Chicago and taught constitutional law at the University of Chicago Law School from 1992 to 2004 .".split(" "),
+                       u"He served three terms representing the 13th District in the Illinois Senate from 1997 to 2004 , running unsuccessfully for the United States House of Representatives in 2000 .".split(" ")]
 
 #tokenized_sentence = u"Members of about 37 species are referred to as foxes , of which only 12 species actually belong to the Vulpes genus of `` true foxes '' .".split(" ")
 
@@ -90,16 +90,16 @@ except Exception as e:
 
 print
 
-'''
+
 for sentence in tokenized_sentences:
     try:
-        tree = client.parse_tokens(sentence, outputOptions)
+        tree = client.sr_parse_tokens(sentence, outputOptions)
         sys.stdout.write(tree.tree.strip() + " [" + str(tree.score) + "]\n")
     except Exception as e:
         print e
 
 print
-'''
+
 '''
 try:
     tree = client.parse_tokens(weird_sentence, outputOptions)

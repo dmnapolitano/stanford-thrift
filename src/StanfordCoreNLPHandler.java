@@ -240,6 +240,20 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
 			throw new TApplicationException(TApplicationException.INTERNAL_ERROR, e.getMessage());
 		}
 	}
+
+	public ParseTree sr_parse_tokens(List<String> tokenizedSentence, List<String> outputFormat) throws TApplicationException
+	{
+		try
+		{
+			List<TaggedToken> taggedSentence = tagger.tag_tokenized_sentence(tokenizedSentence);
+			return srparser.parseTaggedWords(CoreNLPThriftUtil.convertTaggedTokensToTaggedWords(taggedSentence), outputFormat);
+		}
+		catch (Exception e)
+		{
+			// FIXME
+			throw new TApplicationException(TApplicationException.INTERNAL_ERROR, e.getMessage());
+		}
+	}
 	/* End Stanford Shift-Reduce Parser methods */
 
 
