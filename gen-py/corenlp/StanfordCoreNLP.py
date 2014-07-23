@@ -134,6 +134,15 @@ class Iface(object):
     """
     pass
 
+  def sr_parse_tagged_sentence(self, taggedSentence, outputFormat, divider):
+    """
+    Parameters:
+     - taggedSentence
+     - outputFormat
+     - divider
+    """
+    pass
+
 
 class Client(Iface):
   def __init__(self, iprot, oprot=None):
@@ -634,6 +643,40 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "tokenize_text failed: unknown result");
 
+  def sr_parse_tagged_sentence(self, taggedSentence, outputFormat, divider):
+    """
+    Parameters:
+     - taggedSentence
+     - outputFormat
+     - divider
+    """
+    self.send_sr_parse_tagged_sentence(taggedSentence, outputFormat, divider)
+    return self.recv_sr_parse_tagged_sentence()
+
+  def send_sr_parse_tagged_sentence(self, taggedSentence, outputFormat, divider):
+    self._oprot.writeMessageBegin('sr_parse_tagged_sentence', TMessageType.CALL, self._seqid)
+    args = sr_parse_tagged_sentence_args()
+    args.taggedSentence = taggedSentence
+    args.outputFormat = outputFormat
+    args.divider = divider
+    args.write(self._oprot)
+    self._oprot.writeMessageEnd()
+    self._oprot.trans.flush()
+
+  def recv_sr_parse_tagged_sentence(self, ):
+    (fname, mtype, rseqid) = self._iprot.readMessageBegin()
+    if mtype == TMessageType.EXCEPTION:
+      x = TApplicationException()
+      x.read(self._iprot)
+      self._iprot.readMessageEnd()
+      raise x
+    result = sr_parse_tagged_sentence_result()
+    result.read(self._iprot)
+    self._iprot.readMessageEnd()
+    if result.success is not None:
+      return result.success
+    raise TApplicationException(TApplicationException.MISSING_RESULT, "sr_parse_tagged_sentence failed: unknown result");
+
 
 class Processor(Iface, TProcessor):
   def __init__(self, handler):
@@ -656,6 +699,7 @@ class Processor(Iface, TProcessor):
     self._processMap["tag_tokenized_sentence"] = Processor.process_tag_tokenized_sentence
     self._processMap["untokenize_sentence"] = Processor.process_untokenize_sentence
     self._processMap["tokenize_text"] = Processor.process_tokenize_text
+    self._processMap["sr_parse_tagged_sentence"] = Processor.process_sr_parse_tagged_sentence
 
   def process(self, iprot, oprot):
     (name, type, seqid) = iprot.readMessageBegin()
@@ -851,6 +895,17 @@ class Processor(Iface, TProcessor):
     result = tokenize_text_result()
     result.success = self._handler.tokenize_text(args.arbitraryText)
     oprot.writeMessageBegin("tokenize_text", TMessageType.REPLY, seqid)
+    result.write(oprot)
+    oprot.writeMessageEnd()
+    oprot.trans.flush()
+
+  def process_sr_parse_tagged_sentence(self, seqid, iprot, oprot):
+    args = sr_parse_tagged_sentence_args()
+    args.read(iprot)
+    iprot.readMessageEnd()
+    result = sr_parse_tagged_sentence_result()
+    result.success = self._handler.sr_parse_tagged_sentence(args.taggedSentence, args.outputFormat, args.divider)
+    oprot.writeMessageBegin("sr_parse_tagged_sentence", TMessageType.REPLY, seqid)
     result.write(oprot)
     oprot.writeMessageEnd()
     oprot.trans.flush()
@@ -3392,6 +3447,184 @@ class tokenize_text_result(object):
           oprot.writeString(iter160.encode('utf-8'))
         oprot.writeListEnd()
       oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, getattr(self, key))
+      for key in self.__slots__]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+    for attr in self.__slots__:
+      my_val = getattr(self, attr)
+      other_val = getattr(other, attr)
+      if my_val != other_val:
+        return False
+    return True
+
+  def __ne__(self, other):
+    return not (self == other)
+
+
+class sr_parse_tagged_sentence_args(object):
+  """
+  Attributes:
+   - taggedSentence
+   - outputFormat
+   - divider
+  """
+
+  __slots__ = [ 
+    'taggedSentence',
+    'outputFormat',
+    'divider',
+   ]
+
+  thrift_spec = (
+    None, # 0
+    (1, TType.STRING, 'taggedSentence', None, None, ), # 1
+    (2, TType.LIST, 'outputFormat', (TType.STRING,None), None, ), # 2
+    (3, TType.STRING, 'divider', None, None, ), # 3
+  )
+
+  def __init__(self, taggedSentence=None, outputFormat=None, divider=None,):
+    self.taggedSentence = taggedSentence
+    self.outputFormat = outputFormat
+    self.divider = divider
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 1:
+        if ftype == TType.STRING:
+          self.taggedSentence = iprot.readString().decode('utf-8')
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.LIST:
+          self.outputFormat = []
+          (_etype164, _size161) = iprot.readListBegin()
+          for _i165 in xrange(_size161):
+            _elem166 = iprot.readString().decode('utf-8')
+            self.outputFormat.append(_elem166)
+          iprot.readListEnd()
+        else:
+          iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.STRING:
+          self.divider = iprot.readString().decode('utf-8')
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('sr_parse_tagged_sentence_args')
+    if self.taggedSentence is not None:
+      oprot.writeFieldBegin('taggedSentence', TType.STRING, 1)
+      oprot.writeString(self.taggedSentence.encode('utf-8'))
+      oprot.writeFieldEnd()
+    if self.outputFormat is not None:
+      oprot.writeFieldBegin('outputFormat', TType.LIST, 2)
+      oprot.writeListBegin(TType.STRING, len(self.outputFormat))
+      for iter167 in self.outputFormat:
+        oprot.writeString(iter167.encode('utf-8'))
+      oprot.writeListEnd()
+      oprot.writeFieldEnd()
+    if self.divider is not None:
+      oprot.writeFieldBegin('divider', TType.STRING, 3)
+      oprot.writeString(self.divider.encode('utf-8'))
+      oprot.writeFieldEnd()
+    oprot.writeFieldStop()
+    oprot.writeStructEnd()
+
+  def validate(self):
+    return
+
+
+  def __repr__(self):
+    L = ['%s=%r' % (key, getattr(self, key))
+      for key in self.__slots__]
+    return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+  def __eq__(self, other):
+    if not isinstance(other, self.__class__):
+      return False
+    for attr in self.__slots__:
+      my_val = getattr(self, attr)
+      other_val = getattr(other, attr)
+      if my_val != other_val:
+        return False
+    return True
+
+  def __ne__(self, other):
+    return not (self == other)
+
+
+class sr_parse_tagged_sentence_result(object):
+  """
+  Attributes:
+   - success
+  """
+
+  __slots__ = [ 
+    'success',
+   ]
+
+  thrift_spec = (
+    (0, TType.STRUCT, 'success', (ParseTree, ParseTree.thrift_spec), None, ), # 0
+  )
+
+  def __init__(self, success=None,):
+    self.success = success
+
+  def read(self, iprot):
+    if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
+      fastbinary.decode_binary(self, iprot.trans, (self.__class__, self.thrift_spec))
+      return
+    iprot.readStructBegin()
+    while True:
+      (fname, ftype, fid) = iprot.readFieldBegin()
+      if ftype == TType.STOP:
+        break
+      if fid == 0:
+        if ftype == TType.STRUCT:
+          self.success = ParseTree()
+          self.success.read(iprot)
+        else:
+          iprot.skip(ftype)
+      else:
+        iprot.skip(ftype)
+      iprot.readFieldEnd()
+    iprot.readStructEnd()
+
+  def write(self, oprot):
+    if oprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and self.thrift_spec is not None and fastbinary is not None:
+      oprot.trans.write(fastbinary.encode_binary(self, (self.__class__, self.thrift_spec)))
+      return
+    oprot.writeStructBegin('sr_parse_tagged_sentence_result')
+    if self.success is not None:
+      oprot.writeFieldBegin('success', TType.STRUCT, 0)
+      self.success.write(oprot)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()

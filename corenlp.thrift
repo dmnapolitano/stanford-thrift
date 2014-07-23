@@ -45,5 +45,6 @@ service StanfordCoreNLP
     list<list<TaggedToken>> tag_text(1:string untokenizedText),
     list<TaggedToken> tag_tokenized_sentence(1:list<string> tokenizedSentence),
     string untokenize_sentence(1:list<string> sentenceTokens),
-    list<list<string>> tokenize_text(1:string arbitraryText)
+    list<list<string>> tokenize_text(1:string arbitraryText),
+    ParseTree sr_parse_tagged_sentence(1:string taggedSentence, 2:list<string> outputFormat, 3:string divider)
 }

@@ -40,6 +40,7 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
   print '   tag_tokenized_sentence( tokenizedSentence)'
   print '  string untokenize_sentence( sentenceTokens)'
   print '   tokenize_text(string arbitraryText)'
+  print '  ParseTree sr_parse_tagged_sentence(string taggedSentence,  outputFormat, string divider)'
   print ''
   sys.exit(0)
 
@@ -192,6 +193,12 @@ elif cmd == 'tokenize_text':
     print 'tokenize_text requires 1 args'
     sys.exit(1)
   pp.pprint(client.tokenize_text(args[0],))
+
+elif cmd == 'sr_parse_tagged_sentence':
+  if len(args) != 3:
+    print 'sr_parse_tagged_sentence requires 3 args'
+    sys.exit(1)
+  pp.pprint(client.sr_parse_tagged_sentence(args[0],eval(args[1]),args[2],))
 
 else:
   print 'Unrecognized method %s' % cmd
