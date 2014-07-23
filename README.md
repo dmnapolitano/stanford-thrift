@@ -8,7 +8,7 @@ This is a client/server setup of Stanford's [CoreNLP](http://nlp.stanford.edu/so
 Things you can do with it:
 
 * Send over text/data in a variety of formats and receive:
-	- Parse Trees **See README_parser.md**
+	- Parse Trees from either the Lexicalized parser or the Shift-Reduce parser **See README_parser.md**
 	- Named Entities **See README_ner.md**
 	- Resolved Coreferences **See README_coref.md**
 	- Stanford Tregex patterns evaluated over parse trees **See README_tregex.md**

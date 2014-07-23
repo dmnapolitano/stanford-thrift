@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# The purpose of this client is to show how to send over a few sentences in every way possible.
-# It is also for me to unit test things. >:)
 
 from corenlp import StanfordCoreNLP
 from corenlp.ttypes import *
@@ -16,7 +14,7 @@ import sys
 # get command line arguments
 args = sys.argv[1:]
 if len(args) != 2:
-    sys.stderr.write('Usage: parser_client.py <server> <port>\n')
+    sys.stderr.write('Usage: srparser_client.py <server> <port>\n')
     sys.exit(2)
 else:
     server = args[0]
@@ -43,9 +41,9 @@ tagged_sentence = u"Members/NNS of/IN about/IN 37/CD species/NNS are/VBP referre
 
 test_tagged_sentence = u"Jane's/DT dog/NN will/MD come/VB too/RB ./."
 
-weird_sentence = [u'While', u'the', u'child', u'spends', u'about', u'five', u'hours', u'or', u'less', u'with', u'his', u'parents', u',', u'and', u'whenever', u'that', u'child', u'wants', u'to', u'go', u'out', u'he', u'will', u'most', u'probably', u'go', u'out', u'with', u'his', u'friends', u'which', u'are', u'his', u'classmates', u',', u'so', u'most', u'of', u'his', u'school', u'life', u'will', u'be', u'spent', u'with', u'his', u'classmates', u',', u'and', u'this', u'will', u'have', u'a', u'great', u'affect', u'on', u'his', u'personality', u'which', u'will', u'determine', u'the', u'way', u'the', u'child', u'will', u'react', u'towards', u'his', u'school', u'and', u'will', u'determine', u'how', u'he', u'will', u'use', u'his', u'life', u'.']
+#weird_sentence = [u'While', u'the', u'child', u'spends', u'about', u'five', u'hours', u'or', u'less', u'with', u'his', u'parents', u',', u'and', u'whenever', u'that', u'child', u'wants', u'to', u'go', u'out', u'he', u'will', u'most', u'probably', u'go', u'out', u'with', u'his', u'friends', u'which', u'are', u'his', u'classmates', u',', u'so', u'most', u'of', u'his', u'school', u'life', u'will', u'be', u'spent', u'with', u'his', u'classmates', u',', u'and', u'this', u'will', u'have', u'a', u'great', u'affect', u'on', u'his', u'personality', u'which', u'will', u'determine', u'the', u'way', u'the', u'child', u'will', u'react', u'towards', u'his', u'school', u'and', u'will', u'determine', u'how', u'he', u'will', u'use', u'his', u'life', u'.']
 
-ahs_test = "And be it further enacted, That the seat of government of said Territory is hereby located temporarily at Fort Leavenworth; and that such portions of the public buildings as may not be actually used and needed for military purposes, may be occupied and used, under the direction of the Governor and Legislative Assembly, for such public purposes as may be required under the provisions of this act."
+#ahs_test = "And be it further enacted, That the seat of government of said Territory is hereby located temporarily at Fort Leavenworth; and that such portions of the public buildings as may not be actually used and needed for military purposes, may be occupied and used, under the direction of the Governor and Legislative Assembly, for such public purposes as may be required under the provisions of this act."
 
 # Make socket
 transport = TSocket.TSocket(server, port)
@@ -69,8 +67,7 @@ transport.open()
 # So, the following examples are VALID values for the second argument to these parse_* methods.
 # (There are, of course, many more valid combinations depending on what the Stanford Parser supports.)
 #outputOptions = ["-outputFormat", "typedDependencies,penn", "-outputFormatOptions", "basicDependencies"]
-outputOptions = ["-outputFormat", "oneline"]
-#outputOptions = ["-outputFormat", "typedDependencies"]
+outputOptions = ["-outputFormat", "oneline,typedDependencies"]
 
 '''
 try:
@@ -82,27 +79,27 @@ except Exception as e:
     print e
 
 print
+'''
 
 try:
-    parse_trees = client.parse_text(arbitrary_text, outputOptions)
+    parse_trees = client.sr_parse_text(arbitrary_text, None)
     for result in parse_trees:
         sys.stdout.write(result.tree.strip() + " [" + str(result.score) + "]\n")
-        #sys.stdout.write(client.lexicalize_parse_tree(result.tree.strip()) + "\n\n")
 except Exception as e:
     print e
 
 print
-'''
-'''
+
+
 for sentence in tokenized_sentences:
     try:
-        tree = client.parse_tokens(sentence, outputOptions)
+        tree = client.sr_parse_tokens(sentence, outputOptions)
         sys.stdout.write(tree.tree.strip() + " [" + str(tree.score) + "]\n")
     except Exception as e:
         print e
 
 print
-'''
+
 '''
 try:
     tree = client.parse_tokens(weird_sentence, outputOptions)
@@ -111,10 +108,13 @@ except Exception as e:
     print e
 '''
 
+results = client.sr_parse_tagged_sentence(tagged_sentence, None, "/")
+print results
+
 print
 
-tree = client.parse_tagged_sentence(test_tagged_sentence, outputOptions, "/")
-sys.stdout.write("\n" + tree.tree.strip() + "\n")
+results = client.sr_parse_tagged_sentence(test_tagged_sentence, outputOptions, "/")
+sys.stdout.write("\n" + results.tree.strip() + "\n")
 
 
 # All done
