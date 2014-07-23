@@ -8,7 +8,7 @@ The core return type here is a data structure called `ParseTree` which has two m
 * `tree`: A string representing your parse tree (or, quite optionally, parse treeS; keep reading).
 * `score`: A double representing the score for that parse.
    
-### What one can do with the `outputFormat` argument to the methods which take it
+## What one can do with the `outputFormat` argument to the methods which take it
 
 The purpose of the `outputFormat` argument is to allow one to supply arguments in the same style as one would via command-line call to the Stanford Parser. **The only command-line switches supported here are `-outputFormat` and `-outputFormatOptions`, but they are supported in full.**  By that I mean any valid argument to each of those options is also valid here.
 You can also pass in `null`/`None` and that will return parse trees in this server's default format of `-outputFormat "oneline"`.
