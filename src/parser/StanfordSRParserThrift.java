@@ -25,6 +25,7 @@ import java.util.List;
 import org.apache.thrift.TApplicationException;
 
 import CoreNLP.ParseTree;
+import edu.stanford.nlp.ling.TaggedWord;
 import edu.stanford.nlp.parser.shiftreduce.ShiftReduceParser;
 import edu.stanford.nlp.trees.PennTreebankLanguagePack;
 import edu.stanford.nlp.trees.Tree;
@@ -47,17 +48,22 @@ public class StanfordSRParserThrift {
 	{
 		try
 		{
-			TreePrint treePrinter = ParserUtil.setOptions(outputFormat, tlp);
-
 			// a single sentence worth of tagged text, better be properly tokenized >:D
-			Tree parseTree = model.apply(CoreNLPThriftUtil.getListOfTaggedWordsFromTaggedSentence(taggedSentence, divider));
-			// TODO: Do these parse trees have scores, like the lexicalized ones do?
-			return new ParseTree(ParserUtil.TreeObjectToString(parseTree, treePrinter), parseTree.score());
+			List<TaggedWord> taggedWords = CoreNLPThriftUtil.getListOfTaggedWordsFromTaggedSentence(taggedSentence, divider);
+			return parseTaggedWords(taggedWords, outputFormat);
 		}
 		catch (Exception e)
 		{
 			// FIXME
 			throw new TApplicationException(TApplicationException.INTERNAL_ERROR, e.getMessage());
 		}
+	}
+
+	public ParseTree parseTaggedWords(List<TaggedWord> taggedWords, List<String> outputFormat) throws Exception
+	{
+		TreePrint treePrinter = ParserUtil.setOptions(outputFormat, tlp);
+		Tree parseTree = model.apply(taggedWords);
+		// TODO: Do these parse trees have scores, like the lexicalized ones do?
+		return new ParseTree(ParserUtil.TreeObjectToString(parseTree, treePrinter), parseTree.score());
 	}
 }

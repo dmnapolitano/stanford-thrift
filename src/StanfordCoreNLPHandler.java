@@ -17,6 +17,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+import edu.stanford.nlp.ling.TaggedWord;
 import edu.stanford.nlp.pipeline.Annotation;
 import general.CoreNLPThriftConfig;
 import general.CoreNLPThriftUtil;
@@ -218,6 +219,26 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
 	public ParseTree sr_parse_tagged_sentence(String taggedSentence, List<String> outputFormat, String divider) throws TApplicationException
 	{
 		return srparser.sr_parse_tagged_sentence(taggedSentence, outputFormat, divider);
+	}
+
+	public List<ParseTree> sr_parse_text(String untokenizedText, List<String> outputFormat) throws TApplicationException
+	{
+		try
+		{
+			List<ParseTree> results = new ArrayList<ParseTree>();
+			List<List<TaggedToken>> posTaggedText = tagger.tag_text(untokenizedText);
+			for (List<TaggedToken> taggedSentence : posTaggedText)
+			{
+				List<TaggedWord> taggedWords = CoreNLPThriftUtil.convertTaggedTokensToTaggedWords(taggedSentence);
+				results.add(srparser.parseTaggedWords(taggedWords, outputFormat));
+			}
+			return results;
+		}
+		catch (Exception e)
+		{
+			// FIXME
+			throw new TApplicationException(TApplicationException.INTERNAL_ERROR, e.getMessage());
+		}
 	}
 	/* End Stanford Shift-Reduce Parser methods */
 

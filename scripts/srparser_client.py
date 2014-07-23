@@ -22,7 +22,7 @@ else:
 
 
 # Taken from the English Wikipedia entry for "Fox". :)
-#arbitrary_text = u"Members of about 37 species are referred to as foxes, of which only 12 species actually belong to the Vulpes genus of \"true foxes\".  By far the most common and widespread species of fox is the red fox (Vulpes vulpes), although various species are found on almost every continent.  The presence of fox-like carnivores all over the globe, together with their widespread reputation for cunning, has contributed to their appearance in popular culture and folklore in many societies around the world (see also Foxes in culture).  The hunting of foxes with packs of hounds, long an established pursuit in Europe, especially the British Isles, was exported by European settlers to various parts of the New World."
+arbitrary_text = u"Members of about 37 species are referred to as foxes, of which only 12 species actually belong to the Vulpes genus of \"true foxes\".  By far the most common and widespread species of fox is the red fox (Vulpes vulpes), although various species are found on almost every continent.  The presence of fox-like carnivores all over the globe, together with their widespread reputation for cunning, has contributed to their appearance in popular culture and folklore in many societies around the world (see also Foxes in culture).  The hunting of foxes with packs of hounds, long an established pursuit in Europe, especially the British Isles, was exported by European settlers to various parts of the New World."
 
 #tokenized_sentences = [u"Members of about 37 species are referred to as foxes , of which only 12 species actually belong to the Vulpes genus of `` true foxes '' .".split(" "),
 #                       u"By far the most common and widespread species of fox is the red fox -LRB- Vulpes vulpes -RRB- , although various species are found on almost every continent .".split(" "),
@@ -79,17 +79,17 @@ except Exception as e:
     print e
 
 print
+'''
 
 try:
-    parse_trees = client.parse_text(arbitrary_text, outputOptions)
+    parse_trees = client.sr_parse_text(arbitrary_text, None)
     for result in parse_trees:
         sys.stdout.write(result.tree.strip() + " [" + str(result.score) + "]\n")
-        #sys.stdout.write(client.lexicalize_parse_tree(result.tree.strip()) + "\n\n")
 except Exception as e:
     print e
 
 print
-'''
+
 '''
 for sentence in tokenized_sentences:
     try:
