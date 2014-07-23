@@ -68,6 +68,12 @@ public class StanfordCoreNLP {
 
     public List<List<String>> tokenize_text(String arbitraryText) throws org.apache.thrift.TException;
 
+    public ParseTree sr_parse_tagged_sentence(String taggedSentence, List<String> outputFormat, String divider) throws org.apache.thrift.TException;
+
+    public List<ParseTree> sr_parse_text(String untokenizedText, List<String> outputFormat) throws org.apache.thrift.TException;
+
+    public ParseTree sr_parse_tokens(List<String> tokenizedSentence, List<String> outputFormat) throws org.apache.thrift.TException;
+
   }
 
   public interface AsyncIface {
@@ -105,6 +111,12 @@ public class StanfordCoreNLP {
     public void untokenize_sentence(List<String> sentenceTokens, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.untokenize_sentence_call> resultHandler) throws org.apache.thrift.TException;
 
     public void tokenize_text(String arbitraryText, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.tokenize_text_call> resultHandler) throws org.apache.thrift.TException;
+
+    public void sr_parse_tagged_sentence(String taggedSentence, List<String> outputFormat, String divider, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.sr_parse_tagged_sentence_call> resultHandler) throws org.apache.thrift.TException;
+
+    public void sr_parse_text(String untokenizedText, List<String> outputFormat, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.sr_parse_text_call> resultHandler) throws org.apache.thrift.TException;
+
+    public void sr_parse_tokens(List<String> tokenizedSentence, List<String> outputFormat, org.apache.thrift.async.AsyncMethodCallback<AsyncClient.sr_parse_tokens_call> resultHandler) throws org.apache.thrift.TException;
 
   }
 
@@ -506,6 +518,79 @@ public class StanfordCoreNLP {
         return result.success;
       }
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "tokenize_text failed: unknown result");
+    }
+
+    public ParseTree sr_parse_tagged_sentence(String taggedSentence, List<String> outputFormat, String divider) throws org.apache.thrift.TException
+    {
+      send_sr_parse_tagged_sentence(taggedSentence, outputFormat, divider);
+      return recv_sr_parse_tagged_sentence();
+    }
+
+    public void send_sr_parse_tagged_sentence(String taggedSentence, List<String> outputFormat, String divider) throws org.apache.thrift.TException
+    {
+      sr_parse_tagged_sentence_args args = new sr_parse_tagged_sentence_args();
+      args.setTaggedSentence(taggedSentence);
+      args.setOutputFormat(outputFormat);
+      args.setDivider(divider);
+      sendBase("sr_parse_tagged_sentence", args);
+    }
+
+    public ParseTree recv_sr_parse_tagged_sentence() throws org.apache.thrift.TException
+    {
+      sr_parse_tagged_sentence_result result = new sr_parse_tagged_sentence_result();
+      receiveBase(result, "sr_parse_tagged_sentence");
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "sr_parse_tagged_sentence failed: unknown result");
+    }
+
+    public List<ParseTree> sr_parse_text(String untokenizedText, List<String> outputFormat) throws org.apache.thrift.TException
+    {
+      send_sr_parse_text(untokenizedText, outputFormat);
+      return recv_sr_parse_text();
+    }
+
+    public void send_sr_parse_text(String untokenizedText, List<String> outputFormat) throws org.apache.thrift.TException
+    {
+      sr_parse_text_args args = new sr_parse_text_args();
+      args.setUntokenizedText(untokenizedText);
+      args.setOutputFormat(outputFormat);
+      sendBase("sr_parse_text", args);
+    }
+
+    public List<ParseTree> recv_sr_parse_text() throws org.apache.thrift.TException
+    {
+      sr_parse_text_result result = new sr_parse_text_result();
+      receiveBase(result, "sr_parse_text");
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "sr_parse_text failed: unknown result");
+    }
+
+    public ParseTree sr_parse_tokens(List<String> tokenizedSentence, List<String> outputFormat) throws org.apache.thrift.TException
+    {
+      send_sr_parse_tokens(tokenizedSentence, outputFormat);
+      return recv_sr_parse_tokens();
+    }
+
+    public void send_sr_parse_tokens(List<String> tokenizedSentence, List<String> outputFormat) throws org.apache.thrift.TException
+    {
+      sr_parse_tokens_args args = new sr_parse_tokens_args();
+      args.setTokenizedSentence(tokenizedSentence);
+      args.setOutputFormat(outputFormat);
+      sendBase("sr_parse_tokens", args);
+    }
+
+    public ParseTree recv_sr_parse_tokens() throws org.apache.thrift.TException
+    {
+      sr_parse_tokens_result result = new sr_parse_tokens_result();
+      receiveBase(result, "sr_parse_tokens");
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "sr_parse_tokens failed: unknown result");
     }
 
   }
@@ -1078,6 +1163,114 @@ public class StanfordCoreNLP {
       }
     }
 
+    public void sr_parse_tagged_sentence(String taggedSentence, List<String> outputFormat, String divider, org.apache.thrift.async.AsyncMethodCallback<sr_parse_tagged_sentence_call> resultHandler) throws org.apache.thrift.TException {
+      checkReady();
+      sr_parse_tagged_sentence_call method_call = new sr_parse_tagged_sentence_call(taggedSentence, outputFormat, divider, resultHandler, this, ___protocolFactory, ___transport);
+      this.___currentMethod = method_call;
+      ___manager.call(method_call);
+    }
+
+    public static class sr_parse_tagged_sentence_call extends org.apache.thrift.async.TAsyncMethodCall {
+      private String taggedSentence;
+      private List<String> outputFormat;
+      private String divider;
+      public sr_parse_tagged_sentence_call(String taggedSentence, List<String> outputFormat, String divider, org.apache.thrift.async.AsyncMethodCallback<sr_parse_tagged_sentence_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.taggedSentence = taggedSentence;
+        this.outputFormat = outputFormat;
+        this.divider = divider;
+      }
+
+      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
+        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("sr_parse_tagged_sentence", org.apache.thrift.protocol.TMessageType.CALL, 0));
+        sr_parse_tagged_sentence_args args = new sr_parse_tagged_sentence_args();
+        args.setTaggedSentence(taggedSentence);
+        args.setOutputFormat(outputFormat);
+        args.setDivider(divider);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public ParseTree getResult() throws org.apache.thrift.TException {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
+        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_sr_parse_tagged_sentence();
+      }
+    }
+
+    public void sr_parse_text(String untokenizedText, List<String> outputFormat, org.apache.thrift.async.AsyncMethodCallback<sr_parse_text_call> resultHandler) throws org.apache.thrift.TException {
+      checkReady();
+      sr_parse_text_call method_call = new sr_parse_text_call(untokenizedText, outputFormat, resultHandler, this, ___protocolFactory, ___transport);
+      this.___currentMethod = method_call;
+      ___manager.call(method_call);
+    }
+
+    public static class sr_parse_text_call extends org.apache.thrift.async.TAsyncMethodCall {
+      private String untokenizedText;
+      private List<String> outputFormat;
+      public sr_parse_text_call(String untokenizedText, List<String> outputFormat, org.apache.thrift.async.AsyncMethodCallback<sr_parse_text_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.untokenizedText = untokenizedText;
+        this.outputFormat = outputFormat;
+      }
+
+      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
+        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("sr_parse_text", org.apache.thrift.protocol.TMessageType.CALL, 0));
+        sr_parse_text_args args = new sr_parse_text_args();
+        args.setUntokenizedText(untokenizedText);
+        args.setOutputFormat(outputFormat);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public List<ParseTree> getResult() throws org.apache.thrift.TException {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
+        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_sr_parse_text();
+      }
+    }
+
+    public void sr_parse_tokens(List<String> tokenizedSentence, List<String> outputFormat, org.apache.thrift.async.AsyncMethodCallback<sr_parse_tokens_call> resultHandler) throws org.apache.thrift.TException {
+      checkReady();
+      sr_parse_tokens_call method_call = new sr_parse_tokens_call(tokenizedSentence, outputFormat, resultHandler, this, ___protocolFactory, ___transport);
+      this.___currentMethod = method_call;
+      ___manager.call(method_call);
+    }
+
+    public static class sr_parse_tokens_call extends org.apache.thrift.async.TAsyncMethodCall {
+      private List<String> tokenizedSentence;
+      private List<String> outputFormat;
+      public sr_parse_tokens_call(List<String> tokenizedSentence, List<String> outputFormat, org.apache.thrift.async.AsyncMethodCallback<sr_parse_tokens_call> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.tokenizedSentence = tokenizedSentence;
+        this.outputFormat = outputFormat;
+      }
+
+      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
+        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("sr_parse_tokens", org.apache.thrift.protocol.TMessageType.CALL, 0));
+        sr_parse_tokens_args args = new sr_parse_tokens_args();
+        args.setTokenizedSentence(tokenizedSentence);
+        args.setOutputFormat(outputFormat);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public ParseTree getResult() throws org.apache.thrift.TException {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
+        }
+        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
+        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_sr_parse_tokens();
+      }
+    }
+
   }
 
   public static class Processor<I extends Iface> extends org.apache.thrift.TBaseProcessor<I> implements org.apache.thrift.TProcessor {
@@ -1108,6 +1301,9 @@ public class StanfordCoreNLP {
       processMap.put("tag_tokenized_sentence", new tag_tokenized_sentence());
       processMap.put("untokenize_sentence", new untokenize_sentence());
       processMap.put("tokenize_text", new tokenize_text());
+      processMap.put("sr_parse_tagged_sentence", new sr_parse_tagged_sentence());
+      processMap.put("sr_parse_text", new sr_parse_text());
+      processMap.put("sr_parse_tokens", new sr_parse_tokens());
       return processMap;
     }
 
@@ -1446,6 +1642,66 @@ public class StanfordCoreNLP {
       public tokenize_text_result getResult(I iface, tokenize_text_args args) throws org.apache.thrift.TException {
         tokenize_text_result result = new tokenize_text_result();
         result.success = iface.tokenize_text(args.arbitraryText);
+        return result;
+      }
+    }
+
+    public static class sr_parse_tagged_sentence<I extends Iface> extends org.apache.thrift.ProcessFunction<I, sr_parse_tagged_sentence_args> {
+      public sr_parse_tagged_sentence() {
+        super("sr_parse_tagged_sentence");
+      }
+
+      public sr_parse_tagged_sentence_args getEmptyArgsInstance() {
+        return new sr_parse_tagged_sentence_args();
+      }
+
+      protected boolean isOneway() {
+        return false;
+      }
+
+      public sr_parse_tagged_sentence_result getResult(I iface, sr_parse_tagged_sentence_args args) throws org.apache.thrift.TException {
+        sr_parse_tagged_sentence_result result = new sr_parse_tagged_sentence_result();
+        result.success = iface.sr_parse_tagged_sentence(args.taggedSentence, args.outputFormat, args.divider);
+        return result;
+      }
+    }
+
+    public static class sr_parse_text<I extends Iface> extends org.apache.thrift.ProcessFunction<I, sr_parse_text_args> {
+      public sr_parse_text() {
+        super("sr_parse_text");
+      }
+
+      public sr_parse_text_args getEmptyArgsInstance() {
+        return new sr_parse_text_args();
+      }
+
+      protected boolean isOneway() {
+        return false;
+      }
+
+      public sr_parse_text_result getResult(I iface, sr_parse_text_args args) throws org.apache.thrift.TException {
+        sr_parse_text_result result = new sr_parse_text_result();
+        result.success = iface.sr_parse_text(args.untokenizedText, args.outputFormat);
+        return result;
+      }
+    }
+
+    public static class sr_parse_tokens<I extends Iface> extends org.apache.thrift.ProcessFunction<I, sr_parse_tokens_args> {
+      public sr_parse_tokens() {
+        super("sr_parse_tokens");
+      }
+
+      public sr_parse_tokens_args getEmptyArgsInstance() {
+        return new sr_parse_tokens_args();
+      }
+
+      protected boolean isOneway() {
+        return false;
+      }
+
+      public sr_parse_tokens_result getResult(I iface, sr_parse_tokens_args args) throws org.apache.thrift.TException {
+        sr_parse_tokens_result result = new sr_parse_tokens_result();
+        result.success = iface.sr_parse_tokens(args.tokenizedSentence, args.outputFormat);
         return result;
       }
     }
@@ -14491,6 +14747,2802 @@ public class StanfordCoreNLP {
               struct.success.add(_elem180);
             }
           }
+          struct.setSuccessIsSet(true);
+        }
+      }
+    }
+
+  }
+
+  public static class sr_parse_tagged_sentence_args implements org.apache.thrift.TBase<sr_parse_tagged_sentence_args, sr_parse_tagged_sentence_args._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("sr_parse_tagged_sentence_args");
+
+    private static final org.apache.thrift.protocol.TField TAGGED_SENTENCE_FIELD_DESC = new org.apache.thrift.protocol.TField("taggedSentence", org.apache.thrift.protocol.TType.STRING, (short)1);
+    private static final org.apache.thrift.protocol.TField OUTPUT_FORMAT_FIELD_DESC = new org.apache.thrift.protocol.TField("outputFormat", org.apache.thrift.protocol.TType.LIST, (short)2);
+    private static final org.apache.thrift.protocol.TField DIVIDER_FIELD_DESC = new org.apache.thrift.protocol.TField("divider", org.apache.thrift.protocol.TType.STRING, (short)3);
+
+    private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+    static {
+      schemes.put(StandardScheme.class, new sr_parse_tagged_sentence_argsStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new sr_parse_tagged_sentence_argsTupleSchemeFactory());
+    }
+
+    public String taggedSentence; // required
+    public List<String> outputFormat; // required
+    public String divider; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      TAGGED_SENTENCE((short)1, "taggedSentence"),
+      OUTPUT_FORMAT((short)2, "outputFormat"),
+      DIVIDER((short)3, "divider");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 1: // TAGGED_SENTENCE
+            return TAGGED_SENTENCE;
+          case 2: // OUTPUT_FORMAT
+            return OUTPUT_FORMAT;
+          case 3: // DIVIDER
+            return DIVIDER;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.TAGGED_SENTENCE, new org.apache.thrift.meta_data.FieldMetaData("taggedSentence", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      tmpMap.put(_Fields.OUTPUT_FORMAT, new org.apache.thrift.meta_data.FieldMetaData("outputFormat", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.ListMetaData(org.apache.thrift.protocol.TType.LIST, 
+              new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING))));
+      tmpMap.put(_Fields.DIVIDER, new org.apache.thrift.meta_data.FieldMetaData("divider", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(sr_parse_tagged_sentence_args.class, metaDataMap);
+    }
+
+    public sr_parse_tagged_sentence_args() {
+    }
+
+    public sr_parse_tagged_sentence_args(
+      String taggedSentence,
+      List<String> outputFormat,
+      String divider)
+    {
+      this();
+      this.taggedSentence = taggedSentence;
+      this.outputFormat = outputFormat;
+      this.divider = divider;
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public sr_parse_tagged_sentence_args(sr_parse_tagged_sentence_args other) {
+      if (other.isSetTaggedSentence()) {
+        this.taggedSentence = other.taggedSentence;
+      }
+      if (other.isSetOutputFormat()) {
+        List<String> __this__outputFormat = new ArrayList<String>();
+        for (String other_element : other.outputFormat) {
+          __this__outputFormat.add(other_element);
+        }
+        this.outputFormat = __this__outputFormat;
+      }
+      if (other.isSetDivider()) {
+        this.divider = other.divider;
+      }
+    }
+
+    public sr_parse_tagged_sentence_args deepCopy() {
+      return new sr_parse_tagged_sentence_args(this);
+    }
+
+    @Override
+    public void clear() {
+      this.taggedSentence = null;
+      this.outputFormat = null;
+      this.divider = null;
+    }
+
+    public String getTaggedSentence() {
+      return this.taggedSentence;
+    }
+
+    public sr_parse_tagged_sentence_args setTaggedSentence(String taggedSentence) {
+      this.taggedSentence = taggedSentence;
+      return this;
+    }
+
+    public void unsetTaggedSentence() {
+      this.taggedSentence = null;
+    }
+
+    /** Returns true if field taggedSentence is set (has been assigned a value) and false otherwise */
+    public boolean isSetTaggedSentence() {
+      return this.taggedSentence != null;
+    }
+
+    public void setTaggedSentenceIsSet(boolean value) {
+      if (!value) {
+        this.taggedSentence = null;
+      }
+    }
+
+    public int getOutputFormatSize() {
+      return (this.outputFormat == null) ? 0 : this.outputFormat.size();
+    }
+
+    public java.util.Iterator<String> getOutputFormatIterator() {
+      return (this.outputFormat == null) ? null : this.outputFormat.iterator();
+    }
+
+    public void addToOutputFormat(String elem) {
+      if (this.outputFormat == null) {
+        this.outputFormat = new ArrayList<String>();
+      }
+      this.outputFormat.add(elem);
+    }
+
+    public List<String> getOutputFormat() {
+      return this.outputFormat;
+    }
+
+    public sr_parse_tagged_sentence_args setOutputFormat(List<String> outputFormat) {
+      this.outputFormat = outputFormat;
+      return this;
+    }
+
+    public void unsetOutputFormat() {
+      this.outputFormat = null;
+    }
+
+    /** Returns true if field outputFormat is set (has been assigned a value) and false otherwise */
+    public boolean isSetOutputFormat() {
+      return this.outputFormat != null;
+    }
+
+    public void setOutputFormatIsSet(boolean value) {
+      if (!value) {
+        this.outputFormat = null;
+      }
+    }
+
+    public String getDivider() {
+      return this.divider;
+    }
+
+    public sr_parse_tagged_sentence_args setDivider(String divider) {
+      this.divider = divider;
+      return this;
+    }
+
+    public void unsetDivider() {
+      this.divider = null;
+    }
+
+    /** Returns true if field divider is set (has been assigned a value) and false otherwise */
+    public boolean isSetDivider() {
+      return this.divider != null;
+    }
+
+    public void setDividerIsSet(boolean value) {
+      if (!value) {
+        this.divider = null;
+      }
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case TAGGED_SENTENCE:
+        if (value == null) {
+          unsetTaggedSentence();
+        } else {
+          setTaggedSentence((String)value);
+        }
+        break;
+
+      case OUTPUT_FORMAT:
+        if (value == null) {
+          unsetOutputFormat();
+        } else {
+          setOutputFormat((List<String>)value);
+        }
+        break;
+
+      case DIVIDER:
+        if (value == null) {
+          unsetDivider();
+        } else {
+          setDivider((String)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case TAGGED_SENTENCE:
+        return getTaggedSentence();
+
+      case OUTPUT_FORMAT:
+        return getOutputFormat();
+
+      case DIVIDER:
+        return getDivider();
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case TAGGED_SENTENCE:
+        return isSetTaggedSentence();
+      case OUTPUT_FORMAT:
+        return isSetOutputFormat();
+      case DIVIDER:
+        return isSetDivider();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof sr_parse_tagged_sentence_args)
+        return this.equals((sr_parse_tagged_sentence_args)that);
+      return false;
+    }
+
+    public boolean equals(sr_parse_tagged_sentence_args that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_taggedSentence = true && this.isSetTaggedSentence();
+      boolean that_present_taggedSentence = true && that.isSetTaggedSentence();
+      if (this_present_taggedSentence || that_present_taggedSentence) {
+        if (!(this_present_taggedSentence && that_present_taggedSentence))
+          return false;
+        if (!this.taggedSentence.equals(that.taggedSentence))
+          return false;
+      }
+
+      boolean this_present_outputFormat = true && this.isSetOutputFormat();
+      boolean that_present_outputFormat = true && that.isSetOutputFormat();
+      if (this_present_outputFormat || that_present_outputFormat) {
+        if (!(this_present_outputFormat && that_present_outputFormat))
+          return false;
+        if (!this.outputFormat.equals(that.outputFormat))
+          return false;
+      }
+
+      boolean this_present_divider = true && this.isSetDivider();
+      boolean that_present_divider = true && that.isSetDivider();
+      if (this_present_divider || that_present_divider) {
+        if (!(this_present_divider && that_present_divider))
+          return false;
+        if (!this.divider.equals(that.divider))
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    public int compareTo(sr_parse_tagged_sentence_args other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+      sr_parse_tagged_sentence_args typedOther = (sr_parse_tagged_sentence_args)other;
+
+      lastComparison = Boolean.valueOf(isSetTaggedSentence()).compareTo(typedOther.isSetTaggedSentence());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetTaggedSentence()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.taggedSentence, typedOther.taggedSentence);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetOutputFormat()).compareTo(typedOther.isSetOutputFormat());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetOutputFormat()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.outputFormat, typedOther.outputFormat);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetDivider()).compareTo(typedOther.isSetDivider());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetDivider()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.divider, typedOther.divider);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("sr_parse_tagged_sentence_args(");
+      boolean first = true;
+
+      sb.append("taggedSentence:");
+      if (this.taggedSentence == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.taggedSentence);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("outputFormat:");
+      if (this.outputFormat == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.outputFormat);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("divider:");
+      if (this.divider == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.divider);
+      }
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+      // check for sub-struct validity
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private static class sr_parse_tagged_sentence_argsStandardSchemeFactory implements SchemeFactory {
+      public sr_parse_tagged_sentence_argsStandardScheme getScheme() {
+        return new sr_parse_tagged_sentence_argsStandardScheme();
+      }
+    }
+
+    private static class sr_parse_tagged_sentence_argsStandardScheme extends StandardScheme<sr_parse_tagged_sentence_args> {
+
+      public void read(org.apache.thrift.protocol.TProtocol iprot, sr_parse_tagged_sentence_args struct) throws org.apache.thrift.TException {
+        org.apache.thrift.protocol.TField schemeField;
+        iprot.readStructBegin();
+        while (true)
+        {
+          schemeField = iprot.readFieldBegin();
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+            break;
+          }
+          switch (schemeField.id) {
+            case 1: // TAGGED_SENTENCE
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+                struct.taggedSentence = iprot.readString();
+                struct.setTaggedSentenceIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            case 2: // OUTPUT_FORMAT
+              if (schemeField.type == org.apache.thrift.protocol.TType.LIST) {
+                {
+                  org.apache.thrift.protocol.TList _list184 = iprot.readListBegin();
+                  struct.outputFormat = new ArrayList<String>(_list184.size);
+                  for (int _i185 = 0; _i185 < _list184.size; ++_i185)
+                  {
+                    String _elem186; // required
+                    _elem186 = iprot.readString();
+                    struct.outputFormat.add(_elem186);
+                  }
+                  iprot.readListEnd();
+                }
+                struct.setOutputFormatIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            case 3: // DIVIDER
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+                struct.divider = iprot.readString();
+                struct.setDividerIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            default:
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+          }
+          iprot.readFieldEnd();
+        }
+        iprot.readStructEnd();
+
+        // check for required fields of primitive type, which can't be checked in the validate method
+        struct.validate();
+      }
+
+      public void write(org.apache.thrift.protocol.TProtocol oprot, sr_parse_tagged_sentence_args struct) throws org.apache.thrift.TException {
+        struct.validate();
+
+        oprot.writeStructBegin(STRUCT_DESC);
+        if (struct.taggedSentence != null) {
+          oprot.writeFieldBegin(TAGGED_SENTENCE_FIELD_DESC);
+          oprot.writeString(struct.taggedSentence);
+          oprot.writeFieldEnd();
+        }
+        if (struct.outputFormat != null) {
+          oprot.writeFieldBegin(OUTPUT_FORMAT_FIELD_DESC);
+          {
+            oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRING, struct.outputFormat.size()));
+            for (String _iter187 : struct.outputFormat)
+            {
+              oprot.writeString(_iter187);
+            }
+            oprot.writeListEnd();
+          }
+          oprot.writeFieldEnd();
+        }
+        if (struct.divider != null) {
+          oprot.writeFieldBegin(DIVIDER_FIELD_DESC);
+          oprot.writeString(struct.divider);
+          oprot.writeFieldEnd();
+        }
+        oprot.writeFieldStop();
+        oprot.writeStructEnd();
+      }
+
+    }
+
+    private static class sr_parse_tagged_sentence_argsTupleSchemeFactory implements SchemeFactory {
+      public sr_parse_tagged_sentence_argsTupleScheme getScheme() {
+        return new sr_parse_tagged_sentence_argsTupleScheme();
+      }
+    }
+
+    private static class sr_parse_tagged_sentence_argsTupleScheme extends TupleScheme<sr_parse_tagged_sentence_args> {
+
+      @Override
+      public void write(org.apache.thrift.protocol.TProtocol prot, sr_parse_tagged_sentence_args struct) throws org.apache.thrift.TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
+        if (struct.isSetTaggedSentence()) {
+          optionals.set(0);
+        }
+        if (struct.isSetOutputFormat()) {
+          optionals.set(1);
+        }
+        if (struct.isSetDivider()) {
+          optionals.set(2);
+        }
+        oprot.writeBitSet(optionals, 3);
+        if (struct.isSetTaggedSentence()) {
+          oprot.writeString(struct.taggedSentence);
+        }
+        if (struct.isSetOutputFormat()) {
+          {
+            oprot.writeI32(struct.outputFormat.size());
+            for (String _iter188 : struct.outputFormat)
+            {
+              oprot.writeString(_iter188);
+            }
+          }
+        }
+        if (struct.isSetDivider()) {
+          oprot.writeString(struct.divider);
+        }
+      }
+
+      @Override
+      public void read(org.apache.thrift.protocol.TProtocol prot, sr_parse_tagged_sentence_args struct) throws org.apache.thrift.TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(3);
+        if (incoming.get(0)) {
+          struct.taggedSentence = iprot.readString();
+          struct.setTaggedSentenceIsSet(true);
+        }
+        if (incoming.get(1)) {
+          {
+            org.apache.thrift.protocol.TList _list189 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRING, iprot.readI32());
+            struct.outputFormat = new ArrayList<String>(_list189.size);
+            for (int _i190 = 0; _i190 < _list189.size; ++_i190)
+            {
+              String _elem191; // required
+              _elem191 = iprot.readString();
+              struct.outputFormat.add(_elem191);
+            }
+          }
+          struct.setOutputFormatIsSet(true);
+        }
+        if (incoming.get(2)) {
+          struct.divider = iprot.readString();
+          struct.setDividerIsSet(true);
+        }
+      }
+    }
+
+  }
+
+  public static class sr_parse_tagged_sentence_result implements org.apache.thrift.TBase<sr_parse_tagged_sentence_result, sr_parse_tagged_sentence_result._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("sr_parse_tagged_sentence_result");
+
+    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.STRUCT, (short)0);
+
+    private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+    static {
+      schemes.put(StandardScheme.class, new sr_parse_tagged_sentence_resultStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new sr_parse_tagged_sentence_resultTupleSchemeFactory());
+    }
+
+    public ParseTree success; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      SUCCESS((short)0, "success");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 0: // SUCCESS
+            return SUCCESS;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, ParseTree.class)));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(sr_parse_tagged_sentence_result.class, metaDataMap);
+    }
+
+    public sr_parse_tagged_sentence_result() {
+    }
+
+    public sr_parse_tagged_sentence_result(
+      ParseTree success)
+    {
+      this();
+      this.success = success;
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public sr_parse_tagged_sentence_result(sr_parse_tagged_sentence_result other) {
+      if (other.isSetSuccess()) {
+        this.success = new ParseTree(other.success);
+      }
+    }
+
+    public sr_parse_tagged_sentence_result deepCopy() {
+      return new sr_parse_tagged_sentence_result(this);
+    }
+
+    @Override
+    public void clear() {
+      this.success = null;
+    }
+
+    public ParseTree getSuccess() {
+      return this.success;
+    }
+
+    public sr_parse_tagged_sentence_result setSuccess(ParseTree success) {
+      this.success = success;
+      return this;
+    }
+
+    public void unsetSuccess() {
+      this.success = null;
+    }
+
+    /** Returns true if field success is set (has been assigned a value) and false otherwise */
+    public boolean isSetSuccess() {
+      return this.success != null;
+    }
+
+    public void setSuccessIsSet(boolean value) {
+      if (!value) {
+        this.success = null;
+      }
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case SUCCESS:
+        if (value == null) {
+          unsetSuccess();
+        } else {
+          setSuccess((ParseTree)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case SUCCESS:
+        return getSuccess();
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case SUCCESS:
+        return isSetSuccess();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof sr_parse_tagged_sentence_result)
+        return this.equals((sr_parse_tagged_sentence_result)that);
+      return false;
+    }
+
+    public boolean equals(sr_parse_tagged_sentence_result that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_success = true && this.isSetSuccess();
+      boolean that_present_success = true && that.isSetSuccess();
+      if (this_present_success || that_present_success) {
+        if (!(this_present_success && that_present_success))
+          return false;
+        if (!this.success.equals(that.success))
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    public int compareTo(sr_parse_tagged_sentence_result other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+      sr_parse_tagged_sentence_result typedOther = (sr_parse_tagged_sentence_result)other;
+
+      lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetSuccess()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.success, typedOther.success);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+      }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("sr_parse_tagged_sentence_result(");
+      boolean first = true;
+
+      sb.append("success:");
+      if (this.success == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.success);
+      }
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+      // check for sub-struct validity
+      if (success != null) {
+        success.validate();
+      }
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private static class sr_parse_tagged_sentence_resultStandardSchemeFactory implements SchemeFactory {
+      public sr_parse_tagged_sentence_resultStandardScheme getScheme() {
+        return new sr_parse_tagged_sentence_resultStandardScheme();
+      }
+    }
+
+    private static class sr_parse_tagged_sentence_resultStandardScheme extends StandardScheme<sr_parse_tagged_sentence_result> {
+
+      public void read(org.apache.thrift.protocol.TProtocol iprot, sr_parse_tagged_sentence_result struct) throws org.apache.thrift.TException {
+        org.apache.thrift.protocol.TField schemeField;
+        iprot.readStructBegin();
+        while (true)
+        {
+          schemeField = iprot.readFieldBegin();
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+            break;
+          }
+          switch (schemeField.id) {
+            case 0: // SUCCESS
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
+                struct.success = new ParseTree();
+                struct.success.read(iprot);
+                struct.setSuccessIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            default:
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+          }
+          iprot.readFieldEnd();
+        }
+        iprot.readStructEnd();
+
+        // check for required fields of primitive type, which can't be checked in the validate method
+        struct.validate();
+      }
+
+      public void write(org.apache.thrift.protocol.TProtocol oprot, sr_parse_tagged_sentence_result struct) throws org.apache.thrift.TException {
+        struct.validate();
+
+        oprot.writeStructBegin(STRUCT_DESC);
+        if (struct.success != null) {
+          oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+          struct.success.write(oprot);
+          oprot.writeFieldEnd();
+        }
+        oprot.writeFieldStop();
+        oprot.writeStructEnd();
+      }
+
+    }
+
+    private static class sr_parse_tagged_sentence_resultTupleSchemeFactory implements SchemeFactory {
+      public sr_parse_tagged_sentence_resultTupleScheme getScheme() {
+        return new sr_parse_tagged_sentence_resultTupleScheme();
+      }
+    }
+
+    private static class sr_parse_tagged_sentence_resultTupleScheme extends TupleScheme<sr_parse_tagged_sentence_result> {
+
+      @Override
+      public void write(org.apache.thrift.protocol.TProtocol prot, sr_parse_tagged_sentence_result struct) throws org.apache.thrift.TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
+        if (struct.isSetSuccess()) {
+          optionals.set(0);
+        }
+        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetSuccess()) {
+          struct.success.write(oprot);
+        }
+      }
+
+      @Override
+      public void read(org.apache.thrift.protocol.TProtocol prot, sr_parse_tagged_sentence_result struct) throws org.apache.thrift.TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(1);
+        if (incoming.get(0)) {
+          struct.success = new ParseTree();
+          struct.success.read(iprot);
+          struct.setSuccessIsSet(true);
+        }
+      }
+    }
+
+  }
+
+  public static class sr_parse_text_args implements org.apache.thrift.TBase<sr_parse_text_args, sr_parse_text_args._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("sr_parse_text_args");
+
+    private static final org.apache.thrift.protocol.TField UNTOKENIZED_TEXT_FIELD_DESC = new org.apache.thrift.protocol.TField("untokenizedText", org.apache.thrift.protocol.TType.STRING, (short)1);
+    private static final org.apache.thrift.protocol.TField OUTPUT_FORMAT_FIELD_DESC = new org.apache.thrift.protocol.TField("outputFormat", org.apache.thrift.protocol.TType.LIST, (short)2);
+
+    private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+    static {
+      schemes.put(StandardScheme.class, new sr_parse_text_argsStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new sr_parse_text_argsTupleSchemeFactory());
+    }
+
+    public String untokenizedText; // required
+    public List<String> outputFormat; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      UNTOKENIZED_TEXT((short)1, "untokenizedText"),
+      OUTPUT_FORMAT((short)2, "outputFormat");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 1: // UNTOKENIZED_TEXT
+            return UNTOKENIZED_TEXT;
+          case 2: // OUTPUT_FORMAT
+            return OUTPUT_FORMAT;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.UNTOKENIZED_TEXT, new org.apache.thrift.meta_data.FieldMetaData("untokenizedText", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      tmpMap.put(_Fields.OUTPUT_FORMAT, new org.apache.thrift.meta_data.FieldMetaData("outputFormat", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.ListMetaData(org.apache.thrift.protocol.TType.LIST, 
+              new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING))));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(sr_parse_text_args.class, metaDataMap);
+    }
+
+    public sr_parse_text_args() {
+    }
+
+    public sr_parse_text_args(
+      String untokenizedText,
+      List<String> outputFormat)
+    {
+      this();
+      this.untokenizedText = untokenizedText;
+      this.outputFormat = outputFormat;
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public sr_parse_text_args(sr_parse_text_args other) {
+      if (other.isSetUntokenizedText()) {
+        this.untokenizedText = other.untokenizedText;
+      }
+      if (other.isSetOutputFormat()) {
+        List<String> __this__outputFormat = new ArrayList<String>();
+        for (String other_element : other.outputFormat) {
+          __this__outputFormat.add(other_element);
+        }
+        this.outputFormat = __this__outputFormat;
+      }
+    }
+
+    public sr_parse_text_args deepCopy() {
+      return new sr_parse_text_args(this);
+    }
+
+    @Override
+    public void clear() {
+      this.untokenizedText = null;
+      this.outputFormat = null;
+    }
+
+    public String getUntokenizedText() {
+      return this.untokenizedText;
+    }
+
+    public sr_parse_text_args setUntokenizedText(String untokenizedText) {
+      this.untokenizedText = untokenizedText;
+      return this;
+    }
+
+    public void unsetUntokenizedText() {
+      this.untokenizedText = null;
+    }
+
+    /** Returns true if field untokenizedText is set (has been assigned a value) and false otherwise */
+    public boolean isSetUntokenizedText() {
+      return this.untokenizedText != null;
+    }
+
+    public void setUntokenizedTextIsSet(boolean value) {
+      if (!value) {
+        this.untokenizedText = null;
+      }
+    }
+
+    public int getOutputFormatSize() {
+      return (this.outputFormat == null) ? 0 : this.outputFormat.size();
+    }
+
+    public java.util.Iterator<String> getOutputFormatIterator() {
+      return (this.outputFormat == null) ? null : this.outputFormat.iterator();
+    }
+
+    public void addToOutputFormat(String elem) {
+      if (this.outputFormat == null) {
+        this.outputFormat = new ArrayList<String>();
+      }
+      this.outputFormat.add(elem);
+    }
+
+    public List<String> getOutputFormat() {
+      return this.outputFormat;
+    }
+
+    public sr_parse_text_args setOutputFormat(List<String> outputFormat) {
+      this.outputFormat = outputFormat;
+      return this;
+    }
+
+    public void unsetOutputFormat() {
+      this.outputFormat = null;
+    }
+
+    /** Returns true if field outputFormat is set (has been assigned a value) and false otherwise */
+    public boolean isSetOutputFormat() {
+      return this.outputFormat != null;
+    }
+
+    public void setOutputFormatIsSet(boolean value) {
+      if (!value) {
+        this.outputFormat = null;
+      }
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case UNTOKENIZED_TEXT:
+        if (value == null) {
+          unsetUntokenizedText();
+        } else {
+          setUntokenizedText((String)value);
+        }
+        break;
+
+      case OUTPUT_FORMAT:
+        if (value == null) {
+          unsetOutputFormat();
+        } else {
+          setOutputFormat((List<String>)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case UNTOKENIZED_TEXT:
+        return getUntokenizedText();
+
+      case OUTPUT_FORMAT:
+        return getOutputFormat();
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case UNTOKENIZED_TEXT:
+        return isSetUntokenizedText();
+      case OUTPUT_FORMAT:
+        return isSetOutputFormat();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof sr_parse_text_args)
+        return this.equals((sr_parse_text_args)that);
+      return false;
+    }
+
+    public boolean equals(sr_parse_text_args that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_untokenizedText = true && this.isSetUntokenizedText();
+      boolean that_present_untokenizedText = true && that.isSetUntokenizedText();
+      if (this_present_untokenizedText || that_present_untokenizedText) {
+        if (!(this_present_untokenizedText && that_present_untokenizedText))
+          return false;
+        if (!this.untokenizedText.equals(that.untokenizedText))
+          return false;
+      }
+
+      boolean this_present_outputFormat = true && this.isSetOutputFormat();
+      boolean that_present_outputFormat = true && that.isSetOutputFormat();
+      if (this_present_outputFormat || that_present_outputFormat) {
+        if (!(this_present_outputFormat && that_present_outputFormat))
+          return false;
+        if (!this.outputFormat.equals(that.outputFormat))
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    public int compareTo(sr_parse_text_args other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+      sr_parse_text_args typedOther = (sr_parse_text_args)other;
+
+      lastComparison = Boolean.valueOf(isSetUntokenizedText()).compareTo(typedOther.isSetUntokenizedText());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetUntokenizedText()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.untokenizedText, typedOther.untokenizedText);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetOutputFormat()).compareTo(typedOther.isSetOutputFormat());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetOutputFormat()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.outputFormat, typedOther.outputFormat);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("sr_parse_text_args(");
+      boolean first = true;
+
+      sb.append("untokenizedText:");
+      if (this.untokenizedText == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.untokenizedText);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("outputFormat:");
+      if (this.outputFormat == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.outputFormat);
+      }
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+      // check for sub-struct validity
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private static class sr_parse_text_argsStandardSchemeFactory implements SchemeFactory {
+      public sr_parse_text_argsStandardScheme getScheme() {
+        return new sr_parse_text_argsStandardScheme();
+      }
+    }
+
+    private static class sr_parse_text_argsStandardScheme extends StandardScheme<sr_parse_text_args> {
+
+      public void read(org.apache.thrift.protocol.TProtocol iprot, sr_parse_text_args struct) throws org.apache.thrift.TException {
+        org.apache.thrift.protocol.TField schemeField;
+        iprot.readStructBegin();
+        while (true)
+        {
+          schemeField = iprot.readFieldBegin();
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+            break;
+          }
+          switch (schemeField.id) {
+            case 1: // UNTOKENIZED_TEXT
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+                struct.untokenizedText = iprot.readString();
+                struct.setUntokenizedTextIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            case 2: // OUTPUT_FORMAT
+              if (schemeField.type == org.apache.thrift.protocol.TType.LIST) {
+                {
+                  org.apache.thrift.protocol.TList _list192 = iprot.readListBegin();
+                  struct.outputFormat = new ArrayList<String>(_list192.size);
+                  for (int _i193 = 0; _i193 < _list192.size; ++_i193)
+                  {
+                    String _elem194; // required
+                    _elem194 = iprot.readString();
+                    struct.outputFormat.add(_elem194);
+                  }
+                  iprot.readListEnd();
+                }
+                struct.setOutputFormatIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            default:
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+          }
+          iprot.readFieldEnd();
+        }
+        iprot.readStructEnd();
+
+        // check for required fields of primitive type, which can't be checked in the validate method
+        struct.validate();
+      }
+
+      public void write(org.apache.thrift.protocol.TProtocol oprot, sr_parse_text_args struct) throws org.apache.thrift.TException {
+        struct.validate();
+
+        oprot.writeStructBegin(STRUCT_DESC);
+        if (struct.untokenizedText != null) {
+          oprot.writeFieldBegin(UNTOKENIZED_TEXT_FIELD_DESC);
+          oprot.writeString(struct.untokenizedText);
+          oprot.writeFieldEnd();
+        }
+        if (struct.outputFormat != null) {
+          oprot.writeFieldBegin(OUTPUT_FORMAT_FIELD_DESC);
+          {
+            oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRING, struct.outputFormat.size()));
+            for (String _iter195 : struct.outputFormat)
+            {
+              oprot.writeString(_iter195);
+            }
+            oprot.writeListEnd();
+          }
+          oprot.writeFieldEnd();
+        }
+        oprot.writeFieldStop();
+        oprot.writeStructEnd();
+      }
+
+    }
+
+    private static class sr_parse_text_argsTupleSchemeFactory implements SchemeFactory {
+      public sr_parse_text_argsTupleScheme getScheme() {
+        return new sr_parse_text_argsTupleScheme();
+      }
+    }
+
+    private static class sr_parse_text_argsTupleScheme extends TupleScheme<sr_parse_text_args> {
+
+      @Override
+      public void write(org.apache.thrift.protocol.TProtocol prot, sr_parse_text_args struct) throws org.apache.thrift.TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
+        if (struct.isSetUntokenizedText()) {
+          optionals.set(0);
+        }
+        if (struct.isSetOutputFormat()) {
+          optionals.set(1);
+        }
+        oprot.writeBitSet(optionals, 2);
+        if (struct.isSetUntokenizedText()) {
+          oprot.writeString(struct.untokenizedText);
+        }
+        if (struct.isSetOutputFormat()) {
+          {
+            oprot.writeI32(struct.outputFormat.size());
+            for (String _iter196 : struct.outputFormat)
+            {
+              oprot.writeString(_iter196);
+            }
+          }
+        }
+      }
+
+      @Override
+      public void read(org.apache.thrift.protocol.TProtocol prot, sr_parse_text_args struct) throws org.apache.thrift.TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(2);
+        if (incoming.get(0)) {
+          struct.untokenizedText = iprot.readString();
+          struct.setUntokenizedTextIsSet(true);
+        }
+        if (incoming.get(1)) {
+          {
+            org.apache.thrift.protocol.TList _list197 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRING, iprot.readI32());
+            struct.outputFormat = new ArrayList<String>(_list197.size);
+            for (int _i198 = 0; _i198 < _list197.size; ++_i198)
+            {
+              String _elem199; // required
+              _elem199 = iprot.readString();
+              struct.outputFormat.add(_elem199);
+            }
+          }
+          struct.setOutputFormatIsSet(true);
+        }
+      }
+    }
+
+  }
+
+  public static class sr_parse_text_result implements org.apache.thrift.TBase<sr_parse_text_result, sr_parse_text_result._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("sr_parse_text_result");
+
+    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.LIST, (short)0);
+
+    private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+    static {
+      schemes.put(StandardScheme.class, new sr_parse_text_resultStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new sr_parse_text_resultTupleSchemeFactory());
+    }
+
+    public List<ParseTree> success; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      SUCCESS((short)0, "success");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 0: // SUCCESS
+            return SUCCESS;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.ListMetaData(org.apache.thrift.protocol.TType.LIST, 
+              new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, ParseTree.class))));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(sr_parse_text_result.class, metaDataMap);
+    }
+
+    public sr_parse_text_result() {
+    }
+
+    public sr_parse_text_result(
+      List<ParseTree> success)
+    {
+      this();
+      this.success = success;
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public sr_parse_text_result(sr_parse_text_result other) {
+      if (other.isSetSuccess()) {
+        List<ParseTree> __this__success = new ArrayList<ParseTree>();
+        for (ParseTree other_element : other.success) {
+          __this__success.add(new ParseTree(other_element));
+        }
+        this.success = __this__success;
+      }
+    }
+
+    public sr_parse_text_result deepCopy() {
+      return new sr_parse_text_result(this);
+    }
+
+    @Override
+    public void clear() {
+      this.success = null;
+    }
+
+    public int getSuccessSize() {
+      return (this.success == null) ? 0 : this.success.size();
+    }
+
+    public java.util.Iterator<ParseTree> getSuccessIterator() {
+      return (this.success == null) ? null : this.success.iterator();
+    }
+
+    public void addToSuccess(ParseTree elem) {
+      if (this.success == null) {
+        this.success = new ArrayList<ParseTree>();
+      }
+      this.success.add(elem);
+    }
+
+    public List<ParseTree> getSuccess() {
+      return this.success;
+    }
+
+    public sr_parse_text_result setSuccess(List<ParseTree> success) {
+      this.success = success;
+      return this;
+    }
+
+    public void unsetSuccess() {
+      this.success = null;
+    }
+
+    /** Returns true if field success is set (has been assigned a value) and false otherwise */
+    public boolean isSetSuccess() {
+      return this.success != null;
+    }
+
+    public void setSuccessIsSet(boolean value) {
+      if (!value) {
+        this.success = null;
+      }
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case SUCCESS:
+        if (value == null) {
+          unsetSuccess();
+        } else {
+          setSuccess((List<ParseTree>)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case SUCCESS:
+        return getSuccess();
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case SUCCESS:
+        return isSetSuccess();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof sr_parse_text_result)
+        return this.equals((sr_parse_text_result)that);
+      return false;
+    }
+
+    public boolean equals(sr_parse_text_result that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_success = true && this.isSetSuccess();
+      boolean that_present_success = true && that.isSetSuccess();
+      if (this_present_success || that_present_success) {
+        if (!(this_present_success && that_present_success))
+          return false;
+        if (!this.success.equals(that.success))
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    public int compareTo(sr_parse_text_result other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+      sr_parse_text_result typedOther = (sr_parse_text_result)other;
+
+      lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetSuccess()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.success, typedOther.success);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+      }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("sr_parse_text_result(");
+      boolean first = true;
+
+      sb.append("success:");
+      if (this.success == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.success);
+      }
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+      // check for sub-struct validity
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private static class sr_parse_text_resultStandardSchemeFactory implements SchemeFactory {
+      public sr_parse_text_resultStandardScheme getScheme() {
+        return new sr_parse_text_resultStandardScheme();
+      }
+    }
+
+    private static class sr_parse_text_resultStandardScheme extends StandardScheme<sr_parse_text_result> {
+
+      public void read(org.apache.thrift.protocol.TProtocol iprot, sr_parse_text_result struct) throws org.apache.thrift.TException {
+        org.apache.thrift.protocol.TField schemeField;
+        iprot.readStructBegin();
+        while (true)
+        {
+          schemeField = iprot.readFieldBegin();
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+            break;
+          }
+          switch (schemeField.id) {
+            case 0: // SUCCESS
+              if (schemeField.type == org.apache.thrift.protocol.TType.LIST) {
+                {
+                  org.apache.thrift.protocol.TList _list200 = iprot.readListBegin();
+                  struct.success = new ArrayList<ParseTree>(_list200.size);
+                  for (int _i201 = 0; _i201 < _list200.size; ++_i201)
+                  {
+                    ParseTree _elem202; // required
+                    _elem202 = new ParseTree();
+                    _elem202.read(iprot);
+                    struct.success.add(_elem202);
+                  }
+                  iprot.readListEnd();
+                }
+                struct.setSuccessIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            default:
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+          }
+          iprot.readFieldEnd();
+        }
+        iprot.readStructEnd();
+
+        // check for required fields of primitive type, which can't be checked in the validate method
+        struct.validate();
+      }
+
+      public void write(org.apache.thrift.protocol.TProtocol oprot, sr_parse_text_result struct) throws org.apache.thrift.TException {
+        struct.validate();
+
+        oprot.writeStructBegin(STRUCT_DESC);
+        if (struct.success != null) {
+          oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+          {
+            oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, struct.success.size()));
+            for (ParseTree _iter203 : struct.success)
+            {
+              _iter203.write(oprot);
+            }
+            oprot.writeListEnd();
+          }
+          oprot.writeFieldEnd();
+        }
+        oprot.writeFieldStop();
+        oprot.writeStructEnd();
+      }
+
+    }
+
+    private static class sr_parse_text_resultTupleSchemeFactory implements SchemeFactory {
+      public sr_parse_text_resultTupleScheme getScheme() {
+        return new sr_parse_text_resultTupleScheme();
+      }
+    }
+
+    private static class sr_parse_text_resultTupleScheme extends TupleScheme<sr_parse_text_result> {
+
+      @Override
+      public void write(org.apache.thrift.protocol.TProtocol prot, sr_parse_text_result struct) throws org.apache.thrift.TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
+        if (struct.isSetSuccess()) {
+          optionals.set(0);
+        }
+        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetSuccess()) {
+          {
+            oprot.writeI32(struct.success.size());
+            for (ParseTree _iter204 : struct.success)
+            {
+              _iter204.write(oprot);
+            }
+          }
+        }
+      }
+
+      @Override
+      public void read(org.apache.thrift.protocol.TProtocol prot, sr_parse_text_result struct) throws org.apache.thrift.TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(1);
+        if (incoming.get(0)) {
+          {
+            org.apache.thrift.protocol.TList _list205 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
+            struct.success = new ArrayList<ParseTree>(_list205.size);
+            for (int _i206 = 0; _i206 < _list205.size; ++_i206)
+            {
+              ParseTree _elem207; // required
+              _elem207 = new ParseTree();
+              _elem207.read(iprot);
+              struct.success.add(_elem207);
+            }
+          }
+          struct.setSuccessIsSet(true);
+        }
+      }
+    }
+
+  }
+
+  public static class sr_parse_tokens_args implements org.apache.thrift.TBase<sr_parse_tokens_args, sr_parse_tokens_args._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("sr_parse_tokens_args");
+
+    private static final org.apache.thrift.protocol.TField TOKENIZED_SENTENCE_FIELD_DESC = new org.apache.thrift.protocol.TField("tokenizedSentence", org.apache.thrift.protocol.TType.LIST, (short)1);
+    private static final org.apache.thrift.protocol.TField OUTPUT_FORMAT_FIELD_DESC = new org.apache.thrift.protocol.TField("outputFormat", org.apache.thrift.protocol.TType.LIST, (short)2);
+
+    private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+    static {
+      schemes.put(StandardScheme.class, new sr_parse_tokens_argsStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new sr_parse_tokens_argsTupleSchemeFactory());
+    }
+
+    public List<String> tokenizedSentence; // required
+    public List<String> outputFormat; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      TOKENIZED_SENTENCE((short)1, "tokenizedSentence"),
+      OUTPUT_FORMAT((short)2, "outputFormat");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 1: // TOKENIZED_SENTENCE
+            return TOKENIZED_SENTENCE;
+          case 2: // OUTPUT_FORMAT
+            return OUTPUT_FORMAT;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.TOKENIZED_SENTENCE, new org.apache.thrift.meta_data.FieldMetaData("tokenizedSentence", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.ListMetaData(org.apache.thrift.protocol.TType.LIST, 
+              new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING))));
+      tmpMap.put(_Fields.OUTPUT_FORMAT, new org.apache.thrift.meta_data.FieldMetaData("outputFormat", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.ListMetaData(org.apache.thrift.protocol.TType.LIST, 
+              new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING))));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(sr_parse_tokens_args.class, metaDataMap);
+    }
+
+    public sr_parse_tokens_args() {
+    }
+
+    public sr_parse_tokens_args(
+      List<String> tokenizedSentence,
+      List<String> outputFormat)
+    {
+      this();
+      this.tokenizedSentence = tokenizedSentence;
+      this.outputFormat = outputFormat;
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public sr_parse_tokens_args(sr_parse_tokens_args other) {
+      if (other.isSetTokenizedSentence()) {
+        List<String> __this__tokenizedSentence = new ArrayList<String>();
+        for (String other_element : other.tokenizedSentence) {
+          __this__tokenizedSentence.add(other_element);
+        }
+        this.tokenizedSentence = __this__tokenizedSentence;
+      }
+      if (other.isSetOutputFormat()) {
+        List<String> __this__outputFormat = new ArrayList<String>();
+        for (String other_element : other.outputFormat) {
+          __this__outputFormat.add(other_element);
+        }
+        this.outputFormat = __this__outputFormat;
+      }
+    }
+
+    public sr_parse_tokens_args deepCopy() {
+      return new sr_parse_tokens_args(this);
+    }
+
+    @Override
+    public void clear() {
+      this.tokenizedSentence = null;
+      this.outputFormat = null;
+    }
+
+    public int getTokenizedSentenceSize() {
+      return (this.tokenizedSentence == null) ? 0 : this.tokenizedSentence.size();
+    }
+
+    public java.util.Iterator<String> getTokenizedSentenceIterator() {
+      return (this.tokenizedSentence == null) ? null : this.tokenizedSentence.iterator();
+    }
+
+    public void addToTokenizedSentence(String elem) {
+      if (this.tokenizedSentence == null) {
+        this.tokenizedSentence = new ArrayList<String>();
+      }
+      this.tokenizedSentence.add(elem);
+    }
+
+    public List<String> getTokenizedSentence() {
+      return this.tokenizedSentence;
+    }
+
+    public sr_parse_tokens_args setTokenizedSentence(List<String> tokenizedSentence) {
+      this.tokenizedSentence = tokenizedSentence;
+      return this;
+    }
+
+    public void unsetTokenizedSentence() {
+      this.tokenizedSentence = null;
+    }
+
+    /** Returns true if field tokenizedSentence is set (has been assigned a value) and false otherwise */
+    public boolean isSetTokenizedSentence() {
+      return this.tokenizedSentence != null;
+    }
+
+    public void setTokenizedSentenceIsSet(boolean value) {
+      if (!value) {
+        this.tokenizedSentence = null;
+      }
+    }
+
+    public int getOutputFormatSize() {
+      return (this.outputFormat == null) ? 0 : this.outputFormat.size();
+    }
+
+    public java.util.Iterator<String> getOutputFormatIterator() {
+      return (this.outputFormat == null) ? null : this.outputFormat.iterator();
+    }
+
+    public void addToOutputFormat(String elem) {
+      if (this.outputFormat == null) {
+        this.outputFormat = new ArrayList<String>();
+      }
+      this.outputFormat.add(elem);
+    }
+
+    public List<String> getOutputFormat() {
+      return this.outputFormat;
+    }
+
+    public sr_parse_tokens_args setOutputFormat(List<String> outputFormat) {
+      this.outputFormat = outputFormat;
+      return this;
+    }
+
+    public void unsetOutputFormat() {
+      this.outputFormat = null;
+    }
+
+    /** Returns true if field outputFormat is set (has been assigned a value) and false otherwise */
+    public boolean isSetOutputFormat() {
+      return this.outputFormat != null;
+    }
+
+    public void setOutputFormatIsSet(boolean value) {
+      if (!value) {
+        this.outputFormat = null;
+      }
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case TOKENIZED_SENTENCE:
+        if (value == null) {
+          unsetTokenizedSentence();
+        } else {
+          setTokenizedSentence((List<String>)value);
+        }
+        break;
+
+      case OUTPUT_FORMAT:
+        if (value == null) {
+          unsetOutputFormat();
+        } else {
+          setOutputFormat((List<String>)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case TOKENIZED_SENTENCE:
+        return getTokenizedSentence();
+
+      case OUTPUT_FORMAT:
+        return getOutputFormat();
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case TOKENIZED_SENTENCE:
+        return isSetTokenizedSentence();
+      case OUTPUT_FORMAT:
+        return isSetOutputFormat();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof sr_parse_tokens_args)
+        return this.equals((sr_parse_tokens_args)that);
+      return false;
+    }
+
+    public boolean equals(sr_parse_tokens_args that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_tokenizedSentence = true && this.isSetTokenizedSentence();
+      boolean that_present_tokenizedSentence = true && that.isSetTokenizedSentence();
+      if (this_present_tokenizedSentence || that_present_tokenizedSentence) {
+        if (!(this_present_tokenizedSentence && that_present_tokenizedSentence))
+          return false;
+        if (!this.tokenizedSentence.equals(that.tokenizedSentence))
+          return false;
+      }
+
+      boolean this_present_outputFormat = true && this.isSetOutputFormat();
+      boolean that_present_outputFormat = true && that.isSetOutputFormat();
+      if (this_present_outputFormat || that_present_outputFormat) {
+        if (!(this_present_outputFormat && that_present_outputFormat))
+          return false;
+        if (!this.outputFormat.equals(that.outputFormat))
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    public int compareTo(sr_parse_tokens_args other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+      sr_parse_tokens_args typedOther = (sr_parse_tokens_args)other;
+
+      lastComparison = Boolean.valueOf(isSetTokenizedSentence()).compareTo(typedOther.isSetTokenizedSentence());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetTokenizedSentence()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.tokenizedSentence, typedOther.tokenizedSentence);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = Boolean.valueOf(isSetOutputFormat()).compareTo(typedOther.isSetOutputFormat());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetOutputFormat()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.outputFormat, typedOther.outputFormat);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("sr_parse_tokens_args(");
+      boolean first = true;
+
+      sb.append("tokenizedSentence:");
+      if (this.tokenizedSentence == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.tokenizedSentence);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("outputFormat:");
+      if (this.outputFormat == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.outputFormat);
+      }
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+      // check for sub-struct validity
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private static class sr_parse_tokens_argsStandardSchemeFactory implements SchemeFactory {
+      public sr_parse_tokens_argsStandardScheme getScheme() {
+        return new sr_parse_tokens_argsStandardScheme();
+      }
+    }
+
+    private static class sr_parse_tokens_argsStandardScheme extends StandardScheme<sr_parse_tokens_args> {
+
+      public void read(org.apache.thrift.protocol.TProtocol iprot, sr_parse_tokens_args struct) throws org.apache.thrift.TException {
+        org.apache.thrift.protocol.TField schemeField;
+        iprot.readStructBegin();
+        while (true)
+        {
+          schemeField = iprot.readFieldBegin();
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+            break;
+          }
+          switch (schemeField.id) {
+            case 1: // TOKENIZED_SENTENCE
+              if (schemeField.type == org.apache.thrift.protocol.TType.LIST) {
+                {
+                  org.apache.thrift.protocol.TList _list208 = iprot.readListBegin();
+                  struct.tokenizedSentence = new ArrayList<String>(_list208.size);
+                  for (int _i209 = 0; _i209 < _list208.size; ++_i209)
+                  {
+                    String _elem210; // required
+                    _elem210 = iprot.readString();
+                    struct.tokenizedSentence.add(_elem210);
+                  }
+                  iprot.readListEnd();
+                }
+                struct.setTokenizedSentenceIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            case 2: // OUTPUT_FORMAT
+              if (schemeField.type == org.apache.thrift.protocol.TType.LIST) {
+                {
+                  org.apache.thrift.protocol.TList _list211 = iprot.readListBegin();
+                  struct.outputFormat = new ArrayList<String>(_list211.size);
+                  for (int _i212 = 0; _i212 < _list211.size; ++_i212)
+                  {
+                    String _elem213; // required
+                    _elem213 = iprot.readString();
+                    struct.outputFormat.add(_elem213);
+                  }
+                  iprot.readListEnd();
+                }
+                struct.setOutputFormatIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            default:
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+          }
+          iprot.readFieldEnd();
+        }
+        iprot.readStructEnd();
+
+        // check for required fields of primitive type, which can't be checked in the validate method
+        struct.validate();
+      }
+
+      public void write(org.apache.thrift.protocol.TProtocol oprot, sr_parse_tokens_args struct) throws org.apache.thrift.TException {
+        struct.validate();
+
+        oprot.writeStructBegin(STRUCT_DESC);
+        if (struct.tokenizedSentence != null) {
+          oprot.writeFieldBegin(TOKENIZED_SENTENCE_FIELD_DESC);
+          {
+            oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRING, struct.tokenizedSentence.size()));
+            for (String _iter214 : struct.tokenizedSentence)
+            {
+              oprot.writeString(_iter214);
+            }
+            oprot.writeListEnd();
+          }
+          oprot.writeFieldEnd();
+        }
+        if (struct.outputFormat != null) {
+          oprot.writeFieldBegin(OUTPUT_FORMAT_FIELD_DESC);
+          {
+            oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRING, struct.outputFormat.size()));
+            for (String _iter215 : struct.outputFormat)
+            {
+              oprot.writeString(_iter215);
+            }
+            oprot.writeListEnd();
+          }
+          oprot.writeFieldEnd();
+        }
+        oprot.writeFieldStop();
+        oprot.writeStructEnd();
+      }
+
+    }
+
+    private static class sr_parse_tokens_argsTupleSchemeFactory implements SchemeFactory {
+      public sr_parse_tokens_argsTupleScheme getScheme() {
+        return new sr_parse_tokens_argsTupleScheme();
+      }
+    }
+
+    private static class sr_parse_tokens_argsTupleScheme extends TupleScheme<sr_parse_tokens_args> {
+
+      @Override
+      public void write(org.apache.thrift.protocol.TProtocol prot, sr_parse_tokens_args struct) throws org.apache.thrift.TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
+        if (struct.isSetTokenizedSentence()) {
+          optionals.set(0);
+        }
+        if (struct.isSetOutputFormat()) {
+          optionals.set(1);
+        }
+        oprot.writeBitSet(optionals, 2);
+        if (struct.isSetTokenizedSentence()) {
+          {
+            oprot.writeI32(struct.tokenizedSentence.size());
+            for (String _iter216 : struct.tokenizedSentence)
+            {
+              oprot.writeString(_iter216);
+            }
+          }
+        }
+        if (struct.isSetOutputFormat()) {
+          {
+            oprot.writeI32(struct.outputFormat.size());
+            for (String _iter217 : struct.outputFormat)
+            {
+              oprot.writeString(_iter217);
+            }
+          }
+        }
+      }
+
+      @Override
+      public void read(org.apache.thrift.protocol.TProtocol prot, sr_parse_tokens_args struct) throws org.apache.thrift.TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(2);
+        if (incoming.get(0)) {
+          {
+            org.apache.thrift.protocol.TList _list218 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRING, iprot.readI32());
+            struct.tokenizedSentence = new ArrayList<String>(_list218.size);
+            for (int _i219 = 0; _i219 < _list218.size; ++_i219)
+            {
+              String _elem220; // required
+              _elem220 = iprot.readString();
+              struct.tokenizedSentence.add(_elem220);
+            }
+          }
+          struct.setTokenizedSentenceIsSet(true);
+        }
+        if (incoming.get(1)) {
+          {
+            org.apache.thrift.protocol.TList _list221 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRING, iprot.readI32());
+            struct.outputFormat = new ArrayList<String>(_list221.size);
+            for (int _i222 = 0; _i222 < _list221.size; ++_i222)
+            {
+              String _elem223; // required
+              _elem223 = iprot.readString();
+              struct.outputFormat.add(_elem223);
+            }
+          }
+          struct.setOutputFormatIsSet(true);
+        }
+      }
+    }
+
+  }
+
+  public static class sr_parse_tokens_result implements org.apache.thrift.TBase<sr_parse_tokens_result, sr_parse_tokens_result._Fields>, java.io.Serializable, Cloneable   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("sr_parse_tokens_result");
+
+    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.STRUCT, (short)0);
+
+    private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+    static {
+      schemes.put(StandardScheme.class, new sr_parse_tokens_resultStandardSchemeFactory());
+      schemes.put(TupleScheme.class, new sr_parse_tokens_resultTupleSchemeFactory());
+    }
+
+    public ParseTree success; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      SUCCESS((short)0, "success");
+
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+
+      static {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 0: // SUCCESS
+            return SUCCESS;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final String _fieldName;
+
+      _Fields(short thriftId, String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, ParseTree.class)));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(sr_parse_tokens_result.class, metaDataMap);
+    }
+
+    public sr_parse_tokens_result() {
+    }
+
+    public sr_parse_tokens_result(
+      ParseTree success)
+    {
+      this();
+      this.success = success;
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public sr_parse_tokens_result(sr_parse_tokens_result other) {
+      if (other.isSetSuccess()) {
+        this.success = new ParseTree(other.success);
+      }
+    }
+
+    public sr_parse_tokens_result deepCopy() {
+      return new sr_parse_tokens_result(this);
+    }
+
+    @Override
+    public void clear() {
+      this.success = null;
+    }
+
+    public ParseTree getSuccess() {
+      return this.success;
+    }
+
+    public sr_parse_tokens_result setSuccess(ParseTree success) {
+      this.success = success;
+      return this;
+    }
+
+    public void unsetSuccess() {
+      this.success = null;
+    }
+
+    /** Returns true if field success is set (has been assigned a value) and false otherwise */
+    public boolean isSetSuccess() {
+      return this.success != null;
+    }
+
+    public void setSuccessIsSet(boolean value) {
+      if (!value) {
+        this.success = null;
+      }
+    }
+
+    public void setFieldValue(_Fields field, Object value) {
+      switch (field) {
+      case SUCCESS:
+        if (value == null) {
+          unsetSuccess();
+        } else {
+          setSuccess((ParseTree)value);
+        }
+        break;
+
+      }
+    }
+
+    public Object getFieldValue(_Fields field) {
+      switch (field) {
+      case SUCCESS:
+        return getSuccess();
+
+      }
+      throw new IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new IllegalArgumentException();
+      }
+
+      switch (field) {
+      case SUCCESS:
+        return isSetSuccess();
+      }
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof sr_parse_tokens_result)
+        return this.equals((sr_parse_tokens_result)that);
+      return false;
+    }
+
+    public boolean equals(sr_parse_tokens_result that) {
+      if (that == null)
+        return false;
+
+      boolean this_present_success = true && this.isSetSuccess();
+      boolean that_present_success = true && that.isSetSuccess();
+      if (this_present_success || that_present_success) {
+        if (!(this_present_success && that_present_success))
+          return false;
+        if (!this.success.equals(that.success))
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    public int compareTo(sr_parse_tokens_result other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+      sr_parse_tokens_result typedOther = (sr_parse_tokens_result)other;
+
+      lastComparison = Boolean.valueOf(isSetSuccess()).compareTo(typedOther.isSetSuccess());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetSuccess()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.success, typedOther.success);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+      }
+
+    @Override
+    public String toString() {
+      StringBuilder sb = new StringBuilder("sr_parse_tokens_result(");
+      boolean first = true;
+
+      sb.append("success:");
+      if (this.success == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.success);
+      }
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+      // check for sub-struct validity
+      if (success != null) {
+        success.validate();
+      }
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private static class sr_parse_tokens_resultStandardSchemeFactory implements SchemeFactory {
+      public sr_parse_tokens_resultStandardScheme getScheme() {
+        return new sr_parse_tokens_resultStandardScheme();
+      }
+    }
+
+    private static class sr_parse_tokens_resultStandardScheme extends StandardScheme<sr_parse_tokens_result> {
+
+      public void read(org.apache.thrift.protocol.TProtocol iprot, sr_parse_tokens_result struct) throws org.apache.thrift.TException {
+        org.apache.thrift.protocol.TField schemeField;
+        iprot.readStructBegin();
+        while (true)
+        {
+          schemeField = iprot.readFieldBegin();
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+            break;
+          }
+          switch (schemeField.id) {
+            case 0: // SUCCESS
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
+                struct.success = new ParseTree();
+                struct.success.read(iprot);
+                struct.setSuccessIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            default:
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+          }
+          iprot.readFieldEnd();
+        }
+        iprot.readStructEnd();
+
+        // check for required fields of primitive type, which can't be checked in the validate method
+        struct.validate();
+      }
+
+      public void write(org.apache.thrift.protocol.TProtocol oprot, sr_parse_tokens_result struct) throws org.apache.thrift.TException {
+        struct.validate();
+
+        oprot.writeStructBegin(STRUCT_DESC);
+        if (struct.success != null) {
+          oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+          struct.success.write(oprot);
+          oprot.writeFieldEnd();
+        }
+        oprot.writeFieldStop();
+        oprot.writeStructEnd();
+      }
+
+    }
+
+    private static class sr_parse_tokens_resultTupleSchemeFactory implements SchemeFactory {
+      public sr_parse_tokens_resultTupleScheme getScheme() {
+        return new sr_parse_tokens_resultTupleScheme();
+      }
+    }
+
+    private static class sr_parse_tokens_resultTupleScheme extends TupleScheme<sr_parse_tokens_result> {
+
+      @Override
+      public void write(org.apache.thrift.protocol.TProtocol prot, sr_parse_tokens_result struct) throws org.apache.thrift.TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
+        if (struct.isSetSuccess()) {
+          optionals.set(0);
+        }
+        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetSuccess()) {
+          struct.success.write(oprot);
+        }
+      }
+
+      @Override
+      public void read(org.apache.thrift.protocol.TProtocol prot, sr_parse_tokens_result struct) throws org.apache.thrift.TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(1);
+        if (incoming.get(0)) {
+          struct.success = new ParseTree();
+          struct.success.read(iprot);
           struct.setSuccessIsSet(true);
         }
       }
