@@ -142,13 +142,22 @@ public class StanfordParserThrift
 	 * NOTE that this WILL re-lexicalize a pre-lexicalized tree, so don't pass in a tree that
 	 * has been lexicalized and expect to get back the same thing as what you passed in.
 	 */
-	public String lexicalize_parse_tree(String tree)
+	public String lexicalize_parse_tree(String tree) throws TApplicationException
 	{
+	    try
+	    {
 		Tree parseTree = Tree.valueOf(tree);
 		Tree lexicalizedTree = Trees.lexicalize(parseTree, tlp.headFinder());
+		treePrinter = ParserUtil.setOptions(null, tlp); // use defaults
 		Function<Tree, Tree> a = TreeFunctions.getLabeledToDescriptiveCoreLabelTreeFunction();
 		lexicalizedTree = a.apply(lexicalizedTree);
 		return ParserUtil.TreeObjectToString(lexicalizedTree, treePrinter);
+	    }
+	    catch (Exception e)
+	    {
+		// FIXME
+		throw new TApplicationException(TApplicationException.INTERNAL_ERROR, e.getMessage());
+	    }
 	}
 }
 
