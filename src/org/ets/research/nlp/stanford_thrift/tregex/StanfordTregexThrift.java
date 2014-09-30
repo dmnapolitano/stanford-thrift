@@ -18,7 +18,7 @@
  */
 
 
-package tregex;
+package org.ets.research.nlp.stanford_thrift.tregex;
 
 import java.util.ArrayList;
 import java.util.List;

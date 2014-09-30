@@ -18,13 +18,15 @@
 */
 
 
-package coref;
+package org.ets.research.nlp.stanford_thrift.coref;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+
+import org.ets.research.nlp.stanford_thrift.general.CoreNLPThriftUtil;
 
 import edu.stanford.nlp.dcoref.CorefChain;
 import edu.stanford.nlp.dcoref.CorefCoreAnnotations;
@@ -34,7 +36,6 @@ import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.util.CoreMap;
 import edu.stanford.nlp.util.Pair;
-import general.CoreNLPThriftUtil;
 
 
 public class StanfordCorefThrift 
@@ -49,7 +50,7 @@ public class StanfordCorefThrift
 		// parse tree a few times on its own, despite it having
 		// been run (and parse trees having been stored) as part
 		// of the mandatory NER.  Creating the object this way,
-		// the coreference system can create new parser objects
+		// the coreference system can create new org.ets.research.nlp.stanford_thrift.parser objects
 		// on-the-fly, despite the fact that they're never
 		// initialized here.  Very strange.  These parsers
 		// seem to use the default PCFG model.
@@ -193,7 +194,7 @@ public class StanfordCorefThrift
 	 */
 //	public static void main(String[] args) 
 //	{
-//		StanfordCorefThrift coref = new StanfordCorefThrift();
+//		StanfordCorefThrift org.ets.research.nlp.stanford_thrift.coref = new StanfordCorefThrift();
 //		
 //		//String testSentences = "By proposing a meeting date, Eastern moved one step closer toward reopening current high-cost contract agreements with its unions.";
 //		String testSentences = "Barack Hussein Obama II is the 44th and current President of the United States, in office since 2009. "
@@ -202,7 +203,7 @@ public class StanfordCorefThrift
 //				+ "He was a community organizer in Chicago before earning his law degree. "
 //				+ "He worked as a civil rights attorney in Chicago and taught constitutional law at the University of Chicago Law School from 1992 to 2004. "
 //				+ "He served three terms representing the 13th District in the Illinois Senate from 1997 to 2004, running unsuccessfully for the United States House of Representatives in 2000.";
-//		List<String> results = coref.getCoreferencesFromText(testSentences);
+//		List<String> results = org.ets.research.nlp.stanford_thrift.coref.getCoreferencesFromText(testSentences);
 //		for (String s : results)
 //		{
 //			System.out.println(s);
@@ -218,8 +219,8 @@ public class StanfordCorefThrift
 //        trees.add("(ROOT (S (NP (PRP He)) (VP (VP (VBD worked) (PP (IN as) (NP (NP (DT a) (JJ civil) (NNS rights) (NN attorney)) (PP (IN in) (NP (NNP Chicago)))))) (CC and) (VP (VBD taught) (NP (JJ constitutional) (NN law)) (PP (IN at) (NP (NP (DT the) (NNP University)) (PP (IN of) (NP (NP (NNP Chicago) (NNP Law) (NNP School)) (PP (IN from) (NP (CD 1992))))))) (PP (TO to) (NP (CD 2004))))) (. .)))");
 //        trees.add("(ROOT (S (NP (PRP He)) (VP (VBD served) (NP (NP (CD three) (NNS terms)) (VP (VBG representing) (NP (NP (DT the) (NAC (JJ 13th) (NNP District) (PP (IN in) (NP (DT the) (NNP Illinois)))) (NNP Senate)) (PP (IN from) (NP (CD 1997) (TO to) (CD 2004)))))) (, ,) (S (VP (VBG running) (ADVP (RB unsuccessfully)) (PP (IN for) (NP (NP (DT the) (NNP United) (NNPS States) (NNP House)) (PP (IN of) (NP (NP (NNS Representatives)) (PP (IN in) (NP (CD 2000)))))))))) (. .)))");
 //		Annotation annotation = CoreNLPThriftUtil.getAnnotationFromParseTrees(trees);
-//		StanfordNERThrift ner = new StanfordNERThrift();
-//        List<String> results = coref.getCoreferencesFromAnnotation(ner.annotateForNamedEntities(annotation));
+//		StanfordNERThrift org.ets.research.nlp.stanford_thrift.ner = new StanfordNERThrift();
+//        List<String> results = org.ets.research.nlp.stanford_thrift.coref.getCoreferencesFromAnnotation(org.ets.research.nlp.stanford_thrift.ner.annotateForNamedEntities(annotation));
 //		for (String s : results)
 //		{
 //			System.out.println(s);

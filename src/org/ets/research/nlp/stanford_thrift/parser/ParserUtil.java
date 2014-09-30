@@ -1,4 +1,4 @@
-package parser;
+package org.ets.research.nlp.stanford_thrift.parser;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -52,7 +52,7 @@ public class ParserUtil
 		//        {
 		//        	String[] remainingOptions = new String[options.size()];
 		//        	options.toArray(remainingOptions);
-		//        	parser.setOptionFlags(remainingOptions);
+		//        	org.ets.research.nlp.stanford_thrift.parser.setOptionFlags(remainingOptions);
 		//        	customParserOptionsSet = true;
 		//        }
 	}

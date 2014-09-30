@@ -18,7 +18,7 @@
 */
 
 
-package ner;
+package org.ets.research.nlp.stanford_thrift.ner;
 
 import CoreNLP.*;
 
@@ -27,13 +27,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
+import org.ets.research.nlp.stanford_thrift.general.CoreNLPThriftUtil;
+
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.NERCombinerAnnotator;
 import edu.stanford.nlp.util.CoreMap;
-
-import general.CoreNLPThriftUtil;
 
 
 public class StanfordNERThrift 

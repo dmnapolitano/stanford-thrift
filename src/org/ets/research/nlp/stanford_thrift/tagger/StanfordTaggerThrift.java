@@ -18,7 +18,7 @@
 */
 
 
-package tagger;
+package org.ets.research.nlp.stanford_thrift.tagger;
 
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class StanfordTaggerThrift
 	{
 		List<List<TaggedToken>> taggedAndTokenizedSentences = new ArrayList<List<TaggedToken>>();
 		
-		// assume no tokenization was done; use Stanford's default tokenizer
+		// assume no tokenization was done; use Stanford's default org.ets.research.nlp.stanford_thrift.tokenizer
     	DocumentPreprocessor preprocess = new DocumentPreprocessor(new StringReader(untokenizedText));
     	Iterator<List<HasWord>> foundSentences = preprocess.iterator();
     	while (foundSentences.hasNext())

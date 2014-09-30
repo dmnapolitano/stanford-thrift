@@ -18,7 +18,7 @@
  */
 
 
-package general;
+package org.ets.research.nlp.stanford_thrift.general;
 
 import java.util.ArrayList;
 import java.util.List;

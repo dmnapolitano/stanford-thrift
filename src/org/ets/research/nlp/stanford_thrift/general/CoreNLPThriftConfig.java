@@ -17,7 +17,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-package general;
+package org.ets.research.nlp.stanford_thrift.general;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

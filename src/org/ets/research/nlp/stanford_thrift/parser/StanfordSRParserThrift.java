@@ -18,11 +18,12 @@
  */
 
 
-package parser;
+package org.ets.research.nlp.stanford_thrift.parser;
 
 import java.util.List;
 
 import org.apache.thrift.TApplicationException;
+import org.ets.research.nlp.stanford_thrift.general.CoreNLPThriftUtil;
 
 import CoreNLP.ParseTree;
 import edu.stanford.nlp.ling.TaggedWord;
@@ -31,7 +32,6 @@ import edu.stanford.nlp.trees.PennTreebankLanguagePack;
 import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.trees.TreePrint;
 import edu.stanford.nlp.trees.TreebankLanguagePack;
-import general.CoreNLPThriftUtil;
 
 public class StanfordSRParserThrift {
 

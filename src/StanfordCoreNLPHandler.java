@@ -19,27 +19,26 @@
 
 import edu.stanford.nlp.ling.TaggedWord;
 import edu.stanford.nlp.pipeline.Annotation;
-import general.CoreNLPThriftConfig;
-import general.CoreNLPThriftUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import ner.StanfordNERThrift;
-
 import org.apache.thrift.TApplicationException;
+import org.ets.research.nlp.stanford_thrift.coref.StanfordCorefThrift;
+import org.ets.research.nlp.stanford_thrift.general.CoreNLPThriftConfig;
+import org.ets.research.nlp.stanford_thrift.general.CoreNLPThriftUtil;
+import org.ets.research.nlp.stanford_thrift.ner.StanfordNERThrift;
+import org.ets.research.nlp.stanford_thrift.parser.StanfordParserThrift;
+import org.ets.research.nlp.stanford_thrift.parser.StanfordSRParserThrift;
+import org.ets.research.nlp.stanford_thrift.tagger.StanfordTaggerThrift;
+import org.ets.research.nlp.stanford_thrift.tokenizer.StanfordTokenizerThrift;
+import org.ets.research.nlp.stanford_thrift.tregex.StanfordTregexThrift;
 
-import parser.StanfordParserThrift;
-import parser.StanfordSRParserThrift;
-import tagger.StanfordTaggerThrift;
-import tokenizer.StanfordTokenizerThrift;
-import tregex.StanfordTregexThrift;
 import CoreNLP.NamedEntity;
 import CoreNLP.ParseTree;
 import CoreNLP.StanfordCoreNLP;
 import CoreNLP.TaggedToken;
-import coref.StanfordCorefThrift;
 
 
 public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
@@ -89,7 +88,7 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
 			String srModelPath = config.getSRParserModel();
 			if (srModelPath != null)
 			{
-				System.err.println("Initializing shift-reduce parser...");
+				System.err.println("Initializing shift-reduce org.ets.research.nlp.stanford_thrift.parser...");
 				srparser = new StanfordSRParserThrift(config.getSRParserModel());
 			}
 		}

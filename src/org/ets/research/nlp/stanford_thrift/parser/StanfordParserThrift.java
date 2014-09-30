@@ -18,7 +18,7 @@
  */
 
 
-package parser;
+package org.ets.research.nlp.stanford_thrift.parser;
 
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.thrift.TApplicationException;
+import org.ets.research.nlp.stanford_thrift.general.CoreNLPThriftUtil;
 
 import CoreNLP.ParseTree;
 import edu.stanford.nlp.ling.CoreLabel;
@@ -41,7 +42,6 @@ import edu.stanford.nlp.trees.TreePrint;
 import edu.stanford.nlp.trees.TreebankLanguagePack;
 import edu.stanford.nlp.trees.Trees;
 import edu.stanford.nlp.util.Function;
-import general.CoreNLPThriftUtil;
 
 public class StanfordParserThrift
 {
@@ -75,7 +75,7 @@ public class StanfordParserThrift
 		{
 			treePrinter = ParserUtil.setOptions(outputFormat, tlp);
 
-			// assume no tokenization was done; use Stanford's default tokenizer
+			// assume no tokenization was done; use Stanford's default org.ets.research.nlp.stanford_thrift.tokenizer
 			DocumentPreprocessor preprocess = new DocumentPreprocessor(new StringReader(text));
 			Iterator<List<HasWord>> foundSentences = preprocess.iterator();
 			while (foundSentences.hasNext())

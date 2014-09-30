@@ -18,7 +18,7 @@
 */
 
 
-package tokenizer;
+package org.ets.research.nlp.stanford_thrift.tokenizer;
 
 import java.io.StringReader;
 import java.util.ArrayList;
