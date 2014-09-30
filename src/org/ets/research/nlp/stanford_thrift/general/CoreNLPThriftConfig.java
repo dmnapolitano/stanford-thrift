@@ -29,90 +29,97 @@ import java.util.Map;
 
 public class CoreNLPThriftConfig
 {
-	private Map<String, Object> config;
+    private Map<String, Object> config;
 
-	public CoreNLPThriftConfig(String configFile) throws Exception
-	{
-		try
-		{
-			config = new HashMap<String, Object>();
-			BufferedReader reader = new BufferedReader(new FileReader(configFile));
-			String line = "";
-			while ((line = reader.readLine()) != null)
-			{
-				if (line.startsWith("#"))
-				{
-					// It's a comment; ignore it.
-					continue;
-				}
-				String[] info = line.split("=");
-				if (info[1].startsWith(" \""))
-				{
-					// single string
-					config.put(info[0].trim(), new String(info[1].replaceAll("\"", "").trim()));
-				}
-				else if (info[1].startsWith(" ["))
-				{
-					// list
-					String[] options = info[1].replaceAll("[\\[\\]\" ]", "").split(",");
-					List<String> optionsList = Arrays.asList(options);
-					config.put(info[0].trim(), optionsList);
-				}
-			}
-			reader.close();
-		}
-		catch(Exception e)
-		{
-			throw e;
-		}
-	}
+    public CoreNLPThriftConfig(String configFile) throws Exception
+    {
+        try
+        {
+            config = new HashMap<String, Object>();
+            BufferedReader reader = new BufferedReader(new FileReader(configFile));
+            String line = "";
+            while ((line = reader.readLine()) != null)
+            {
+                if (line.startsWith("#"))
+                {
+                    // It's a comment; ignore it.
+                    continue;
+                }
+                String[] info = line.split("=");
+                if (info[1].startsWith(" \""))
+                {
+                    // single string
+                    config.put(info[0].trim(), new String(info[1].replaceAll("\"", "").trim()));
+                }
+                else if (info[1].startsWith(" ["))
+                {
+                    // list
+                    String[] options = info[1].replaceAll("[\\[\\]\" ]", "").split(",");
+                    List<String> optionsList = Arrays.asList(options);
+                    config.put(info[0].trim(), optionsList);
+                }
+            }
+            reader.close();
+        }
+        catch(Exception e)
+        {
+            throw e;
+        }
+    }
 
-	public String getParserModel()
-	{
-		try
-		{
-			return (String)config.get("parser_model");
-		}
-		catch (Exception e)
-		{
-			return null;
-		}
-	}
+    public String getParserModel()
+    {
+        try
+        {
+            return (String)config.get("parser_model");
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
 
-	@SuppressWarnings("unchecked")
-	public List<String> getNERModels()
-	{
-		Object nerModels = config.get("ner_models");
-		if (nerModels.getClass().getCanonicalName().contains("String"))
-		{
-			List<String> returnVal = new ArrayList<String>();
-			returnVal.add((String)nerModels);
-			return returnVal;
-		}
-		return (List<String>)config.get("ner_models");
-	}
+    @SuppressWarnings("unchecked")
+    public List<String> getNERModels()
+    {
+        try
+        {
+            Object nerModels = config.get("ner_models");
+            if (nerModels.getClass().getCanonicalName().contains("String"))
+            {
+                List<String> returnVal = new ArrayList<String>();
+                returnVal.add((String)nerModels);
+                return returnVal;
+            }
+            return (List<String>)config.get("ner_models");
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
 
-	public String getTaggerModel()
-	{
-		try
-		{
-			return (String)config.get("tagger_model");
-		}
-		catch (Exception e)
-		{
-			return null;
-		}
-	}
+    public String getTaggerModel()
+    {
+        try
+        {
+            return (String)config.get("tagger_model");
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
 
-	public String getSRParserModel()
-	{
-		try
-		{
-			return (String)config.get("shift-reduce_model");
-		}
-		catch (Exception e)
-		{
-			return null;
-		}
-	}
+    public String getSRParserModel()
+    {
+        try
+        {
+            return (String)config.get("shift-reduce_model");
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
 }

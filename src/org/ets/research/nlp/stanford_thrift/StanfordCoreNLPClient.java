@@ -1,3 +1,4 @@
+package org.ets.research.nlp.stanford_thrift;
 // Generated code
 import CoreNLP.*;
 

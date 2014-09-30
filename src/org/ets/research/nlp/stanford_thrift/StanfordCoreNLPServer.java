@@ -1,3 +1,4 @@
+package org.ets.research.nlp.stanford_thrift;
 /*
   Apache Thrift Server for Stanford CoreNLP (stanford-thrift)
   Copyright (C) 2013 Diane M. Napolitano, Educational Testing Service
@@ -24,6 +25,8 @@ import org.apache.thrift.server.TServer;
 import org.apache.thrift.server.TThreadPoolServer;
 import org.apache.thrift.transport.TServerSocket;
 import org.apache.thrift.transport.TServerTransport;
+
+
 // Generated code
 import CoreNLP.*;
 
