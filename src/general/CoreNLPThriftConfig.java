@@ -69,7 +69,14 @@ public class CoreNLPThriftConfig
 
 	public String getParserModel()
 	{
-		return (String)config.get("parser_model");
+		try
+		{
+			return (String)config.get("parser_model");
+		}
+		catch (Exception e)
+		{
+			return null;
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -87,11 +94,25 @@ public class CoreNLPThriftConfig
 
 	public String getTaggerModel()
 	{
-		return (String)config.get("tagger_model");
+		try
+		{
+			return (String)config.get("tagger_model");
+		}
+		catch (Exception e)
+		{
+			return null;
+		}
 	}
 
 	public String getSRParserModel()
 	{
-		return (String)config.get("shift-reduce_model");
+		try
+		{
+			return (String)config.get("shift-reduce_model");
+		}
+		catch (Exception e)
+		{
+			return null;
+		}
 	}
 }

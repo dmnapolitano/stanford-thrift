@@ -60,8 +60,12 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
 			System.err.println("Reading in configuration from " + configFilePath + "...");
 			CoreNLPThriftConfig config = new CoreNLPThriftConfig(configFilePath);
 
-			System.err.println("Initializing Parser...");
-			parser = new StanfordParserThrift(config.getParserModel());
+			String parserModelPath = config.getParserModel();
+			if (parserModelPath != null)
+			{
+				System.err.println("Initializing Parser...");
+				parser = new StanfordParserThrift(parserModelPath);
+			}
 
 			System.err.println("Initializing Named Entity Recognizer...");
 			ner = new StanfordNERThrift(config.getNERModels());
@@ -72,14 +76,22 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
 			System.err.println("Initializing Tregex...");
 			tregex = new StanfordTregexThrift();
 
-			System.err.println("Initializing Tagger...");
-			tagger = new StanfordTaggerThrift(config.getTaggerModel());
+			String taggerModelPath = config.getTaggerModel();
+			if (taggerModelPath != null)
+			{
+				System.err.println("Initializing Tagger...");
+				tagger = new StanfordTaggerThrift(taggerModelPath);
+			}
 
 			System.err.println("Initializing Tokenizer...");
 			tokenizer = new StanfordTokenizerThrift();
 
-			System.err.println("Initializing shift-reduce parser...");
-			srparser = new StanfordSRParserThrift(config.getSRParserModel());
+			String srModelPath = config.getSRParserModel();
+			if (srModelPath != null)
+			{
+				System.err.println("Initializing shift-reduce parser...");
+				srparser = new StanfordSRParserThrift(config.getSRParserModel());
+			}
 		}
 		catch (Exception e)
 		{
@@ -118,7 +130,7 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLP.Iface
 		return parser.parse_tagged_sentence(taggedSentence, outputFormat, divider);
 	}
 
-	public String lexicalize_parse_tree(String tree)
+	public String lexicalize_parse_tree(String tree) throws TApplicationException
 	{
 		return parser.lexicalize_parse_tree(tree);
 	}
