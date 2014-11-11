@@ -27,35 +27,30 @@ import java.util.Set;
 import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.trees.tregex.TregexMatcher;
 import edu.stanford.nlp.trees.tregex.TregexPattern;
-import edu.stanford.nlp.util.Timing;
 
 public class StanfordTregexThrift
 {
-	public StanfordTregexThrift()
-	{
+    public StanfordTregexThrift()
+    {
 
-	}
+    }
 
-	public List<String> evaluateTregexPattern(String parseTree, String tregexPattern)
-	{
-		Timing timer = new Timing();
-		List<String> foundMatches = new ArrayList<String>();
+    public List<String> evaluateTregexPattern(String parseTree, String tregexPattern)
+    {
+        List<String> foundMatches = new ArrayList<String>();
 
-		timer.start("Evaluating \"" + tregexPattern + "\" on <<" + parseTree + ">> ...");
-		TregexPattern pattern = TregexPattern.compile(tregexPattern);
-		TregexMatcher matches = pattern.matcher(Tree.valueOf(parseTree));
-		Set<String> nodes = matches.getNodeNames();
-		while (matches.find())
-		{
-			timer.report("");
-			foundMatches.add(matches.getMatch().pennString());
-			for (String node : nodes)
-			{
-				foundMatches.add(matches.getNode(node).pennString());
-			}
-		}
+        TregexPattern pattern = TregexPattern.compile(tregexPattern);
+        TregexMatcher matches = pattern.matcher(Tree.valueOf(parseTree));
+        Set<String> nodes = matches.getNodeNames();
+        while (matches.find())
+        {
+            foundMatches.add(matches.getMatch().pennString());
+            for (String node : nodes)
+            {
+                foundMatches.add(matches.getNode(node).pennString());
+            }
+        }
 
-		timer.stop("Evaluation finished.");
-		return foundMatches;
-	}
+        return foundMatches;
+    }
 }
