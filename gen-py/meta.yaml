@@ -3,7 +3,7 @@ package:
     version: "0.5"
 
 source:
-    git_url: https://github.com/EducationalTestingService/stanford-thrift.git
+    git_url: .
     git_tag: operational
 
 build:
