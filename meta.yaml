@@ -3,7 +3,7 @@ package:
     version: "0.5"
 
 source:
-    git_url: .
+    git_url: ./gen-py
     git_tag: operational
 
 build:
