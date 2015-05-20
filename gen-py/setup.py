@@ -5,7 +5,7 @@ from setuptools import setup
 setup(name='stanford-thrift',
       version='0.1',
       description=(''),
-      long_description="Stanford CoreNLP server wrapper using Apache Thrift"
+      long_description="Stanford CoreNLP server wrapper using Apache Thrift",
       keywords='natural language processing',
       url='https://github.com/EducationalTestingService/stanford-thrift',
       author='Diane Napolitano',
