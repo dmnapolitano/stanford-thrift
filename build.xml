@@ -51,7 +51,7 @@
 
   <target name="clean">
     <delete dir="${genjava}" />
-    <delete dir="${genpy}" />
+    <delete dir="${genpy}/corenlp" />
     <delete dir="${build}" />
     <delete file="stanford-corenlp-wrapper.jar" />
   </target>
