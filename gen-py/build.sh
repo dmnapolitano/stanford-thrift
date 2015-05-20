@@ -1,3 +1,4 @@
 #! /bin/bash
 
-python gen-py/setup.py install --single-version-externally-managed --record=record.txt
+cd gen-py/
+python setup.py install --single-version-externally-managed --record=record.txt
