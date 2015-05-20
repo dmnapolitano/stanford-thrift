@@ -7,10 +7,10 @@ source:
 
 requirements:
   build:
-    - python ==2.7
+    - python
     - thrift
   run:
-    - python ==2.7
+    - python
     - thrift
 
 about:
