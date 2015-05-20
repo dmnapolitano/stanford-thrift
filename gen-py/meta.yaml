@@ -1,0 +1,19 @@
+package:
+  name: stanford-thrift
+  version: "0.1"
+
+source:
+  git_url: https://github.com/EducationalTestingService/stanford-thrift
+
+requirements:
+  build:
+    - python=2.7
+    - thrift
+  run:
+    - python=2.7
+    - thrift
+
+about:
+  home: https://github.com/EducationalTestingService/stanford-thrift
+  license: Apache 2.0
+  summary: Stanford CoreNLP wrapper using Apache Thrift
