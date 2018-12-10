@@ -1,0 +1,59 @@
+<project name="StanfordCoreNLP" default="main" basedir=".">
+
+  <description>Stanford CoreNLP Wrapper</description>
+
+  <property name="src" location="src" />
+  <property name="genjava" location="gen-java" />
+  <property name="genpy" location="gen-py" />
+  <property name="build" location="build" />
+  <property environment="env"/>
+  
+  <path id="libs.classpath">
+    <pathelement path="${env.CLASSPATH}" />
+  </path>
+  <path id="build.classpath">
+    <path refid="libs.classpath" />
+    <pathelement path="${genjava}" />
+  </path>
+
+  <!-- Set $THRIFTPATH to the root of your thrift installation. -->
+  <target name="combine_thrift_jars">
+    <zip destfile="${env.THRIFTPATH}/all_thrift_jars.jar">
+      <zipgroupfileset dir="${env.THRIFTPATH}" includes="*.jar"/>
+    </zip>
+  </target>
+
+  <target name="init">
+    <tstamp />
+    <mkdir dir="${build}"/>
+    <mkdir dir="${build}/log"/>
+  </target>
+
+ <target name="generate">
+    <!-- Generate the thrift gen-java and gen-py source -->
+    <!-- Assumes thrift is on your path. -->
+    <exec executable="thrift" failonerror="true">
+      <arg line="--gen java corenlp.thrift"/>
+    </exec>
+    <exec executable="thrift" failonerror="true">
+      <arg line="--gen py:utf8strings,slots,new_style corenlp.thrift"/>
+    </exec>
+  </target>
+
+  <target name="compile" depends="init, generate">
+    <javac srcdir="${genjava}" destdir="${build}" />
+    <javac srcdir="${src}" destdir="${build}" classpathref="build.classpath" />
+  </target>
+
+  <target name="main" description="Run" depends="compile">
+    <jar jarfile="stanford-corenlp-wrapper.jar" basedir="${build}"/>
+  </target>
+
+  <target name="clean">
+    <delete dir="${genjava}" />
+    <delete dir="${genpy}/corenlp" />
+    <delete dir="${build}" />
+    <delete file="stanford-corenlp-wrapper.jar" />
+  </target>
+
+</project>
